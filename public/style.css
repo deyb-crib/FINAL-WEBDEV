@@ -1,0 +1,2908 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');   
+* 
+ {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Alata', sans-serif;
+}
+
+body {
+    font-family: 'Alata', sans-serif;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+body.has-dashboard-sidebar {
+    padding-left: 220px;
+}
+
+a {
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+/* =========================================
+   HERO CONTAINER
+========================================= */
+.hero {
+    width: 95%;
+    max-width: 1200px;
+    background: linear-gradient(180deg, #931c21 0%, #a81c22 58%, #ffffff 100%);
+    border-radius: 12px;
+    padding: 74px 24px 24px 24px;
+    position: relative;
+    overflow: hidden; /* Contains children within the hero bounds */
+    height: auto;     /* Allows hero to grow dynamically */
+    margin-bottom: 50px; /* Creates clean spacing above the feature cards */
+}
+
+/* NAVIGATION */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 58px;
+    margin: 0;
+    padding: 8px 24px;
+    transform: none;
+    display: flex;
+    align-items: center;
+    background: rgba(132, 15, 20, 0.96);
+    border-bottom: 1px solid #690d12;
+    border-radius: 0;
+    box-shadow: 0 5px 16px rgba(55, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    z-index: 20;
+}
+
+.navbar.is-sticky {
+    z-index: 100;
+}
+
+.home-dashboard-sidebar {
+    position: fixed;
+    z-index: 19;
+    top: 58px;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 220px;
+    padding: 28px 18px 22px;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff;
+    border-right: 1px solid #edcaca;
+    box-shadow: 5px 0 16px rgba(55, 0, 0, 0.1);
+}
+
+.home-sidebar-heading {
+    display: grid;
+    gap: 7px;
+    padding: 0 12px 22px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f0d1d1;
+}
+
+.home-sidebar-eyebrow {
+    color: #a71920;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.home-sidebar-heading strong {
+    overflow: hidden;
+    color: #690d12;
+    font-size: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.home-sidebar-link,
+.home-sidebar-logout {
+    padding: 12px;
+    border-radius: 7px;
+    color: #432d2d;
+    font-size: 12px;
+}
+
+.home-sidebar-link:hover,
+.home-sidebar-link.is-active {
+    background: #fff4f4;
+    box-shadow: inset 3px 0 0 #a71920;
+    color: #a71920;
+    font-weight: 700;
+}
+
+.home-sidebar-logout {
+    margin-top: auto;
+    color: #a71920;
+    font-weight: 700;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
+
+.nav-logo img {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+}
+
+.nav-links a {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-account {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.nav-user {
+    display: inline-grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    color: #ffffff;
+}
+
+.nav-user svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+}
+
+.login {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.signup {
+    background: #b71922;
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.all-hospitals-page {
+    align-items: stretch;
+    min-height: 100vh;
+    background: #fffafa;
+}
+
+.hospitals-header {
+    display: flex;
+    width: min(95%, 1200px);
+    min-height: 62px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto 24px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #9e1b21;
+    box-shadow: 0 6px 16px rgba(90, 12, 16, 0.16);
+}
+
+.hospitals-brand,
+.hospitals-actions a {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hospitals-brand {
+    font-size: 20px;
+    letter-spacing: 0.5px;
+}
+
+.hospitals-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.hospitals-signup {
+    padding: 9px 14px;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #8b181c !important;
+}
+
+.hospitals-main {
+    width: min(95%, 1200px);
+    margin: 0 auto;
+}
+
+.hospitals-intro {
+    padding: 12px 4px 0;
+}
+
+.hospitals-intro h1 {
+    margin: 6px 0;
+    color: #650c11;
+    font-size: clamp(28px, 4vw, 42px);
+}
+
+.hospitals-intro p {
+    max-width: 620px;
+    color: #654c4c;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.hospitals-back {
+    display: inline-flex;
+    gap: 7px;
+    margin-top: 14px;
+    color: #a71920;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.hospitals-list {
+    width: 100%;
+    margin-top: 28px;
+}
+
+.hospitals-count {
+    color: #8b181c;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* HERO CONTENT GRID */
+.hero-content {
+    display: grid;
+    grid-template-columns: 36% minmax(0, 1fr);
+    gap: 16px;
+    position: relative;
+    align-items: stretch;
+}
+
+/* LEFT WHITE CARD */
+.katoc-info {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 24px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 5;
+    min-height: 310px; /* Match the medical visual height */
+}
+
+.katoc-logo {
+    width: 100%;
+    max-width: 320px; /* Increased from 240px/280px */
+    height: auto;
+    margin-top: 4px;
+}
+
+/* DESCRIPTION PARAGRAPH */
+.description {
+    position: relative;
+    top: -20px;
+    font-size: 13px;  /* Increased from 11px */
+    color: #333333;
+    line-height: 1.5;
+    margin-top: 16px;
+    margin-bottom: 30px;
+    max-width: 340px;  /* Slightly wider to accommodate larger text */
+}
+
+.description span {
+    color: #931c21;
+    font-weight: 700;
+    font-size: 18px; /* Increased from 15px */
+}
+
+/* BUTTONS */
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+}
+
+.services-btn,
+.about-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    width: 115px;
+    min-height: 44px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.services-btn:hover,
+.about-btn:hover,
+.services-btn:focus-visible,
+.about-btn:focus-visible {
+    transform: translateY(-2px);
+    outline: 2px solid #931c21;
+    outline-offset: 3px;
+}
+
+.services-btn:hover,
+.services-btn:focus-visible {
+    background: #690d12;
+}
+
+.about-btn:hover,
+.about-btn:focus-visible {
+    background: #fff4f4;
+}
+
+.services-btn {
+    background: #931c21;
+    color: #ffffff;
+    border: 1px solid #931c21;
+}
+
+.about-btn {
+    background: #ffffff;
+    color: #931c21;
+    border: 1px solid #931c21;
+}
+
+#services,
+#about {
+    scroll-margin-top: 78px;
+}
+
+.medical-visual {
+    position: relative;
+    border-radius: 50px;
+    overflow: hidden;
+    min-height: 310px; /* Match the left information card */
+}
+
+.dialysis-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+}
+
+.red-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(147, 28, 33, 0.5) 0%, rgba(147, 28, 33, 0.1) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* OVERLAY GRAPHICS */
+.syringe {
+    position: absolute;
+    width: 550px;
+    right: 430px; 
+    top: 55%;
+    transform: translateY(-50%) rotate(-8deg);
+    z-index: 10;
+    filter: drop-shadow(-8px 10px 14px rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+}
+
+.kidney {
+    position: absolute;
+    width: 600px;
+    right: -80px;
+    bottom: -100px;
+    z-index: 10;
+    filter: drop-shadow(-5px 10px 16px rgba(0, 0, 0, 0.35));
+    pointer-events: none;
+}
+
+/* Keep the logged-in homepage artwork inside the medical visual. */
+.has-dashboard-sidebar .syringe {
+    width: 380px;
+    left: 180px;
+    right: auto;
+    z-index: 6;
+}
+
+.has-dashboard-sidebar .kidney {
+    width: 440px;
+    top: 50%;
+    right: -35px;
+    bottom: auto;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+
+/* =========================================
+   FEATURE CARDS SECTION
+========================================= */
+.features-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 16px;
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    flex: 1 1 0;
+    min-width: 0;
+    background-color: #9e1b21;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    background-color: #ffffff;
+    padding: 16px 12px;
+    text-align: center;
+}
+
+.card-header h3 {
+    color: #9e1b21;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.card-body {
+    padding: 20px 16px 24px;
+    text-align: center;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-body h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.card-body p {
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+    .features-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================
+   DIALYSIS CENTERS SECTION
+========================================= */
+
+.centers-section {
+    position: relative;
+    z-index: 1;
+    width: 95%;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 24px 28px 32px;
+    border-radius: 16px;
+    
+    /* Outer Red Container Gradient with top white glow */
+    background: linear-gradient(180deg, #ffffff 0%, #f7dada 28%, #a81c22 72%, #850f14 100%);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    overflow-x: clip;
+    overflow-y: visible;
+}
+
+.centers-section.has-no-results {
+    display: none;
+}
+
+/* Floating Red Blood Cells Graphic */
+.bg-cells {
+    position: absolute;
+    top: -220px;
+    right: 0;
+    width: min(520px, 55vw);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.95;
+}
+
+/* Header & View All Button */
+.centers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 24px;
+}
+
+.centers-title {
+    font-family: 'Alata', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #8b0000;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.view-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #8f1217;
+    color: #ffffff;
+    font-family: 'Alata', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.view-all-btn:hover {
+    background-color: #6d0a0e;
+}
+
+/* 3-Column Grid */
+.centers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Individual Cards */
+.center-card {
+    position: relative;
+    background-color: #850f14;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-image-placeholder {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #f8dede, #d98a8e);
+    color: #8b181c;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+/* Dark Red Gradient Fade Over Images */
+.card-gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    background: linear-gradient(to bottom, rgba(133, 15, 20, 0) 0%, rgba(133, 15, 20, 0.95) 100%);
+}
+
+/* White Floating Info Box */
+.center-info-box {
+    position: relative;
+    z-index: 3;
+    width: 88%;
+    margin-top: -65px; /* Overlaps onto the image */
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 10px 12px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.center-name {
+    font-family: 'Alata', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #850f14;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.center-location,
+.center-hours,
+.center-service {
+    font-family: 'Alata', sans-serif;
+    font-size: 12px;
+    color: #333333;
+    margin: 2px 0;
+    line-height: 1.2;
+}
+
+/* Bottom Card Action Link */
+.see-availability {
+    position: relative;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 170px;
+    padding: 10px 18px;
+    border: 1px solid #7d1519;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #8d1a1f 0%, #730d12 100%);
+    color: #ffffff;
+    font-family: 'Alata', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    opacity: 1;
+    pointer-events: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+    box-shadow: 0 4px 10px rgba(73, 0, 4, 0.22);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.see-availability:hover,
+.see-availability:focus-visible {
+    background: linear-gradient(180deg, #a42128 0%, #851116 100%);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 16px rgba(73, 0, 4, 0.28);
+    outline: none;
+}
+
+.see-availability:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.see-availability:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.availability-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+    z-index: 1200;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.availability-modal.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.availability-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: 0;
+}
+
+.availability-modal-card {
+    position: relative;
+    z-index: 1;
+    width: min(760px, calc(100vw - 32px));
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 8px 0 0;
+    text-align: center;
+}
+
+.availability-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.65);
+    color: #8a8a8a;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.availability-icon {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin: 12px auto 8px;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    background: rgba(255, 255, 255, 0.5);
+    color: #8a8a8a;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.availability-label {
+    margin: 0 0 8px;
+    color: #8d1e24;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: none;
+}
+
+.availability-modal-card h3 {
+    margin: 0;
+    color: #5b0a12;
+    font-size: clamp(26px, 2.2vw, 38px);
+    line-height: 1.08;
+    font-weight: 700;
+}
+
+.availability-copy {
+    margin: 10px auto 0;
+    max-width: 610px;
+    color: #4d4040;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.availability-details {
+    width: min(100%, 460px);
+    margin: 18px auto 0;
+    padding: 14px 18px;
+    border: 1px solid #ead3d4;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #4d4040;
+    font-size: 14px;
+    text-align: left;
+}
+
+.availability-details p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 6px 0;
+}
+
+.availability-details strong {
+    color: #8d1e24;
+}
+
+.availability-details .availability-open-status {
+    display: block;
+    margin-top: 12px;
+    color: #277242;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.availability-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.availability-booking-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: min(100%, 620px);
+    margin: 18px auto 0;
+    text-align: left;
+}
+
+.availability-booking-form fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.availability-booking-form legend,
+.availability-slot-heading strong {
+    color: #8d1e24;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.availability-booking-form fieldset label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #4d4040;
+    font-weight: 400;
+}
+
+.availability-booking-form fieldset input {
+    width: auto;
+    min-height: auto;
+    margin: 0;
+}
+
+.availability-booking-form label {
+    color: #8d1e24;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.availability-booking-form input,
+.availability-booking-form select,
+.availability-booking-form textarea {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 6px;
+    padding: 12px 14px;
+    border: 1px solid #d4b7b8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #4d4040;
+    font: inherit;
+    font-size: 15px;
+    box-shadow: inset 0 1px 2px rgba(90, 12, 16, 0.02);
+}
+
+.availability-booking-form input:not([type="hidden"]),
+.availability-booking-form select,
+.availability-booking-form textarea {
+    pointer-events: auto;
+    user-select: text;
+}
+
+.availability-booking-form .availability-primary {
+    border: 0;
+    cursor: pointer;
+}
+
+.availability-slot-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.availability-slot-heading span,
+.availability-slot-legend {
+    color: #6d5a5a;
+    font-size: 11px;
+}
+
+.availability-time-slots {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.availability-time-slot {
+    min-height: 44px;
+    border: 1px solid #b7d5bd;
+    border-radius: 10px;
+    background: #f4fbf5;
+    color: #277242;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.availability-time-slot:hover:not(:disabled):not(.is-full) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(39, 114, 66, 0.12);
+}
+
+.availability-time-slot.is-selected {
+    border-color: #8d1e24;
+    background: #8d1e24;
+    color: #ffffff;
+}
+
+.availability-time-slot.is-full,
+.availability-time-slot:disabled {
+    border-color: #d2caca;
+    background: #f1eeee;
+    color: #8a7a7a;
+    cursor: not-allowed;
+}
+
+.availability-slot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.availability-slot-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.availability-slot-legend i {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #b7d5bd;
+}
+
+.availability-slot-legend i.is-full {
+    background: #c6bcbc;
+}
+
+.availability-slot-legend i.is-selected {
+    background: #8d1e24;
+}
+
+.availability-no-slots {
+    margin: 0;
+    color: #7b1b22;
+    font-size: 12px;
+}
+
+.booking-result {
+    width: min(680px, calc(100% - 32px));
+    margin: 15vh auto 0;
+    padding: 36px;
+    text-align: center;
+}
+
+.booking-result h1 {
+    margin: 12px auto 24px;
+    color: #5b0a12;
+    font-size: clamp(24px, 4vw, 38px);
+    line-height: 1.15;
+}
+
+.availability-cancel,
+.availability-primary,
+.availability-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Alata', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.availability-cancel {
+    border: 1px solid #d4d4d4;
+    background: rgba(255, 255, 255, 0.55);
+    color: #7b1b22;
+    cursor: pointer;
+}
+
+.availability-secondary {
+    border: 1px solid #9e1b21;
+    background: #ffffff;
+    color: #9e1b21;
+}
+
+.availability-primary {
+    background: #9e1b21;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(158, 27, 33, 0.18);
+}
+
+.availability-cancel:hover,
+.availability-primary:hover,
+.availability-cancel:focus-visible,
+.availability-primary:focus-visible {
+    transform: translateY(-1px);
+    outline: none;
+}
+
+.availability-secondary:hover,
+.availability-secondary:focus-visible {
+    background: #f8e7e8;
+    transform: translateY(-1px);
+    outline: none;
+}
+
+/* =========================================
+   KIDNEY CARE INFORMATION SECTION
+========================================= */
+
+.kidney-care-section {
+    width: 95%;
+    max-width: 1200px;
+    display: block;
+    margin: 30px auto 24px;
+    padding: 20px 26px 24px;
+    background: linear-gradient(135deg, #7b0d13 0%, #9e1b21 55%, #751016 100%);
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(90, 12, 16, 0.24);
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+}
+
+.kidney-care-section::after {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    right: -95px;
+    bottom: -150px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    box-shadow: 0 0 0 22px rgba(255, 255, 255, 0.04), 0 0 0 44px rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+}
+
+.kidney-care-heading {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.kidney-care-heading .section-eyebrow {
+    color: #ffd8d8;
+}
+
+.kidney-care-heading h2 {
+    margin-top: 3px;
+    font-size: 24px;
+    line-height: 1.2;
+}
+
+.section-eyebrow {
+    color: #9e1b21;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.kidney-care-intro h2 {
+    color: #5f0b10;
+    font-size: 25px;
+    line-height: 1.15;
+    margin: 8px 0 12px;
+}
+
+.kidney-care-intro p {
+    color: #4b3838;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.care-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 9px 15px;
+    background: #9e1b21;
+    border-radius: 7px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.kidney-care-cards {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    gap: 0;
+}
+
+.care-card {
+    min-height: 166px;
+    padding: 2px 24px 2px 22px;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.care-card:hover {
+    transform: translateY(-3px);
+}
+
+.care-card:last-child {
+    border-right: 0;
+}
+
+.care-card h3 {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.25;
+    margin: 0 0 8px;
+}
+
+.care-card-heading {
+    margin-bottom: 0;
+}
+
+.care-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 12px;
+    background: #e9ff37;
+    border-radius: 5px;
+    color: #751016;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.care-card p {
+    color: #ffe9e9;
+    font-size: 11px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.care-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.care-link:hover,
+.care-link:focus-visible {
+    color: #e9ff37;
+    outline: none;
+}
+
+/* =========================================
+   HOMEPAGE DISCOVERY SECTIONS
+========================================= */
+
+.center-search-section,
+.how-it-works-section,
+.locator-section,
+.dialysis-options-section,
+.why-katoc-section,
+.appointment-cta-section,
+.faq-section {
+    width: 95%;
+    max-width: 1200px;
+    margin: 34px auto;
+}
+
+.center-search-section {
+    padding: 24px 28px;
+    background: #fff8f8;
+    border: 1px solid #f0cccc;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(90, 12, 16, 0.1);
+    scroll-margin-top: 78px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.center-search-section.is-highlighted {
+    border-color: #a71920;
+    box-shadow: 0 0 0 4px rgba(167, 25, 32, 0.14), 0 8px 22px rgba(90, 12, 16, 0.14);
+}
+
+.search-copy {
+    margin-bottom: 18px;
+}
+
+.search-copy h1,
+.section-heading-row h2,
+.locator-header h2,
+.options-heading h2,
+.why-katoc-heading h2,
+.appointment-cta-section h2,
+.faq-heading h2 {
+    color: #650c11;
+    font-size: 24px;
+    line-height: 1.2;
+    margin-top: 5px;
+}
+
+.search-copy p,
+.section-heading-row > p,
+.appointment-cta-section p {
+    color: #654c4c;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.center-search-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 10px;
+}
+
+.search-field {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 13px;
+    background: #ffffff;
+    border: 1px solid #e3baba;
+    border-radius: 7px;
+}
+
+.search-field-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin-right: 9px;
+    border: 1px solid #9e1b21;
+    border-radius: 50%;
+    color: #9e1b21;
+    font-weight: 700;
+}
+
+.search-field input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    color: #3e2929;
+    font: inherit;
+    font-size: 12px;
+}
+
+.location-button,
+.search-submit,
+.primary-action,
+.secondary-action,
+.outline-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 9px 15px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.location-button {
+    border: 1px solid #9e1b21;
+    background: #ffffff;
+    color: #9e1b21;
+}
+
+.search-submit,
+.primary-action {
+    border: 1px solid #9e1b21;
+    background: #9e1b21;
+    color: #ffffff;
+}
+
+.search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 13px;
+}
+
+.filter-chip {
+    padding: 6px 11px;
+    border: 1px solid #e3baba;
+    border-radius: 20px;
+    background: #ffffff;
+    color: #7d171c;
+    font: inherit;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.filter-chip.is-active {
+    background: #9e1b21;
+    color: #ffffff;
+}
+
+.search-status {
+    min-height: 15px;
+    margin-top: 9px;
+    color: #8b181c;
+    font-size: 11px;
+}
+
+.section-heading-row,
+.locator-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
+}
+
+.section-heading-row > p {
+    max-width: 300px;
+    margin: 0;
+    text-align: right;
+}
+
+.workflow-grid,
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.workflow-card {
+    padding: 20px;
+    background: #9e1b21;
+    border-radius: 9px;
+    color: #ffffff;
+}
+
+.workflow-number,
+.option-label {
+    color: #f4bcbc;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.workflow-card h3 {
+    margin: 28px 0 8px;
+    font-size: 16px;
+}
+
+.workflow-card p,
+.benefit-item p,
+.option-card p {
+    color: #ffe8e8;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.locator-section {
+    padding: 24px 28px 28px;
+    background: #fff8f8;
+    border-radius: 12px;
+    border: 1px solid #f0cccc;
+}
+
+.locator-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.outline-action,
+.secondary-action {
+    min-height: 52px;
+    padding: 0 22px;
+    border: 1px solid #9e1b21;
+    color: #9e1b21;
+    background: #ffffff;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+}
+
+.locator-map {
+    position: relative;
+    width: 100%;
+    height: clamp(300px, 32vw, 470px);
+    min-height: 300px;
+    overflow: hidden;
+    border-radius: 9px;
+    background-color: #f3dede;
+    border: 1px solid #f0cccc;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.locator-map iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+    touch-action: none;
+    filter: saturate(0.8) contrast(1.08);
+}
+
+.map-road {
+    position: absolute;
+    display: block;
+    height: 8px;
+    background: rgba(158, 27, 33, 0.2);
+    transform: rotate(-18deg);
+}
+
+.map-road-one { width: 75%; top: 34%; left: -5%; }
+.map-road-two { width: 70%; top: 66%; left: 31%; transform: rotate(24deg); }
+.map-road-three { width: 55%; top: 8%; left: 40%; transform: rotate(76deg); }
+
+.map-pin {
+    position: absolute;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 3px solid #ffffff;
+    border-radius: 50% 50% 50% 0;
+    background: #9e1b21;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    transform: rotate(-45deg);
+    box-shadow: 0 3px 8px rgba(90, 12, 16, 0.25);
+}
+
+.map-pin::first-letter { transform: rotate(45deg); }
+.map-pin-one { top: 30%; left: 22%; }
+.map-pin-two { top: 52%; left: 48%; }
+.map-pin-three { top: 23%; right: 20%; }
+.map-pin-four { bottom: 17%; right: 35%; }
+
+.map-label {
+    position: absolute;
+    right: 18px;
+    bottom: 16px;
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 5px;
+    color: #741117;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.map-dialog {
+    width: min(920px, calc(100% - 32px));
+    max-width: none;
+    padding: 24px;
+    border: 1px solid #f0cccc;
+    border-radius: 12px;
+    background: #fff8f8;
+    color: #650c11;
+    box-shadow: 0 18px 60px rgba(90, 12, 16, 0.28);
+}
+
+.map-dialog::backdrop {
+    background: rgba(42, 8, 10, 0.62);
+}
+
+.map-dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.map-dialog-header h2 {
+    margin-top: 5px;
+    font-size: 24px;
+}
+
+.map-dialog-close {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid #9e1b21;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #9e1b21;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.map-frame {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f3dede;
+}
+
+.map-frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.map-external-link {
+    display: inline-flex;
+    gap: 7px;
+    margin-top: 12px;
+    color: #9e1b21;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.dialysis-options-section {
+    padding: 26px 28px 28px;
+    background: #9e1b21;
+    border-radius: 12px;
+}
+
+.options-heading h2,
+.dialysis-options-section .section-eyebrow,
+.options-heading > p { color: #ffffff; }
+
+.options-heading > p { opacity: 0.82; }
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.option-card {
+    padding: 22px;
+    background: #751016;
+    border-radius: 8px;
+}
+
+.option-card h3 { margin: 22px 0 9px; color: #ffffff; font-size: 20px; }
+.option-card .text-action { display: inline-flex; gap: 7px; margin-top: 18px; color: #ffffff; font-size: 11px; font-weight: 700; }
+.option-card-light { background: #fff8f8; }
+.option-card-light h3,
+.option-card-light p,
+.option-card-light .text-action { color: #741117; }
+.option-card-soft { background: #b72a31; }
+.option-label { color: #f8c5c5; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; }
+
+.dialysis-help-panel {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 28px;
+    align-items: center;
+    margin-top: 14px;
+    padding: 20px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    background: rgba(105, 13, 18, 0.35);
+}
+
+.dialysis-help-panel h3 {
+    margin: 7px 0 5px;
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.dialysis-help-panel p,
+.dialysis-help-panel li {
+    color: #ffeaea;
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.dialysis-help-panel ul {
+    display: grid;
+    gap: 7px;
+    padding-left: 18px;
+}
+
+.why-katoc-section { padding: 8px 0; }
+.why-katoc-heading { margin-bottom: 20px; }
+.benefits-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.benefit-item { padding: 16px 0; border-top: 2px solid #9e1b21; }
+.benefit-icon { color: #9e1b21; font-size: 22px; font-weight: 700; }
+.benefit-item h3 { margin: 13px 0 7px; color: #741117; font-size: 15px; }
+.benefit-item p { color: #5a4747; }
+
+.appointment-cta-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 25px 28px;
+    background: #f4d5d5;
+    border-left: 6px solid #9e1b21;
+    border-radius: 9px;
+}
+
+.appointment-cta-section h2 { margin-bottom: 5px; }
+.appointment-cta-section p { margin: 0; }
+.appointment-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+
+.faq-section { display: grid; grid-template-columns: 0.8fr 1.4fr; gap: 38px; padding: 10px 0; }
+.faq-list { border-top: 1px solid #e3baba; }
+.faq-item { border-bottom: 1px solid #e3baba; }
+.faq-item summary { padding: 15px 4px; color: #741117; cursor: pointer; font-size: 13px; font-weight: 700; list-style: none; }
+.faq-item summary::after { content: "+"; float: right; font-size: 18px; }
+.faq-item[open] summary::after { content: "-"; }
+.faq-item p { max-width: 620px; padding: 0 24px 16px 4px; color: #5a4747; font-size: 11px; line-height: 1.5; }
+
+.location-button:hover,
+.search-submit:hover,
+.primary-action:hover,
+.secondary-action:hover,
+.outline-action:hover,
+.filter-chip:hover { transform: translateY(-2px); }
+
+/* =========================================
+   KATOC CTA / FOOTER
+========================================= */
+
+.cta-footer-wrapper {
+    position: relative;
+    width: 95%;
+    max-width: 1200px;
+    margin: 10px auto 24px;
+}
+
+/* MAIN LIGHT-RED FOOTER */
+.cta-footer-card {
+    position: relative;
+    background: #850f14;
+    border-radius: 8px;
+    height: auto;
+    padding: 16px 20px 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    z-index: 2;
+}
+
+
+/* TOP RIGHT LOGO */
+.footer-logo-container {
+    display: flex;
+    justify-content: flex-end;
+    height: 150px;
+    overflow: hidden;
+}
+
+.katoc-logo2 {
+    width: auto;
+    left: -30px;
+    height: 320px;
+    position: relative;
+    top: -95px;
+    object-fit: contain;
+}
+
+
+/* =========================================
+   BLOOD VESSEL - TOP LEFT
+========================================= */
+
+.vessel-graphic {
+    position: absolute;
+    top: -55px;
+    left: -70px;
+    width: 440px;
+    height: 230px;
+    object-fit: cover;
+    object-position: center;
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+}
+
+
+/* =========================================
+   KIDNEY - LOWER LEFT
+========================================= */
+
+.large-kidney-logo {
+    position: absolute;
+    bottom: 0;
+    left: 24px;
+    width: 330px;
+    height: 330px;
+    object-fit: contain;
+    z-index: 20;
+    pointer-events: none;
+    filter: drop-shadow(2px 8px 14px rgba(0, 0, 0, 0.35));
+}
+
+
+/* =========================================
+   INNER DARK RED BOX
+========================================= */
+
+.footer-inner-card {
+    position: relative;
+    background: linear-gradient(270deg, #52080c 0%, #850f14 100%);
+    top: -10px;
+    border-radius: 12px;
+
+    /* THIS controls the width */
+    width: 92%;
+
+
+    margin: -18px auto 0;
+
+    /* top | right | bottom | left */
+    padding: 14px 35px 18px 250px;
+
+    color: #ffffff;
+
+    box-shadow:
+        inset 0 2px 6px rgba(0, 0, 0, 0.4);
+
+    z-index: 5;
+}
+
+
+/* =========================================
+   HEADING
+========================================= */
+
+.cta-heading {
+    font-family: 'Alata', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.cta-subtext {
+    font-family: 'Alata', sans-serif;
+    font-size: 11px;
+    line-height: 1.45;
+    text-align: center;
+
+    max-width: 650px;
+
+    margin: 0 auto 18px;
+
+    color: #e0e0e0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================================
+   TWO COLUMNS
+========================================= */
+
+.footer-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+
+/* EACH COLUMN */
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+}
+
+
+/* =========================================
+   WHITE BUTTONS
+========================================= */
+
+.pill-badge {
+    background-color: #ffffff;
+    color: #850f14;
+
+    font-family: 'Alata', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+
+    padding: 5px 35px;
+
+    border-radius: 6px;
+
+    margin-bottom: 10px;
+
+    text-align: center;
+    min-width: 140px;
+}
+
+
+/* =========================================
+   LISTS
+========================================= */
+
+.footer-links,
+.footer-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.footer-links li,
+.footer-info li {
+    font-family: 'Alata', sans-serif;
+    font-size: 11px;
+    line-height: 1.6;
+
+    color: #f1f1f1;
+
+    position: relative;
+    padding-left: 12px;
+}
+
+
+/* BULLET */
+
+.footer-links li::before,
+.footer-info li::before {
+    content: "•";
+
+    position: absolute;
+    left: 0;
+
+    color: #ffffff;
+}
+
+
+/* LINKS */
+
+.footer-links a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+
+/* BOLD TEXT */
+
+.highlight-text {
+    font-weight: 700;
+}
+
+
+/* =========================================
+   FOOTER TAGLINE
+========================================= */
+
+.footer-tagline {
+    font-family: 'Alata', sans-serif;
+    font-size: 10px;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    margin-top: 10px;
+
+    letter-spacing: 0.5px;
+
+    opacity: 0.9;
+
+    position: relative;
+    z-index: 10;
+}
+
+/* RESPONSIVE ACTION LINKS */
+.signup,
+.services-btn,
+.about-btn,
+.view-all-btn,
+.see-availability {
+    min-height: 44px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px 0;
+    }
+
+    body.has-dashboard-sidebar {
+        padding-left: 0;
+    }
+
+    .home-dashboard-sidebar {
+        display: none;
+    }
+
+    .hero {
+        width: 100%;
+        padding: 74px 14px 18px;
+        border-radius: 0;
+        margin-bottom: 28px;
+    }
+
+    .navbar {
+        left: 0;
+        width: 100%;
+        height: auto;
+        min-height: 58px;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 8px 14px;
+        transform: none;
+        border-radius: 0;
+    }
+
+    .navbar.is-sticky {
+        left: 0;
+        width: 100%;
+        padding: 8px 14px;
+        transform: none;
+        border-radius: 0;
+    }
+
+    .nav-logo {
+        margin-right: auto;
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .nav-links a,
+    .login {
+        font-size: 13px;
+    }
+
+    .nav-account {
+        margin-left: 0;
+        gap: 12px;
+    }
+
+    .signup {
+        padding: 8px 14px;
+    }
+
+    .hero-content {
+        grid-template-columns: 1fr;
+    }
+
+    .katoc-info {
+        min-height: 0;
+        padding: 20px 16px 16px;
+    }
+
+    .hero-buttons {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .services-btn,
+    .about-btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        padding: 8px 10px;
+    }
+
+    .medical-visual {
+        min-height: 220px;
+        border-radius: 24px;
+    }
+
+    .syringe {
+        width: 72vw;
+        right: 28vw;
+    }
+
+    .kidney {
+        width: 85vw;
+        right: -22vw;
+        bottom: -14vw;
+    }
+
+    .has-dashboard-sidebar .syringe {
+        width: 68vw;
+        left: 8vw;
+        right: auto;
+        z-index: 3;
+    }
+
+    .has-dashboard-sidebar .kidney {
+        width: 78vw;
+        right: -18vw;
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+    }
+
+    .centers-section,
+    .kidney-care-section,
+    .center-search-section,
+    .how-it-works-section,
+    .locator-section,
+    .dialysis-options-section,
+    .why-katoc-section,
+    .appointment-cta-section,
+    .faq-section,
+    .cta-footer-wrapper {
+        width: 100%;
+    }
+
+    .center-search-section,
+    .locator-section,
+    .dialysis-options-section {
+        padding-left: 16px;
+        padding-right: 16px;
+        border-radius: 0;
+    }
+
+    .center-search-form,
+    .workflow-grid,
+    .options-grid,
+    .benefits-grid,
+    .faq-section {
+        grid-template-columns: 1fr;
+    }
+
+    .dialysis-help-panel {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .center-search-form {
+        gap: 8px;
+    }
+
+    .location-button,
+    .search-submit {
+        width: 100%;
+    }
+
+    .section-heading-row,
+    .locator-header,
+    .appointment-cta-section {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .locator-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .locator-actions .outline-action {
+        flex: 1 1 0;
+    }
+
+    .section-heading-row > p {
+        text-align: left;
+    }
+
+    .workflow-card {
+        padding: 18px;
+    }
+
+    .locator-map {
+        height: clamp(180px, 52vw, 260px);
+        min-height: 180px;
+        aspect-ratio: 16 / 7;
+    }
+
+    .locator-map-overlay {
+        right: 12px;
+        bottom: 12px;
+    }
+
+    .map-view-button {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    .map-dialog {
+        width: calc(100% - 20px);
+        padding: 16px;
+    }
+
+    .map-dialog-header h2 {
+        font-size: 20px;
+    }
+
+    .map-frame {
+        aspect-ratio: 4 / 5;
+    }
+
+    .availability-modal {
+        align-items: center;
+        padding: 12px;
+        overflow-y: auto;
+    }
+
+    .availability-modal-card {
+        width: min(100%, 420px);
+        max-height: calc(100vh - 24px);
+        overflow-y: auto;
+        padding: 34px 18px 20px;
+        background: #ffffff;
+        border: 1px solid #ead3d4;
+        border-radius: 12px;
+        box-shadow: 0 16px 40px rgba(70, 0, 5, 0.25);
+    }
+
+    .availability-close {
+        top: 10px;
+        right: 10px;
+    }
+
+    .availability-icon {
+        margin-top: 0;
+    }
+
+    .availability-modal-card h3 {
+        font-size: 26px;
+    }
+
+    .availability-copy {
+        max-width: 32rem;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .availability-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    .availability-cancel,
+    .availability-primary,
+    .availability-secondary {
+        width: 100%;
+        min-height: 42px;
+    }
+
+    .appointment-actions,
+    .primary-action,
+    .secondary-action,
+    .outline-action {
+        width: 100%;
+    }
+
+    .faq-section {
+        gap: 18px;
+        padding: 0 14px;
+    }
+
+    .centers-section {
+        padding: 20px 14px 24px;
+        border-radius: 0;
+    }
+
+    .centers-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .view-all-btn {
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .centers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kidney-care-section {
+        margin-top: 24px;
+        padding: 20px 14px;
+        border-radius: 0;
+    }
+
+    .kidney-care-heading h2 {
+        font-size: 22px;
+    }
+
+    .kidney-care-cards {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .care-card {
+        min-height: 0;
+        padding: 16px 4px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .care-card:hover {
+        transform: none;
+    }
+
+    .care-card:last-child {
+        border-bottom: 0;
+    }
+
+    .see-availability {
+        align-self: stretch;
+        justify-content: center;
+        margin-left: 14px;
+        margin-right: 14px;
+    }
+
+    .cta-footer-card {
+        border-radius: 0;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .footer-inner-card {
+        width: 100%;
+        padding: 18px 16px;
+    }
+
+    .large-kidney-logo {
+        opacity: 0.35;
+        width: 220px;
+        height: 220px;
+        left: -70px;
+    }
+
+    .footer-columns {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .availability-booking-form .availability-primary {
+        width: 100%;
+    }
+
+    .availability-time-slots {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .services-btn,
+    .about-btn {
+        width: 100%;
+    }
+
+    .nav-links a,
+    .login,
+    .signup {
+        font-size: 12px;
+    }
+}
+
+/* BUTTON HIGHLIGHTS */
+.signup,
+.nav-links a,
+.login,
+.services-btn,
+.about-btn,
+.view-all-btn,
+.see-availability {
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease,
+        box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.signup:hover,
+.nav-links a:hover,
+.login:hover,
+.services-btn:hover,
+.about-btn:hover,
+.view-all-btn:hover,
+.see-availability:hover,
+.signup:focus-visible,
+.services-btn:focus-visible,
+.about-btn:focus-visible,
+.view-all-btn:focus-visible,
+.see-availability:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 3px #ffffff, 0 7px 16px rgba(70, 0, 0, 0.35);
+    outline: none;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.login:hover,
+.login:focus-visible {
+    background-color: #ffffff;
+    color: #8b181c;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.signup:hover,
+.signup:focus-visible {
+    background-color: #8b181c;
+    color: #ffffff;
+}
+
+.services-btn:hover,
+.services-btn:focus-visible,
+.view-all-btn:hover,
+.view-all-btn:focus-visible {
+    background-color: #ffffff;
+    color: #8b181c;
+}
+
+.about-btn:hover,
+.about-btn:focus-visible {
+    background-color: #8b181c;
+    color: #ffffff;
+}
+
+.see-availability:hover,
+.see-availability:focus-visible {
+    color: #ffffff;
+    opacity: 1;
+    text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .signup,
+    .nav-links a,
+    .login,
+    .services-btn,
+    .about-btn,
+    .view-all-btn,
+    .see-availability {
+        transition: none;
+    }
+
+    .care-card {
+        transition: none;
+    }
+}
+
+/* Shared KATOC brand color refinements */
+.signup,
+.services-btn,
+.view-all-btn,
+.feature-card,
+.care-action,
+.search-submit,
+.workflow-card,
+.dialysis-options-section,
+.primary-action {
+    background-color: #A71920;
+}
+
+.signup {
+    color: #ffffff;
+}
+
+.signup,
+.services-btn,
+.about-btn,
+.view-all-btn,
+.care-action,
+.location-button,
+.search-submit,
+.primary-action,
+.secondary-action,
+.outline-action,
+.filter-chip,
+.care-card,
+.appointment-cta-section {
+    border-color: #A71920;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.login:hover,
+.login:focus-visible,
+.about-btn:hover,
+.about-btn:focus-visible,
+.location-button,
+.outline-action,
+.secondary-action,
+.filter-chip,
+.care-link:hover,
+.care-link:focus-visible {
+    color: #A71920;
+}
+
+/* Keep card availability actions above decorative card layers. */
+.center-card .see-availability {
+    position: relative;
+    z-index: 10;
+    display: inline-flex;
+    background: #7d1519 !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+.center-card .see-availability:hover,
+.center-card .see-availability:focus-visible {
+    background: #a42128 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px rgba(73, 0, 4, 0.28);
+}
+
+/* FIX: SEE AVAILABILITY BUTTON */
+.center-card .see-availability {
+    position: relative;
+    z-index: 9999;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-width: 170px;
+    min-height: 44px;
+    padding: 10px 18px;
+
+    background: #7d1519 !important;
+    color: #ffffff !important;
+
+    border: 1px solid #ffffff;
+    border-radius: 6px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer;
+
+    position: relative;
+}
+
+.center-card .see-availability span {
+    color: #ffffff !important;
+}
+
+.center-card .see-availability:hover {
+    background: #a42128 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.center-card .see-availability:active {
+    transform: translateY(0);
+}
+
+/* =====================================
+   KATOC AVAILABILITY POPUP FIX
+===================================== */
+
+.availability-modal {
+    position: fixed !important;
+    inset: 0 !important;
+
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow-y: auto !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    padding: 20px !important;
+
+    background: rgba(0, 0, 0, 0.45) !important;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    z-index: 99999 !important;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+}
+
+.availability-modal.is-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.availability-modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+}
+
+.availability-modal-card {
+    position: relative !important;
+    z-index: 1 !important;
+
+    width: min(960px, calc(100vw - 40px)) !important;
+    max-height: calc(100vh - 40px) !important;
+    margin: 20px auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 24px 28px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #ead3d4 !important;
+    border-radius: 16px !important;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+
+    text-align: center !important;
+}
+
+.availability-booking-form {
+    display: grid;
+    grid-template-columns: minmax(0, 68fr) minmax(280px, 32fr);
+    align-items: start;
+    gap: 26px;
+    margin-top: 18px;
+    width: 100%;
+    max-width: none;
+}
+
+.availability-booking-form fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.availability-booking-form fieldset label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #e7c9c9;
+    border-radius: 999px;
+    background: #fffaf9;
+    color: #4d4040;
+    font-size: 14px;
+    font-weight: 400;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.availability-booking-form fieldset label:hover {
+    border-color: #c74b55;
+    background: #fff4f4;
+}
+
+.availability-booking-form fieldset input {
+    width: auto;
+    min-height: auto;
+    margin: 0;
+    accent-color: #8d1e24;
+}
+
+.availability-modal.has-booking-form .availability-details {
+    display: none;
+}
+
+.availability-booking-form .booking-step {
+    grid-column: 1;
+}
+
+.availability-booking-main {
+    grid-column: 1;
+    min-width: 0;
+    max-height: calc(100vh - 190px);
+    overflow-y: auto;
+    padding: 0 10px 12px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #d4b7b8 transparent;
+}
+
+.availability-booking-aside {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    min-height: 100%;
+    padding: 24px 22px;
+    border: 1px solid #ead3d4;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #fffaf9 0%, #f9efef 100%);
+    text-align: left;
+    box-shadow: inset 0 0 0 1px rgba(141, 30, 36, 0.04);
+}
+
+.availability-aside-eyebrow {
+    color: #8d1e24;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.availability-booking-aside h4 {
+    margin: 8px 0 18px;
+    color: #5b0a12;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.15;
+}
+
+.availability-booking-aside dl {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+}
+
+.availability-booking-aside dl div {
+    display: grid;
+    gap: 3px;
+}
+
+.availability-booking-aside dt {
+    color: #8d1e24;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.availability-booking-aside dd {
+    margin: 0;
+    color: #4d4040;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.availability-aside-note {
+    margin: 22px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid #ead3d4;
+    color: #6d5a5a;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.availability-aside-action {
+    width: 100%;
+    margin-top: 22px;
+}
+
+.availability-modal-card h3 {
+    color: #5b0a12 !important;
+    margin-bottom: 10px !important;
+}
+
+.availability-copy {
+    color: #4d4040 !important;
+}
+
+.availability-actions {
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+.availability-primary,
+.availability-secondary,
+.availability-cancel {
+    cursor: pointer !important;
+}
+
+.booking-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.booking-step h4 {
+    margin: 4px 0 2px;
+    color: #5b0a12;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+.booking-step h4:not(:first-child) {
+    margin-top: 12px;
+}
+
+.booking-step label span {
+    color: #7b6b6b;
+    font-weight: 400;
+}
+
+.booking-step textarea {
+    width: 100%;
+    min-height: 70px;
+    padding: 9px 10px;
+    border: 1px solid #d4b7b8;
+    border-radius: 6px;
+    resize: vertical;
+    color: #4d4040;
+    font: inherit;
+}
+
+#availability-patient-step input,
+#availability-patient-step textarea {
+    position: relative;
+    z-index: 3;
+}
+
+.booking-summary {
+    text-align: left;
+}
+
+.booking-summary p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 4px 0;
+    color: #4d4040;
+    font-size: 13px;
+}
+
+.booking-summary p strong {
+    color: #8d1e24;
+}
+
+.booking-summary-actions,
+.booking-result-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.booking-result > p {
+    color: #4d4040;
+    line-height: 1.5;
+}
+
+.booking-confirmation {
+    width: min(100%, 500px);
+    margin: 22px auto 0;
+    padding: 16px;
+    border: 1px solid #ead3d4;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.booking-confirmation p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 7px 0;
+    color: #4d4040;
+}
+
+.booking-confirmation strong {
+    color: #8d1e24;
+}
+
+/* Keep the long booking form inside the viewport on phones. */
+@media (max-width: 600px) {
+    .availability-modal {
+        align-items: flex-start !important;
+        padding: 8px 10px !important;
+        overflow-y: auto !important;
+    }
+
+    .availability-modal-card {
+    width: min(1100px, 92vw) !important;
+    height: 55vh !important;
+    margin: 0 auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    border-radius: 16px !important;
+}
+
+    .availability-booking-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .availability-booking-main {
+        max-height: none;
+        overflow: visible;
+        padding: 0;
+    }
+
+    .availability-booking-aside {
+        order: -1;
+        width: 100%;
+    }
+}

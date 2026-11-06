@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up | KATOC</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-login-page">
+    <main class="auth-shell">
+        <section class="auth-visual">
+            <div class="auth-logo-stage">
+                <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-logo">
+            </div>
+            <div class="auth-visual-content">
+                <span class="auth-eyebrow">KIDNEY ACCESS AND TREATMENT OPERATION CENTER</span>
+                <h1>Find. Book. Care.</h1>
+                <p>Create an account to request dialysis appointments and keep track of them in one place.</p>
+            </div>
+        </section>
+
+        <section class="auth-form-panel">
+            <div class="auth-form-wrap">
+                <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-form-logo-mark">
+                <h2>Create your account</h2>
+                <p class="auth-intro">It only takes a minute.</p>
+
+                {% if errors %}
+                    <div class="auth-error" role="alert">
+                        {% for e in errors %}<div>{{ e }}</div>{% endfor %}
+                    </div>
+                {% endif %}
+
+                <form class="auth-form" method="post" action="{{ path('app_register') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
+                    <div class="form-field">
+                        <label for="name">Full name</label>
+                        <input type="text" id="name" name="name" value="{{ name }}" autocomplete="name" maxlength="100" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email address</label>
+                        <input type="email" id="email" name="email" value="{{ email }}" autocomplete="email" maxlength="180" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="password">Password (min. 8 characters)</label>
+                        <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="confirm_password">Confirm password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" autocomplete="new-password" minlength="8" required>
+                        <label class="password-toggle" for="password-visibility">
+                            <input type="checkbox" id="password-visibility">
+                            <span>Show passwords</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-submit">Create account</button>
+                </form>
+
+                <p class="auth-switch">Already have an account? <a href="{{ path('app_login') }}">Log in</a></p>
+                <a href="{{ path('app_home') }}" class="auth-back">Back to homepage</a>
+            </div>
+        </section>
+    </main>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

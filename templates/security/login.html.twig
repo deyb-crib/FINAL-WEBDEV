@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in | KATOC</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-login-page">
+    <main class="auth-shell">
+        <section class="auth-visual">
+            <div class="auth-logo-stage">
+                <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-logo">
+            </div>
+            <div class="auth-visual-content">
+                <span class="auth-eyebrow">KIDNEY ACCESS AND TREATMENT OPERATION CENTER</span>
+                <h1>Your care starts here.</h1>
+                <p>Sign in to find dialysis centers, review care information, and manage your appointment requests.</p>
+            </div>
+        </section>
+
+        <section class="auth-form-panel">
+            <div class="auth-form-wrap">
+                <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-form-logo-mark">
+                <h2>Log in to KATOC</h2>
+                <p class="auth-intro">Access your dialysis care information and appointment requests.</p>
+
+                {% for message in app.flashes('success') %}
+                    <div class="auth-success" role="status">{{ message }}</div>
+                {% endfor %}
+                {% if error %}
+                    <div class="auth-error" role="alert"><div>Invalid email or password.</div></div>
+                {% endif %}
+
+                <form class="auth-form" method="post" action="{{ path('app_login') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="form-field">
+                        <label for="email">Email address</label>
+                        <input type="email" id="email" name="email" value="{{ last_username }}" autocomplete="email" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" autocomplete="current-password" required>
+                        <label class="password-toggle" for="password-visibility">
+                            <input type="checkbox" id="password-visibility">
+                            <span>Show password</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-submit">Get started</button>
+                </form>
+
+                <p class="auth-switch">Don't have an account? <a href="{{ path('app_register') }}">Sign up</a></p>
+                <a href="{{ path('app_home') }}" class="auth-back">Back to homepage</a>
+            </div>
+        </section>
+    </main>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

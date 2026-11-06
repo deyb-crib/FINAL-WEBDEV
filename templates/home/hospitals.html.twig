@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Dialysis Hospitals | KATOC</title>
+    <link rel="stylesheet" href="/style.css?v=20260908-booking-layout">
+    <script src="/script.js?v=20260908-booking-input-layer" defer></script>
+</head>
+<body class="all-hospitals-page">
+    <header class="hospitals-header">
+        <a href="{{ path('app_home') }}" class="hospitals-brand">KATOC</a>
+        <div class="hospitals-actions">
+            {% if app.user %}
+                <a href="{{ path('app_dashboard') }}">Dashboard</a>
+                <a href="{{ path('app_logout') }}">Log out</a>
+            {% else %}
+                <a href="{{ path('app_login') }}">Log in</a>
+                <a href="{{ path('app_register') }}" class="hospitals-signup">Sign up</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="hospitals-main">
+        <div class="hospitals-intro">
+            <span class="section-eyebrow">KATOC CARE NETWORK</span>
+            <h1>All dialysis hospitals</h1>
+            <p>Browse available dialysis centers, compare their details, and choose the care location that fits your needs.</p>
+            <a href="{{ path('app_home') }}#services" class="hospitals-back">Search centers <span>&rarr;</span></a>
+        </div>
+
+        <section class="centers-section hospitals-list" id="centers" aria-label="All dialysis hospitals">
+            <div class="centers-header">
+                <h2 class="centers-title">AVAILABLE CARE CENTERS</h2>
+                <span class="hospitals-count">{{ centers|length }} centers</span>
+            </div>
+            <div class="centers-grid">
+                {% for center in centers %}
+                <article class="center-card">
+                    <div class="card-image-wrapper{{ center.imagePath ? '' : ' card-image-placeholder' }}">
+                        {% if center.imagePath %}<img src="/{{ center.imagePath }}" alt="{{ center.name }}">{% else %}Photo coming soon{% endif %}
+                        <div class="card-gradient-overlay"></div>
+                    </div>
+                    <div class="center-info-box">
+                        <h3 class="center-name">{{ center.name }}</h3>
+                        <p class="center-location">{{ center.address }}</p>
+                        <p class="center-hours">{{ center.operatingHours }}</p>
+                        <p class="center-service">{{ center.dialysisTypes }}</p>
+                    </div>
+                    <button type="button" class="see-availability availability-trigger" data-center="{{ center.name }}" data-location="{{ center.address }}" data-hours="{{ center.operatingHours }}" data-logged-in="{{ app.user ? 'true' : 'false' }}">See Availability <span>&rarr;</span></button>
+                </article>
+                {% else %}
+                <p>No centers are available right now.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    {% include 'home/_booking_modal.html.twig' %}
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | KATOC</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <header class="app-header">
+        <a href="{{ path('app_home') }}" class="app-brand">KATOC</a>
+        <nav>
+            <a href="{{ path('app_home') }}">Home</a>
+            <a href="{{ path('app_hospitals') }}">Find a center</a>
+            <a href="{{ path('app_logout') }}">Log out</a>
+        </nav>
+    </header>
+    <main class="app-main">
+        <h1>Welcome, {{ app.user.name }}</h1>
+        <p class="muted">Your dialysis appointment requests.</p>
+
+        {% for type in ['success', 'error'] %}
+            {% for message in app.flashes(type) %}
+                <div class="flash flash-{{ type }}" role="status">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <p><a class="btn" href="{{ path('app_hospitals') }}">Book a new appointment</a></p>
+
+        {% for a in appointments %}
+            <div class="card">
+                <div>
+                    <h3>{{ a.center }}</h3>
+                    <div class="muted">{{ a.location }}</div>
+                    <div>{{ a.dialysisType }} &middot; {{ a.appointmentDate|date('F j, Y') }} &middot; {{ ('2000-01-01 ' ~ a.appointmentTime)|date('g:i A') }} ({{ a.session }})</div>
+                    <div class="muted">Patient: {{ a.patientName }}</div>
+                </div>
+                <div>
+                    <span class="badge badge-{{ a.status }}">{{ a.status }}</span>
+                    {% if a.status != 'Cancelled' %}
+                        <form method="post" action="{{ path('app_appointment_cancel', {id: a.id}) }}" style="display:inline" onsubmit="return confirm('Cancel this appointment?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ a.id) }}">
+                            <button type="submit" class="btn btn-outline">Cancel</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p class="muted">You have no appointment requests yet.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

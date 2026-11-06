@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KATOC | Kidney Access and Treatment Operation Center</title>
+
+    <link rel="stylesheet" href="/style.css?v=20260908-booking-layout">
+</head>
+
+<body class="{{ app.user ? 'has-dashboard-sidebar' : '' }}">
+
+    <!-- =========================
+         KATOC HERO SECTION
+    ========================== -->
+
+    <section class="hero" id="hero-home">
+
+        <!-- NAVIGATION -->
+        <nav class="navbar">
+
+            <!-- KATOC ICON -->
+            <a href="#hero-home" class="nav-logo">
+                <img src="/images/katoc-icon.png" alt="KATOC">
+            </a>
+
+            <!-- NAVIGATION LINKS -->
+            <div class="nav-links">
+                <a href="#hero-home">Home</a>
+                <a href="#why-katoc">Why KATOC</a>
+                <a href="{{ path('app_about') }}">About</a>
+            </div>
+
+            <!-- LOGIN / SIGN UP -->
+            <div class="nav-account">
+                {% if app.user %}
+                    <a href="{{ path('app_dashboard') }}" class="nav-user" aria-label="Open dashboard" title="Open dashboard">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21c.7-4 3.3-6 8-6s7.3 2 8 6"></path>
+                        </svg>
+                    </a>
+                    <a href="{{ path('app_dashboard') }}" class="login">Dashboard</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="login">Log in</a>
+                    <a href="{{ path('app_register') }}" class="signup">Sign up</a>
+                {% endif %}
+            </div>
+
+        </nav>
+
+        {% if app.user %}
+            <aside class="home-dashboard-sidebar" aria-label="Dashboard navigation">
+                <div class="home-sidebar-heading">
+                    <span class="home-sidebar-eyebrow">PATIENT MENU</span>
+                    <strong>{{ app.user.name }}</strong>
+                </div>
+                <a class="home-sidebar-link is-active" href="{{ path('app_dashboard') }}" aria-current="page">Dashboard</a>
+                <a class="home-sidebar-link" href="#services" data-section="services">Find a center</a>
+                <a class="home-sidebar-link" href="#appointment" data-section="appointment">Appointments</a>
+                <a class="home-sidebar-link" href="#kidney-care" data-section="kidney-care">Kidney care guide</a>
+                <a class="home-sidebar-logout" href="{{ path('app_logout') }}">Log out</a>
+            </aside>
+        {% endif %}
+
+        <!-- =========================
+             HERO CONTENT
+        ========================== -->
+
+        <div class="hero-content">
+
+            <!-- LEFT WHITE CARD -->
+            <div class="katoc-info">
+                <img src="/images/katoc-logo.png" alt="KATOC Logo" class="katoc-logo">
+                <p class="description">
+                    <span>KATOC</span> is a digital platform that helps patients and
+                    their families easily locate dialysis centers and access essential
+                    information about nearby facilities.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#services" class="services-btn">
+                        <span>Our Services</span>
+                        <strong>→</strong>
+                    </a>
+                    <a href="#about" class="about-btn">
+                        <span>About Us</span>
+                        <strong>→</strong>
+                    </a>
+                </div>
+            </div>
+
+            <!-- RIGHT MEDICAL VISUAL -->
+            <div class="medical-visual">
+                <img src="/images/blood-cells.png" alt="Red blood cells" class="dialysis-image">
+                <div class="red-overlay"></div>
+            </div>
+
+            <!-- OVERLAY IMAGES -->
+            <img src="/images/syringe.png" alt="Syringe" class="syringe">
+            <img src="/images/kidney.png" alt="Kidney" class="kidney">
+
+        </div>
+
+    </section>
+
+    <section class="center-search-section" id="services">
+        <div class="search-copy">
+            <span class="section-eyebrow">FIND CARE NEAR YOU</span>
+            <h1>Find a Dialysis Center Near You</h1>
+            <p>Search for dialysis centers based on your location and treatment needs.</p>
+        </div>
+        <form class="center-search-form" id="center-search-form">
+            <label class="search-field">
+                <span class="search-field-icon">+</span>
+                <input type="search" id="center-search-input" placeholder="Search by city or location..." aria-label="Search by city or location">
+            </label>
+            <button type="button" class="location-button" id="use-location-button">Use my location</button>
+            <button type="submit" class="search-submit">Find centers <span>&rarr;</span></button>
+        </form>
+        <div class="search-filters" aria-label="Center search filters">
+            <button type="button" class="filter-chip" data-filter="location" aria-pressed="false">Location</button>
+            <button type="button" class="filter-chip" data-filter="facility" aria-pressed="false">Center or hospital</button>
+            <button type="button" class="filter-chip" data-filter="type" aria-pressed="false">Dialysis type</button>
+            <button type="button" class="filter-chip" data-filter="hours" aria-pressed="false">Operating hours</button>
+        </div>
+        <p class="search-status" id="search-status" role="status"></p>
+    </section>
+
+    <section class="features-container" id="about">
+        <div class="feature-card">
+            <div class="card-header">
+                <h3>FIND A CENTER</h3>
+            </div>
+            <div class="card-body">
+                <h4>Find Dialysis Centers Near You</h4>
+                <p>Search and locate dialysis centers based on your location.</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-header">
+                <h3>CENTER INFORMATION</h3>
+            </div>
+            <div class="card-body">
+                <h4>Know Before You Go</h4>
+                <p>View important information about dialysis centers, including location, contact details, and available services.</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-header">
+                <h3>EASY NAVIGATION</h3>
+            </div>
+            <div class="card-body">
+                <h4>Get There With Ease</h4>
+                <p>Use location and map features to help you find your way to your chosen dialysis center.</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-header">
+                <h3>KIDNEY CARE</h3>
+            </div>
+            <div class="card-body">
+                <h4>Learn About Dialysis</h4>
+                <p>Access helpful information and resources about dialysis and kidney care.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works-section">
+        <div class="section-heading-row">
+            <div>
+                <span class="section-eyebrow">A SIMPLE WAY TO START</span>
+                <h2>How KATOC Works</h2>
+            </div>
+            <p>Everything you need to move from searching to planning your care.</p>
+        </div>
+        <div class="workflow-grid">
+            <article class="workflow-card">
+                <span class="workflow-number">01</span>
+                <h3>Find a Center</h3>
+                <p>Search for dialysis centers near your location.</p>
+            </article>
+            <article class="workflow-card">
+                <span class="workflow-number">02</span>
+                <h3>Check Information</h3>
+                <p>Compare services, hours, location, and center details.</p>
+            </article>
+            <article class="workflow-card">
+                <span class="workflow-number">03</span>
+                <h3>Request an Appointment</h3>
+                <p>Choose a center and take the next step in your care.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="locator-section" id="locator">
+        <div class="locator-header">
+            <div>
+                <span class="section-eyebrow">DIALYSIS CENTERS NEAR YOU</span>
+                <h2>Locate care with confidence</h2>
+            </div>
+            <div class="locator-actions">
+                <button type="button" class="outline-action map-open-action" id="open-map-button">View map <span aria-hidden="true">↗</span></button>
+                <a href="#centers" class="outline-action">View all centers <span>&rarr;</span></a>
+            </div>
+        </div>
+        <div class="locator-map" aria-label="Map showing dialysis center locations">
+            <iframe
+                title="Map of dialysis centers in Dumaguete"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=123.285%2C9.285%2C123.32%2C9.325&amp;layer=mapnik&amp;marker=9.307%2C123.305"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+
+    <dialog class="map-dialog" id="map-dialog" aria-labelledby="map-dialog-title">
+        <div class="map-dialog-header">
+            <div>
+                <span class="section-eyebrow">DUMAGUETE CARE NETWORK</span>
+                <h2 id="map-dialog-title">Dialysis centers near you</h2>
+            </div>
+            <button type="button" class="map-dialog-close" id="close-map-button" aria-label="Close map">&times;</button>
+        </div>
+        <div class="map-frame">
+            <iframe
+                title="Map of dialysis centers in Dumaguete"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=123.285%2C9.285%2C123.32%2C9.325&amp;layer=mapnik&amp;marker=9.307%2C123.305"
+                loading="lazy"></iframe>
+        </div>
+        <a class="map-external-link" href="https://www.openstreetmap.org/?mlat=9.307&amp;mlon=123.305#map=14/9.307/123.305" target="_blank" rel="noopener noreferrer">Open in a new tab <span aria-hidden="true">&rarr;</span></a>
+    </dialog>
+
+    <section class="centers-section" id="centers">
+        <img src="/images/blood-cells.png" alt="" class="bg-cells">
+
+        <div class="centers-header">
+            <h2 class="centers-title">FIND YOUR MOST SUITABLE PLACE, WE CARE FOR YOUR HEALTH</h2>
+            <a href="{{ path('app_hospitals') }}" class="view-all-btn">
+                VIEW ALL <span>&rarr;</span>
+            </a>
+        </div>
+
+        <div class="centers-grid">
+            {% for center in centers %}
+            <div class="center-card" data-location="{{ center.address|lower }}" data-facility="{{ center.name|lower }}" data-type="{{ center.dialysisTypes|lower }}" data-hours="open">
+                <div class="card-image-wrapper{{ center.imagePath ? '' : ' card-image-placeholder' }}">
+                    {% if center.imagePath %}<img src="/{{ center.imagePath }}" alt="{{ center.name }}">{% else %}Photo coming soon{% endif %}
+                    <div class="card-gradient-overlay"></div>
+                </div>
+                <div class="center-info-box">
+                    <h3 class="center-name">{{ center.name }}</h3>
+                    <p class="center-location">{{ center.address }}</p>
+                    <p class="center-hours">{{ center.operatingHours }}</p>
+                    <p class="center-service">{{ center.dialysisTypes }}</p>
+                </div>
+                <button type="button" class="see-availability availability-trigger" data-center="{{ center.name }}" data-location="{{ center.address }}" data-hours="{{ center.operatingHours }}" data-logged-in="{{ app.user ? 'true' : 'false' }}">
+                    See Availability <span>&rarr;</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% include 'home/_booking_modal.html.twig' %}
+
+    <!-- =========================
+         KIDNEY HEALTH INFORMATION
+    ========================== -->
+    <section class="kidney-care-section" id="kidney-care">
+        <div class="kidney-care-heading">
+            <span class="section-eyebrow">KIDNEY CARE GUIDE</span>
+            <h2>Understand kidney disease and dialysis</h2>
+        </div>
+
+        <div class="kidney-care-cards">
+            <article class="care-card">
+                <div class="care-card-icon">+</div>
+                <div class="care-card-heading">
+                    <h3>What is kidney disease?</h3>
+                </div>
+                <p>
+                    Kidney disease happens when the kidneys cannot properly remove waste
+                    and extra fluid from the blood. Early checkups can help protect kidney function.
+                </p>
+                <a href="#kidney-care" class="care-link">Learn more <span>&rarr;</span></a>
+            </article>
+
+            <article class="care-card">
+                <div class="care-card-icon">!</div>
+                <div class="care-card-heading">
+                    <h3>Know the warning signs</h3>
+                </div>
+                <p>
+                    Swelling, changes in urination, tiredness, nausea, or shortness of breath
+                    may need medical attention. Talk to a healthcare professional about any concerns.
+                </p>
+                <a href="#kidney-care" class="care-link">Learn more <span>&rarr;</span></a>
+            </article>
+
+            <article class="care-card">
+                <div class="care-card-icon">✓</div>
+                <div class="care-card-heading">
+                    <h3>Preparing for dialysis</h3>
+                </div>
+                <p>
+                    Ask about treatment schedules, center services, transportation, and what to
+                    bring. Your care team can guide you through every step of your treatment plan.
+                </p>
+                <a href="#centers" class="care-link">Find a center <span>&rarr;</span></a>
+            </article>
+        </div>
+    </section>
+
+    <section class="dialysis-options-section" id="dialysis-options">
+        <div class="section-heading-row options-heading">
+            <div>
+                <span class="section-eyebrow">KNOW YOUR OPTIONS</span>
+                <h2>Types of Dialysis</h2>
+            </div>
+            <p>Learn the basics and discuss the best treatment approach with your healthcare team.</p>
+        </div>
+        <div class="options-grid">
+            <article class="option-card">
+                <span class="option-label">01 / MACHINE-BASED</span>
+                <h3>Hemodialysis</h3>
+                <p>Blood passes through a filter, called a dialyzer, to remove waste and extra fluid. It is often provided at a center several times each week.</p>
+                <a href="#kidney-care" class="text-action">Learn about care <span>&rarr;</span></a>
+            </article>
+            <article class="option-card option-card-light">
+                <span class="option-label">02 / HOME-BASED</span>
+                <h3>Peritoneal Dialysis</h3>
+                <p>A cleansing fluid uses the lining of the abdomen to remove waste and extra fluid. It can be done manually or with a machine at home.</p>
+                <a href="#kidney-care" class="text-action">Learn about care <span>&rarr;</span></a>
+            </article>
+            <article class="option-card option-card-soft">
+                <span class="option-label">03 / FLEXIBLE SCHEDULE</span>
+                <h3>Home Hemodialysis</h3>
+                <p>Hemodialysis performed at home with training and support from a care team. Some schedules use shorter or more frequent treatments.</p>
+                <a href="#kidney-care" class="text-action">Explore home care <span>&rarr;</span></a>
+            </article>
+            <article class="option-card option-card-light">
+                <span class="option-label">04 / HOSPITAL CARE</span>
+                <h3>Continuous Renal Replacement Therapy</h3>
+                <p>CRRT is a slower, continuous form of dialysis used in hospitals for some critically ill patients who need close monitoring.</p>
+                <a href="#kidney-care" class="text-action">Ask your care team <span>&rarr;</span></a>
+            </article>
+        </div>
+        <div class="dialysis-help-panel">
+            <div>
+                <span class="option-label">BEFORE YOU DECIDE</span>
+                <h3>Choose with your care team</h3>
+                <p>The right option depends on your health, schedule, home support, access needs, and personal preferences.</p>
+            </div>
+            <ul>
+                <li>Where will treatment take place?</li>
+                <li>How often and how long will treatment be?</li>
+                <li>What training, supplies, and support are needed?</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="why-katoc-section" id="why-katoc">
+        <div class="why-katoc-heading">
+            <span class="section-eyebrow">WHY PATIENTS USE KATOC</span>
+            <h2>Care information, made easier to reach.</h2>
+        </div>
+        <div class="benefits-grid">
+            <article class="benefit-item"><span class="benefit-icon">+</span><h3>Easy to Find</h3><p>Locate dialysis centers based on your location.</p></article>
+            <article class="benefit-item"><span class="benefit-icon">i</span><h3>Reliable Information</h3><p>Access important center details in one place.</p></article>
+            <article class="benefit-item"><span class="benefit-icon">→</span><h3>Convenient Access</h3><p>Request appointments without searching everywhere.</p></article>
+            <article class="benefit-item"><span class="benefit-icon">♥</span><h3>Patient-Focused</h3><p>Designed to make finding dialysis care simpler.</p></article>
+        </div>
+    </section>
+
+    <section class="appointment-cta-section" id="appointment">
+        <div>
+            <span class="section-eyebrow">YOUR NEXT STEP</span>
+            <h2>Ready to find your dialysis care?</h2>
+            <p>Find a center, check its services, and request an appointment with ease.</p>
+        </div>
+        <div class="appointment-actions">
+            <a href="#centers" class="primary-action">Find a center <span>&rarr;</span></a>
+            <a href="#appointment" class="secondary-action">Request an appointment <span>&rarr;</span></a>
+        </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+        <div class="faq-heading">
+            <span class="section-eyebrow">NEED TO KNOW</span>
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>What is dialysis?</summary>
+                <p>Dialysis is a treatment that helps remove waste and extra fluid from the blood when the kidneys are not working properly.</p>
+            </details>
+            <details class="faq-item">
+                <summary>How do I find a dialysis center?</summary>
+                <p>Use the search area above to look for centers by city or location, then review the center information provided.</p>
+            </details>
+            <details class="faq-item">
+                <summary>What information can I see about a center?</summary>
+                <p>You can review location, operating hours, available services, and contact information.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Can I request an appointment through KATOC?</summary>
+                <p>KATOC helps you find a center and request an appointment. The center will confirm availability and treatment details.</p>
+            </details>
+            <details class="faq-item">
+                <summary>What are the different types of dialysis?</summary>
+                <p>The two common types are hemodialysis and peritoneal dialysis. Your healthcare team can explain which option may be appropriate for you.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- =========================
+         CTA / FOOTER SECTION
+    ========================== -->
+    <section class="cta-footer-wrapper">
+        <img src="/images/vessel-cells.png" alt="Blood vessel and cells" class="vessel-graphic">
+        <img src="/images/kidney-outline.png" alt="KATOC Kidney Logo" class="large-kidney-logo">
+
+        <div class="cta-footer-card">
+            <div class="footer-logo-container">
+                <img src="/images/katoc-logo2.png" alt="KATOC Logo" class="katoc-logo2">
+            </div>
+
+            <div class="footer-inner-card">
+                <h2 class="cta-heading">YOUR CARE STARTS HERE</h2>
+                <p class="cta-subtext">
+                    Finding dialysis care doesn't have to be difficult. KATOC helps you discover dialysis centers, learn about their services, and request an appointment—all in one place.
+                </p>
+
+                <div class="footer-columns">
+                    <div class="footer-col">
+                        <span class="pill-badge">Find Us</span>
+                        <ul class="footer-links">
+                            <li><a href="#hero-home">Home</a></li>
+                            <li><a href="#services">Our services</a></li>
+                            <li><a href="{{ path('app_about') }}">About Us</a></li>
+                            <li><a href="#appointment">Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <span class="pill-badge">Contact Us</span>
+                        <ul class="footer-info">
+                            <li>Phone No.: 09192266069</li>
+                            <li>Gmail: markdaveopena968@gmail.com</li>
+                            <li>Facebook: KATOC PH</li>
+                            <li class="highlight-text">Book for Appointment NOW</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p class="footer-tagline">KATOC • Find. Book. Care.</p>
+        </div>
+    </section>
+
+    <script src="/script.js?v=20260908-booking-input-layer"></script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | KATOC</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <header class="app-header">
+        <a href="{{ path('app_home') }}" class="app-brand">KATOC</a>
+        <nav>
+            <a href="{{ path('app_home') }}">Home</a>
+            <a href="{{ path('app_hospitals') }}">Find a center</a>
+            {% if app.user %}<a href="{{ path('app_dashboard') }}">Dashboard</a>{% else %}<a href="{{ path('app_login') }}">Log in</a>{% endif %}
+        </nav>
+    </header>
+    <main class="app-main about">
+        <h1>About KATOC</h1>
+        <p class="muted">Kidney Access and Treatment Operation Center</p>
+        <p>KATOC is a digital platform that helps patients and their families locate dialysis centers, read essential information about nearby facilities, and request appointments in one place.</p>
+        <p>Edit this page in <code>templates/about/about.html.twig</code> to add your own team and project details.</p>
+    </main>
+</body>
+</html>

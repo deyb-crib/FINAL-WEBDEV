@@ -1,0 +1,9 @@
+/vendor/
+/var/
+.env
+.env.local
+.env.*.local
+.mcp.json
+cookies.txt
+tmp_cookies.txt
+data/skills/
