@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} | KATOC</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="admin-body">
+    <button class="admin-menu-toggle" type="button" aria-expanded="false" aria-controls="admin-sidebar">
+        <span aria-hidden="true">☰</span>
+        <span class="sr-only">Open admin navigation</span>
+    </button>
+    <div class="admin-shell">
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <a href="{{ path('app_admin_dashboard') }}" class="admin-brand">
+                <img src="/images/katoc-icon.png" alt="">
+                <span><strong>KATOC</strong><small>ADMIN CONSOLE</small></span>
+            </a>
+            <nav class="admin-nav" aria-label="Admin navigation">
+                <span class="admin-nav-label">WORKSPACE</span>
+                <a class="{{ active_nav == 'dashboard' ? 'is-active' : '' }}" href="{{ path('app_admin_dashboard') }}"><span class="admin-nav-icon">⌂</span>Dashboard</a>
+                <a class="{{ active_nav == 'users' ? 'is-active' : '' }}" href="{{ path('app_admin_users') }}"><span class="admin-nav-icon">♙</span>User management</a>
+                <a class="{{ active_nav == 'records' ? 'is-active' : '' }}" href="{{ path('app_admin_records') }}"><span class="admin-nav-icon">▤</span>Records management</a>
+                <a class="{{ active_nav == 'centers' ? 'is-active' : '' }}" href="{{ path('app_admin_centers') }}"><span class="admin-nav-icon">⌖</span>Dialysis centers</a>
+                <a class="{{ active_nav == 'reports' ? 'is-active' : '' }}" href="{{ path('app_admin_reports') }}"><span class="admin-nav-icon">▥</span>Reports &amp; analytics</a>
+                <span class="admin-nav-label admin-nav-label-secondary">SYSTEM</span>
+                <a class="{{ active_nav == 'activity' ? 'is-active' : '' }}" href="{{ path('app_admin_activity') }}"><span class="admin-nav-icon">◷</span>Activity logs</a>
+                <a class="{{ active_nav == 'notifications' ? 'is-active' : '' }}" href="{{ path('app_admin_notifications') }}"><span class="admin-nav-icon">♧</span>Notifications</a>
+                <a class="{{ active_nav == 'settings' ? 'is-active' : '' }}" href="{{ path('app_admin_settings') }}"><span class="admin-nav-icon">⚙</span>System settings</a>
+                <a class="{{ active_nav == 'profile' ? 'is-active' : '' }}" href="{{ path('app_admin_profile') }}"><span class="admin-nav-icon">♙</span>Profile</a>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <a href="{{ path('app_home') }}" class="admin-view-site">← View KATOC website</a>
+                <a href="{{ path('app_logout') }}" class="admin-logout"><span class="admin-nav-icon">↪</span>Log out</a>
+                <div class="admin-sidebar-user">
+                    <span class="admin-avatar">{{ app.user.name|slice(0, 1)|upper }}</span>
+                    <span><strong>{{ app.user.name }}</strong><small>Administrator</small></span>
+                </div>
+            </div>
+        </aside>
+        <div class="admin-sidebar-backdrop" hidden></div>
+        <div class="admin-content-wrap">
+            <header class="admin-topbar">
+                <div>
+                    <span class="admin-topbar-label">KIDNEY ACCESS &amp; TREATMENT OPERATIONS</span>
+                    <strong>{% block section_label %}Administration{% endblock %}</strong>
+                </div>
+                <a class="admin-topbar-profile" href="{{ path('app_admin_profile') }}">
+                    <span class="admin-avatar">{{ app.user.name|slice(0, 1)|upper }}</span>
+                    <span>{{ app.user.name }}</span>
+                </a>
+            </header>
+            <main class="admin-main">
+                {% for type in ['success', 'error'] %}
+                    {% for message in app.flashes(type) %}
+                        <div class="flash flash-{{ type }}" role="status">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+                {% block body %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    <script src="/js/admin.js" defer></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

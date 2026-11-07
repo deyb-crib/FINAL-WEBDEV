@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin sign up | KATOC</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-login-page">
+    <main class="auth-shell">
+        <section class="auth-visual">
+            <div class="auth-logo-stage">
+                <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-logo">
+            </div>
+            <div class="auth-visual-content">
+                <span class="auth-eyebrow">KIDNEY ACCESS AND TREATMENT OPERATION CENTER</span>
+                <h1>Administrator access.</h1>
+                <p>Create an administrator account to manage dialysis centers and appointment requests.</p>
+            </div>
+        </section>
+
+        <section class="auth-form-panel">
+            <div class="auth-form-wrap">
+                <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-form-logo-mark">
+                <h2>Create an admin account</h2>
+                <p class="auth-intro">An administrator invite code is required to register.</p>
+
+                {% if not configured %}
+                    <div class="auth-error" role="alert">
+                        Admin signup is not configured. Set a private ADMIN_SIGNUP_CODE with at least 64 characters, then restart the app.
+                    </div>
+                {% else %}
+                    {% if errors %}
+                        <div class="auth-error" role="alert">
+                            {% for error in errors %}<div>{{ error }}</div>{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form class="auth-form" method="post" action="{{ path('app_admin_register') }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin-register') }}">
+                        <div class="form-field">
+                            <label for="name">Full name</label>
+                            <input type="text" id="name" name="name" value="{{ name }}" autocomplete="name" maxlength="100" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="email">Email address</label>
+                            <input type="email" id="email" name="email" value="{{ email }}" autocomplete="email" maxlength="180" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="invite_code">Admin invite code</label>
+                            <input type="password" id="invite_code" name="invite_code" autocomplete="off" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="password">Password (min. 8 characters)</label>
+                            <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="confirm_password">Confirm password</label>
+                            <input type="password" id="confirm_password" name="confirm_password" autocomplete="new-password" minlength="8" required>
+                            <label class="password-toggle" for="password-visibility">
+                                <input type="checkbox" id="password-visibility">
+                                <span>Show passwords</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="auth-submit">Create admin account</button>
+                    </form>
+                {% endif %}
+
+                <p class="auth-switch"><a href="{{ path('app_admin_login') }}">Back to admin sign in</a></p>
+                <a href="{{ path('app_home') }}" class="auth-back">Back to homepage</a>
+            </div>
+        </section>
+    </main>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

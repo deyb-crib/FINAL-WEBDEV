@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Appointment;
 use App\Entity\DialysisCenter;
+use App\Entity\User;
+use App\Service\AdminActivityLogger;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +48,7 @@ class BookingController extends AbstractController
     }
 
     #[Route('/booking/create', name: 'app_booking_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em, AdminActivityLogger $activityLogger): Response
     {
         $p = $request->request;
         if (!$this->isCsrfTokenValid('booking', (string) $p->get('csrf_token'))) {
@@ -126,6 +128,14 @@ class BookingController extends AbstractController
         $a->notes = $notes !== '' ? $notes : null;
         $em->persist($a);
         $em->flush();
+        $actor = $this->getUser();
+        $activityLogger->record(
+            $actor instanceof User ? $actor : null,
+            'appointment.create',
+            'appointment',
+            (string) $a->id,
+            'Requested an appointment at '.$a->center,
+        );
 
         $this->addFlash('success', 'Appointment request sent to '.$center->name.'. The center will confirm it.');
 

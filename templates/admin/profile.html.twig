@@ -1,0 +1,17 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'profile' %}
+{% block title %}Profile{% endblock %}
+{% block section_label %}Administrator profile{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">YOUR ACCOUNT</span><h1>Administrator profile</h1><p>Update the name and email address associated with your account.</p></div></div>
+    {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+    <form class="admin-panel admin-edit-form" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token('admin-profile') }}">
+        <label for="name">Full name</label><input id="name" name="name" value="{{ name }}" maxlength="100" required>
+        <label for="email">Email address</label><input type="email" id="email" name="email" value="{{ email }}" maxlength="180" required>
+        <p class="admin-form-note">Your sign-in email changes when you save a new email address. Your administrator role is retained.</p>
+        <div class="admin-form-actions"><button class="admin-button admin-button-primary" type="submit">Save profile</button></div>
+    </form>
+{% endblock %}

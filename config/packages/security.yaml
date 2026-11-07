@@ -1,4 +1,5 @@
 security:
+    access_denied_url: app_admin_access_denied
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     providers:
@@ -13,6 +14,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -24,5 +26,9 @@ security:
                 path: app_logout
                 target: app_home
     access_control:
+        - { path: ^/admin/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/signup$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin-access-denied$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/dashboard, roles: ROLE_USER }
         - { path: ^/booking, roles: ROLE_USER }

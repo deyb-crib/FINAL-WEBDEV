@@ -1,0 +1,39 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'centers' %}
+{% block title %}Dialysis centers{% endblock %}
+{% block section_label %}Care center management{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading">
+        <div><span class="admin-eyebrow">CARE NETWORK</span><h1>Dialysis centers</h1><p>Manage center details and booking availability.</p></div>
+        <a class="admin-button admin-button-primary" href="{{ path('app_admin_center_new') }}">＋ Add a center</a>
+    </div>
+    {% if centers %}
+        <section class="admin-center-grid">
+        {% for center in centers %}
+            <article class="admin-panel admin-center-card">
+                <div class="admin-center-card-top">
+                    {% if center.imagePath %}<img src="/{{ center.imagePath }}" alt="" class="admin-center-image">{% else %}<span class="admin-center-image admin-center-placeholder">K</span>{% endif %}
+                    <span class="admin-status {{ center.status == 'Active' ? 'status-active' : 'status-inactive' }}">{{ center.status }}</span>
+                </div>
+                <div class="admin-center-info">
+                    <h2>{{ center.name }}</h2>
+                    <p class="admin-center-address">{{ center.address }}</p>
+                    <p><strong>Hours</strong><span>{{ center.operatingHours }}</span></p>
+                    <p><strong>Services</strong><span>{{ center.dialysisTypes }}</span></p>
+                </div>
+                <div class="admin-center-actions">
+                    <a class="admin-button admin-button-quiet" href="{{ path('app_admin_center_edit', {id: center.id}) }}">Edit details</a>
+                    <form method="post" action="{{ path('app_admin_center_status', {id: center.id}) }}" onsubmit="return confirm('{{ center.status == 'Active' ? 'Deactivate' : 'Activate' }} this dialysis center?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin-center-status-' ~ center.id) }}">
+                        <button class="admin-button {{ center.status == 'Active' ? 'admin-button-danger-quiet' : 'admin-button-primary' }}" type="submit">{{ center.status == 'Active' ? 'Deactivate' : 'Activate' }}</button>
+                    </form>
+                </div>
+            </article>
+        {% endfor %}
+        </section>
+    {% else %}
+        <section class="admin-panel"><div class="admin-empty-state"><span>+</span><strong>No centers have been added</strong><p>Add a dialysis center to make it available in the care directory.</p><a class="admin-button admin-button-primary" href="{{ path('app_admin_center_new') }}">Add a center</a></div></section>
+    {% endif %}
+{% endblock %}

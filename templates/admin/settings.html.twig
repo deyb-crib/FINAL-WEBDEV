@@ -1,0 +1,19 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'settings' %}
+{% block title %}System settings{% endblock %}
+{% block section_label %}System settings{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">APPLICATION</span><h1>System settings</h1><p>Runtime status and configuration guidance for this KATOC installation.</p></div></div>
+    <section class="admin-panel">
+        <div class="admin-panel-heading"><div><h2>Application status</h2><p>Read-only runtime information</p></div><span class="admin-status {{ database_available ? 'status-active' : 'status-inactive' }}">{{ database_available ? 'Database connected' : 'Database unavailable' }}</span></div>
+        <div class="admin-settings-grid">
+            <div><span>Application environment</span><strong>{{ environment|upper }}</strong></div>
+            <div><span>PHP runtime</span><strong>{{ php_version }}</strong></div>
+            <div><span>Database platform</span><strong>{{ database_platform }}</strong></div>
+            <div><span>Application timezone</span><strong>{{ timezone }}</strong></div>
+        </div>
+        <div class="admin-settings-notice"><strong>Configuration is managed through the deployment environment.</strong><p>Database credentials, application secrets, and administrator signup codes are intentionally not exposed or editable in this dashboard. Configure them in your private environment file or deployment environment, then restart the application.</p></div>
+    </section>
+{% endblock %}

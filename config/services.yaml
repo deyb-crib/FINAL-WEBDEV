@@ -1,3 +1,6 @@
+parameters:
+    admin_signup_code_default: ''
+
 services:
     _defaults:
         autowire: true

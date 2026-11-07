@@ -10,6 +10,7 @@ services:
     environment:
       APP_ENV: dev
       APP_DEBUG: "1"
+      ADMIN_SIGNUP_CODE: ${ADMIN_SIGNUP_CODE:-}
       DATABASE_URL: "mysql://katoc:katoc@db:3306/katoc?serverVersion=8.0&charset=utf8mb4"
     depends_on:
       db:

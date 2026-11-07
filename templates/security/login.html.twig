@@ -22,34 +22,53 @@
         <section class="auth-form-panel">
             <div class="auth-form-wrap">
                 <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-form-logo-mark">
-                <h2>Log in to KATOC</h2>
-                <p class="auth-intro">Access your dialysis care information and appointment requests.</p>
+                <h2>{{ admin_mode ? 'Admin sign in' : 'Log in to KATOC' }}</h2>
+                <p class="auth-intro">{{ admin_mode ? 'Sign in with your administrator account to manage appointments and dialysis centers.' : 'Access your dialysis care information and appointment requests.' }}</p>
 
                 {% for message in app.flashes('success') %}
                     <div class="auth-success" role="status">{{ message }}</div>
                 {% endfor %}
-                {% if error %}
+                {% if error and not already_authenticated %}
                     <div class="auth-error" role="alert"><div>Invalid email or password.</div></div>
                 {% endif %}
 
-                <form class="auth-form" method="post" action="{{ path('app_login') }}">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                    <div class="form-field">
-                        <label for="email">Email address</label>
-                        <input type="email" id="email" name="email" value="{{ last_username }}" autocomplete="email" required>
-                    </div>
-                    <div class="form-field">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" autocomplete="current-password" required>
-                        <label class="password-toggle" for="password-visibility">
-                            <input type="checkbox" id="password-visibility">
-                            <span>Show password</span>
-                        </label>
-                    </div>
-                    <button type="submit" class="auth-submit">Get started</button>
-                </form>
+                {% if already_authenticated %}
+                    <div class="auth-error" role="status">You are currently signed in with a non-admin account. Log out first, then sign in with an administrator account.</div>
+                    <a class="auth-submit auth-admin-logout" href="{{ path('app_logout') }}">Log out</a>
+                {% else %}
+                    <form class="auth-form" method="post" action="{{ path('app_login') }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        {% if admin_mode %}<input type="hidden" name="_target_path" value="{{ path('app_admin_dashboard') }}">{% endif %}
+                        <div class="form-field">
+                            <label for="email">Email address</label>
+                            <input type="email" id="email" name="email" value="{{ last_username }}" autocomplete="email" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" autocomplete="current-password" required>
+                            <label class="password-toggle" for="password-visibility">
+                                <input type="checkbox" id="password-visibility">
+                                <span>Show password</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="auth-submit">{{ admin_mode ? 'Sign in as admin' : 'Get started' }}</button>
+                    </form>
 
-                <p class="auth-switch">Don't have an account? <a href="{{ path('app_register') }}">Sign up</a></p>
+                    {% if admin_mode %}
+                        <div class="auth-admin-entry">
+                            <span>New administrator?</span>
+                            <a class="auth-admin-button" href="{{ path('app_admin_register') }}">Admin sign up</a>
+                        </div>
+                        <p class="auth-switch"><a href="{{ path('app_login') }}">Back to regular sign in</a></p>
+                    {% else %}
+                        <div class="auth-admin-entry">
+                            <span>Are you an administrator?</span>
+                            <a class="auth-admin-button" href="{{ path('app_admin_login') }}">Admin sign in</a>
+                        </div>
+                        <p class="auth-switch">Don't have an account? <a href="{{ path('app_register') }}">Sign up</a></p>
+                    {% endif %}
+                {% endif %}
+
                 <a href="{{ path('app_home') }}" class="auth-back">Back to homepage</a>
             </div>
         </section>

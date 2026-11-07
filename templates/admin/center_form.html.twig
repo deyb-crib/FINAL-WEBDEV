@@ -1,0 +1,21 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'centers' %}
+{% block title %}{{ is_new ? 'Add center' : 'Edit center' }}{% endblock %}
+{% block section_label %}Care center management{% endblock %}
+
+{% block body %}
+    <a class="admin-back-link" href="{{ path('app_admin_centers') }}">← Back to dialysis centers</a>
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">CARE NETWORK</span><h1>{{ is_new ? 'Add a dialysis center' : 'Edit dialysis center' }}</h1><p>Keep directory information accurate for patients.</p></div></div>
+    {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+    <form class="admin-panel admin-edit-form" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token('admin-center') }}">
+        <label for="name">Center name *</label><input id="name" name="name" maxlength="150" value="{{ center.name }}" required>
+        <label for="address">Address *</label><input id="address" name="address" maxlength="255" value="{{ center.address }}" required>
+        <label for="operating_hours">Operating hours *</label><input id="operating_hours" name="operating_hours" maxlength="60" value="{{ center.operatingHours }}" required>
+        <label for="dialysis_types">Dialysis services *</label><input id="dialysis_types" name="dialysis_types" maxlength="255" value="{{ center.dialysisTypes }}" required>
+        <label for="image_path">Image path</label><input id="image_path" name="image_path" maxlength="255" value="{{ center.imagePath }}" placeholder="images/center.png">
+        <p class="admin-form-note">Optional path to an image in the public images folder.</p>
+        <div class="admin-form-actions"><button class="admin-button admin-button-primary" type="submit">{{ is_new ? 'Add center' : 'Save changes' }}</button><a class="admin-button admin-button-quiet" href="{{ path('app_admin_centers') }}">Cancel</a></div>
+    </form>
+{% endblock %}

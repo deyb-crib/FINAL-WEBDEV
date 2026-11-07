@@ -1,0 +1,57 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'reports' %}
+{% block title %}Reports and analytics{% endblock %}
+{% block section_label %}Reports &amp; analytics{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading">
+        <div><span class="admin-eyebrow">INSIGHTS</span><h1>Reports &amp; analytics</h1><p>Operational summaries based on KATOC appointment and account records.</p></div>
+    </div>
+    {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+    <section class="admin-panel admin-report-filters">
+        <form class="admin-filter-form" method="get">
+            <label for="report-from">From</label><input id="report-from" type="date" name="from" value="{{ from }}" required>
+            <label for="report-to">To</label><input id="report-to" type="date" name="to" value="{{ to }}" required>
+            <button class="admin-button admin-button-primary" type="submit">Update report</button>
+            <button class="admin-button admin-button-quiet" name="export" value="1" type="submit">Export CSV</button>
+        </form>
+    </section>
+    <section class="admin-stats-grid admin-report-stats">
+        <div class="admin-stat-card"><span class="admin-stat-icon admin-icon-blue">▤</span><span class="admin-stat-label">Appointment requests</span><strong>{{ report.totals.total }}</strong><span class="admin-stat-footnote">Created in selected period</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-icon admin-icon-amber">◷</span><span class="admin-stat-label">Pending</span><strong>{{ report.totals.pending }}</strong><span class="admin-stat-footnote">Requests awaiting a decision</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-icon admin-icon-green">✓</span><span class="admin-stat-label">Completed</span><strong>{{ report.totals.completed }}</strong><span class="admin-stat-footnote">Completed appointments</span></div>
+    </section>
+    <div class="admin-dashboard-grid admin-report-grid">
+        <section class="admin-panel">
+            <div class="admin-panel-heading"><div><h2>Appointment activity</h2><p>Requests created per month</p></div></div>
+            {% if report.monthly_appointments %}
+                <div class="admin-chart-list">
+                {% for row in report.monthly_appointments %}
+                    <div class="admin-chart-row"><span>{{ (row.period ~ '-01')|date('M Y') }}</span><div class="admin-chart-track"><span style="width: {{ row.percent }}%"></span></div><strong>{{ row.total }}</strong></div>
+                {% endfor %}
+                </div>
+            {% else %}<div class="admin-empty-state admin-empty-compact"><strong>No appointment activity in this period</strong><p>Try a wider date range.</p></div>{% endif %}
+        </section>
+        <section class="admin-panel">
+            <div class="admin-panel-heading"><div><h2>Appointment status</h2><p>Requests created in selected period</p></div></div>
+            {% if report.appointment_statuses %}
+                <div class="admin-chart-list">
+                {% for row in report.appointment_statuses %}
+                    <div class="admin-chart-row"><span>{{ row.status }}</span><div class="admin-chart-track"><span class="chart-status-{{ row.status|lower }}" style="width: {{ row.percent }}%"></span></div><strong>{{ row.total }}</strong></div>
+                {% endfor %}
+                </div>
+            {% else %}<div class="admin-empty-state admin-empty-compact"><strong>No status data available</strong></div>{% endif %}
+        </section>
+    </div>
+    <section class="admin-panel">
+        <div class="admin-panel-heading"><div><h2>User registrations</h2><p>New accounts by user role in the selected period</p></div></div>
+        {% if report.user_distribution %}
+            <div class="admin-chart-list admin-chart-list-short">
+            {% for row in report.user_distribution %}
+                <div class="admin-chart-row"><span>{{ row.role }}</span><div class="admin-chart-track"><span class="chart-user" style="width: {{ row.percent }}%"></span></div><strong>{{ row.total }}</strong></div>
+            {% endfor %}
+            </div>
+        {% else %}<div class="admin-empty-state admin-empty-compact"><strong>No new accounts in this period</strong><p>Try a wider date range.</p></div>{% endif %}
+    </section>
+{% endblock %}

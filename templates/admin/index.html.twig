@@ -1,0 +1,128 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'dashboard' %}
+{% block title %}Dashboard{% endblock %}
+{% block section_label %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading">
+        <div>
+            <span class="admin-eyebrow">OVERVIEW</span>
+            <h1>Good day, {{ app.user.name|split(' ')|first }}</h1>
+            <p>Here’s what’s happening across your KATOC care network.</p>
+        </div>
+        <a class="admin-button admin-button-primary" href="{{ path('app_admin_records') }}">Review appointments <span aria-hidden="true">→</span></a>
+    </div>
+
+    <section class="admin-stats-grid" aria-label="System statistics">
+        <a class="admin-stat-card" href="{{ path('app_admin_users') }}">
+            <span class="admin-stat-icon admin-icon-red">♙</span>
+            <span class="admin-stat-label">Registered users</span>
+            <strong>{{ overview.users.total }}</strong>
+            <span class="admin-stat-footnote">All registered accounts</span>
+        </a>
+        <a class="admin-stat-card" href="{{ path('app_admin_users', {status: 'active'}) }}">
+            <span class="admin-stat-icon admin-icon-green">✓</span>
+            <span class="admin-stat-label">Active users</span>
+            <strong>{{ overview.users.active }}</strong>
+            <span class="admin-stat-footnote">Can sign in to KATOC</span>
+        </a>
+        <a class="admin-stat-card" href="{{ path('app_admin_users', {status: 'inactive'}) }}">
+            <span class="admin-stat-icon admin-icon-amber">Ⅱ</span>
+            <span class="admin-stat-label">Inactive users</span>
+            <strong>{{ overview.users.inactive }}</strong>
+            <span class="admin-stat-footnote">Accounts disabled by admin</span>
+        </a>
+        <a class="admin-stat-card" href="{{ path('app_admin_records') }}">
+            <span class="admin-stat-icon admin-icon-blue">▤</span>
+            <span class="admin-stat-label">Appointment records</span>
+            <strong>{{ overview.appointments.total }}</strong>
+            <span class="admin-stat-footnote">Total requests managed</span>
+        </a>
+        <a class="admin-stat-card" href="{{ path('app_admin_records', {status: 'Pending'}) }}">
+            <span class="admin-stat-icon admin-icon-amber">◷</span>
+            <span class="admin-stat-label">Pending requests</span>
+            <strong>{{ overview.appointments.pending }}</strong>
+            <span class="admin-stat-footnote">Need a status update</span>
+        </a>
+        <a class="admin-stat-card" href="{{ path('app_admin_records', {status: 'Completed'}) }}">
+            <span class="admin-stat-icon admin-icon-green">✓</span>
+            <span class="admin-stat-label">Completed</span>
+            <strong>{{ overview.appointments.completed }}</strong>
+            <span class="admin-stat-footnote">Completed appointments</span>
+        </a>
+        <a class="admin-stat-card" href="{{ path('app_admin_centers') }}">
+            <span class="admin-stat-icon admin-icon-purple">+</span>
+            <span class="admin-stat-label">Active care centers</span>
+            <strong>{{ overview.centers.active }}</strong>
+            <span class="admin-stat-footnote">{{ overview.centers.total }} centers in the directory</span>
+        </a>
+    </section>
+
+    <div class="admin-dashboard-grid">
+        <section class="admin-panel">
+            <div class="admin-panel-heading">
+                <div><h2>Recent appointment requests</h2><p>Latest activity from patients</p></div>
+                <a class="admin-text-link" href="{{ path('app_admin_records') }}">View all <span aria-hidden="true">→</span></a>
+            </div>
+            {% if appointments %}
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Patient</th><th>Care center</th><th>Date</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                        {% for appointment in appointments %}
+                            <tr>
+                                <td><strong>{{ appointment.patientName }}</strong><small>{{ appointment.patientEmail }}</small></td>
+                                <td>{{ appointment.center }}</td>
+                                <td>{{ appointment.appointmentDate|date('M j, Y') }}<small>{{ ('2000-01-01 ' ~ appointment.appointmentTime)|date('g:i A') }}</small></td>
+                                <td><span class="admin-status status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+                                <td><a class="admin-row-link" href="{{ path('app_admin_records') }}">Manage</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="admin-empty-state"><span>▤</span><strong>No appointment requests yet</strong><p>New patient requests will appear here.</p></div>
+            {% endif %}
+        </section>
+
+        <section class="admin-panel admin-alert-panel">
+            <div class="admin-panel-heading"><div><h2>Needs attention</h2><p>Live operational alerts</p></div><a class="admin-text-link" href="{{ path('app_admin_notifications') }}">All alerts</a></div>
+            {% set has_alerts = overview.alerts.pending_appointments or overview.alerts.overdue_appointments or overview.alerts.inactive_centers %}
+            {% if has_alerts %}
+                {% if overview.alerts.pending_appointments %}
+                    <a class="admin-alert-item alert-warning" href="{{ path('app_admin_records', {status: 'Pending'}) }}"><span class="admin-alert-mark">!</span><span><strong>{{ overview.alerts.pending_appointments }} pending {{ overview.alerts.pending_appointments == 1 ? 'request' : 'requests' }}</strong><small>Review appointment requests</small></span><span aria-hidden="true">→</span></a>
+                {% endif %}
+                {% if overview.alerts.overdue_appointments %}
+                    <a class="admin-alert-item alert-danger" href="{{ path('app_admin_records', {status: 'Confirmed'}) }}"><span class="admin-alert-mark">!</span><span><strong>{{ overview.alerts.overdue_appointments }} past appointment dates</strong><small>Confirmed appointment date has passed</small></span><span aria-hidden="true">→</span></a>
+                {% endif %}
+                {% if overview.alerts.inactive_centers %}
+                    <a class="admin-alert-item alert-info" href="{{ path('app_admin_centers') }}"><span class="admin-alert-mark">i</span><span><strong>{{ overview.alerts.inactive_centers }} inactive {{ overview.alerts.inactive_centers == 1 ? 'center' : 'centers' }}</strong><small>Not shown for new bookings</small></span><span aria-hidden="true">→</span></a>
+                {% endif %}
+            {% else %}
+                <div class="admin-empty-state admin-empty-compact"><span>✓</span><strong>All caught up</strong><p>No pending operational alerts.</p></div>
+            {% endif %}
+        </section>
+    </div>
+
+    <section class="admin-panel admin-recent-activity">
+        <div class="admin-panel-heading">
+            <div><h2>Recent system activity</h2><p>Account, appointment, and admin events</p></div>
+            <a class="admin-text-link" href="{{ path('app_admin_activity') }}">Activity log <span aria-hidden="true">→</span></a>
+        </div>
+        {% if overview.recent_activities %}
+            <div class="admin-activity-list">
+                {% for activity in overview.recent_activities %}
+                    <div class="admin-activity-row">
+                        <span class="admin-activity-dot"></span>
+                        <span class="admin-activity-copy"><strong>{{ activity.summary }}</strong><small>{{ activity.actorName }} · {{ activity.actorEmail }}</small></span>
+                        <time datetime="{{ activity.createdAt|date('c') }}">{{ activity.createdAt|date('M j, Y · g:i A') }}</time>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="admin-empty-state admin-empty-compact"><strong>No activity recorded yet</strong><p>Sign-ins and system changes will be listed here.</p></div>
+        {% endif %}
+    </section>
+{% endblock %}

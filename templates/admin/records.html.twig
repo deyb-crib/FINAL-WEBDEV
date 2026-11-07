@@ -1,0 +1,67 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'records' %}
+{% block title %}Records management{% endblock %}
+{% block section_label %}Records management{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading">
+        <div><span class="admin-eyebrow">PATIENT CARE</span><h1>Appointment records</h1><p>Review and update dialysis appointment requests.</p></div>
+    </div>
+    <section class="admin-panel">
+        <form class="admin-filter-form" method="get">
+            <label class="sr-only" for="record-search">Search records</label>
+            <input id="record-search" name="q" value="{{ search }}" placeholder="Search patient, email, or center">
+            <label class="sr-only" for="record-status">Filter by status</label>
+            <select id="record-status" name="status">
+                {% for value, label in {'all': 'All statuses', 'Pending': 'Pending', 'Confirmed': 'Confirmed', 'Completed': 'Completed', 'Cancelled': 'Cancelled'} %}
+                    <option value="{{ value }}"{{ status_filter == value ? ' selected' : '' }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button class="admin-button admin-button-primary" type="submit">Apply filters</button>
+            {% if search or status_filter != 'all' %}<a class="admin-button admin-button-quiet" href="{{ path('app_admin_records') }}">Clear</a>{% endif %}
+            <span class="admin-filter-count">{{ total }} records</span>
+        </form>
+
+        {% if appointments %}
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead><tr><th>Patient</th><th>Care center</th><th>Appointment</th><th>Treatment</th><th>Status</th><th>Update status</th></tr></thead>
+                    <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td><strong>{{ appointment.patientName }}</strong><small>{{ appointment.patientEmail }} · {{ appointment.patientContact }}</small></td>
+                            <td>{{ appointment.center }}<small>{{ appointment.location }}</small></td>
+                            <td>{{ appointment.appointmentDate|date('M j, Y') }}<small>{{ ('2000-01-01 ' ~ appointment.appointmentTime)|date('g:i A') }} · {{ appointment.session }}</small></td>
+                            <td>{{ appointment.dialysisType }}</td>
+                            <td><span class="admin-status status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+                            <td>
+                                <form class="admin-inline-status-form" method="post" action="{{ path('app_admin_appointment_status', {id: appointment.id}) }}" onsubmit="return confirm('Save this appointment status update?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('admin-appointment-' ~ appointment.id) }}">
+                                    <input type="hidden" name="return_to" value="records">
+                                    <label class="sr-only" for="record-state-{{ appointment.id }}">Status for {{ appointment.patientName }}</label>
+                                    <select id="record-state-{{ appointment.id }}" name="status">
+                                        {% for status in ['Pending', 'Confirmed', 'Completed', 'Cancelled'] %}
+                                            <option value="{{ status }}"{{ appointment.status == status ? ' selected' : '' }}>{{ status }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button class="admin-icon-button" type="submit" aria-label="Save status for {{ appointment.patientName }}">Save</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if page_count > 1 %}
+                <nav class="admin-pagination" aria-label="Records pages">
+                    {% if page > 1 %}<a href="{{ path('app_admin_records', {q: search, status: status_filter, page: page - 1}) }}">← Previous</a>{% endif %}
+                    <span>Page {{ page }} of {{ page_count }}</span>
+                    {% if page < page_count %}<a href="{{ path('app_admin_records', {q: search, status: status_filter, page: page + 1}) }}">Next →</a>{% endif %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="admin-empty-state"><span>▤</span><strong>No matching appointment records</strong><p>Try changing your search or filters.</p></div>
+        {% endif %}
+    </section>
+{% endblock %}

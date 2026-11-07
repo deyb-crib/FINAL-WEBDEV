@@ -53,9 +53,13 @@
         {% if app.user %}
             <aside class="home-dashboard-sidebar" aria-label="Dashboard navigation">
                 <div class="home-sidebar-heading">
-                    <span class="home-sidebar-eyebrow">PATIENT MENU</span>
+                    <span class="home-sidebar-eyebrow">{{ is_granted('ROLE_ADMIN') ? 'ADMIN MENU' : 'PATIENT MENU' }}</span>
                     <strong>{{ app.user.name }}</strong>
                 </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="home-sidebar-link" href="{{ path('app_admin_dashboard') }}">Admin panel</a>
+                    <a class="home-sidebar-link" href="{{ path('app_admin_centers') }}">Manage centers</a>
+                {% endif %}
                 <a class="home-sidebar-link is-active" href="{{ path('app_dashboard') }}" aria-current="page">Dashboard</a>
                 <a class="home-sidebar-link" href="#services" data-section="services">Find a center</a>
                 <a class="home-sidebar-link" href="#appointment" data-section="appointment">Appointments</a>

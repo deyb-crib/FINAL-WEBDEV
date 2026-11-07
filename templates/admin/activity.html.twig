@@ -1,0 +1,25 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'activity' %}
+{% block title %}Activity logs{% endblock %}
+{% block section_label %}Activity logs{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">AUDIT TRAIL</span><h1>Activity logs</h1><p>Sign-ins and account, appointment, and center changes.</p></div></div>
+    <section class="admin-panel">
+        <form class="admin-filter-form" method="get">
+            <label class="sr-only" for="activity-search">Search activity</label><input id="activity-search" name="q" value="{{ search }}" placeholder="Search user, activity, or action">
+            <button class="admin-button admin-button-primary" type="submit">Search</button>
+            {% if search %}<a class="admin-button admin-button-quiet" href="{{ path('app_admin_activity') }}">Clear</a>{% endif %}
+            <span class="admin-filter-count">{{ total }} activities</span>
+        </form>
+        {% if activities %}
+            <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Activity</th><th>User</th><th>Type</th><th>Date and time</th></tr></thead><tbody>
+                {% for activity in activities %}
+                    <tr><td><strong>{{ activity.summary }}</strong><small>{{ activity.action }}</small></td><td>{{ activity.actorName }}<small>{{ activity.actorEmail }}</small></td><td>{{ activity.subjectType|title }}</td><td>{{ activity.createdAt|date('M j, Y') }}<small>{{ activity.createdAt|date('g:i:s A') }}</small></td></tr>
+                {% endfor %}
+            </tbody></table></div>
+            {% if page_count > 1 %}<nav class="admin-pagination" aria-label="Activity pages">{% if page > 1 %}<a href="{{ path('app_admin_activity', {q: search, page: page - 1}) }}">← Previous</a>{% endif %}<span>Page {{ page }} of {{ page_count }}</span>{% if page < page_count %}<a href="{{ path('app_admin_activity', {q: search, page: page + 1}) }}">Next →</a>{% endif %}</nav>{% endif %}
+        {% else %}<div class="admin-empty-state"><span>◷</span><strong>No matching activity yet</strong><p>Sign-ins and changes will be listed here.</p></div>{% endif %}
+    </section>
+{% endblock %}

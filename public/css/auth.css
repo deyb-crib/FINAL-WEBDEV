@@ -21,6 +21,10 @@ body { margin:0; font-family:'Alata',system-ui,sans-serif; color:var(--ink); bac
 .password-toggle { display:flex !important; align-items:center; gap:8px; margin-top:8px; color:var(--muted); cursor:pointer; }
 .auth-submit { width:100%; padding:13px; border:0; border-radius:999px; background:var(--red); color:#fff; font:inherit; font-size:1rem; cursor:pointer; }
 .auth-submit:hover { background:var(--red-dark); }
+.auth-admin-entry { display:grid; gap:9px; margin-top:18px; text-align:center; color:var(--muted); font-size:.9rem; }
+.auth-admin-button { display:block; width:100%; padding:11px 13px; border:1.5px solid var(--red); border-radius:999px; color:var(--red); text-decoration:none; font:inherit; transition:background .2s,color .2s; }
+.auth-admin-button:hover { background:var(--red); color:#fff; }
+.auth-admin-logout { display:block; text-align:center; text-decoration:none; }
 .auth-error, .auth-success { padding:12px 14px; border-radius:10px; margin-bottom:16px; font-size:.9rem; }
 .auth-error { background:#fdecee; color:#8a0f17; }
 .auth-success { background:#e8f6ec; color:#1b6b34; }

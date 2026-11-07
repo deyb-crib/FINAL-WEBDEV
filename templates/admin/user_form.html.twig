@@ -1,0 +1,21 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'users' %}
+{% block title %}{{ is_new ? 'Add user' : 'Edit user' }}{% endblock %}
+{% block section_label %}User management{% endblock %}
+
+{% block body %}
+    <a class="admin-back-link" href="{{ is_new ? path('app_admin_users') : path('app_admin_user_show', {id: managed_user.id}) }}">← Back to user management</a>
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">ACCOUNT</span><h1>{{ is_new ? 'Add a user' : 'Edit account' }}</h1><p>{{ is_new ? 'Create a patient or administrator account.' : 'Update account details and access.' }}</p></div></div>
+    {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+    <form class="admin-panel admin-edit-form" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token('admin-user-form' ~ (managed_user.id ?? 'new')) }}">
+        <label for="name">Full name</label><input id="name" name="name" value="{{ name }}" maxlength="100" required>
+        <label for="email">Email address</label><input type="email" id="email" name="email" value="{{ email }}" maxlength="180" required>
+        <label for="password">{{ is_new ? 'Temporary password' : 'New password (leave blank to keep current password)' }}</label><input type="password" id="password" name="password" autocomplete="new-password" minlength="8" {{ is_new ? 'required' : '' }}>
+        <label for="role">Role</label><select id="role" name="role"><option value="patient"{{ not is_admin ? ' selected' : '' }}>Patient</option><option value="admin"{{ is_admin ? ' selected' : '' }}>Administrator</option></select>
+        <label class="admin-checkbox-label"><input type="checkbox" name="is_active" value="1"{{ is_active ? ' checked' : '' }}> Account active</label>
+        {% if managed_user.id == app.user.id %}<p class="admin-form-note">You cannot remove your own administrator access or deactivate your account.</p>{% endif %}
+        <div class="admin-form-actions"><button class="admin-button admin-button-primary" type="submit">{{ is_new ? 'Create account' : 'Save changes' }}</button><a class="admin-button admin-button-quiet" href="{{ is_new ? path('app_admin_users') : path('app_admin_user_show', {id: managed_user.id}) }}">Cancel</a></div>
+    </form>
+{% endblock %}

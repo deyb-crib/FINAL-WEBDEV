@@ -1,0 +1,28 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'notifications' %}
+{% block title %}Notifications{% endblock %}
+{% block section_label %}Notifications{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">SYSTEM STATUS</span><h1>Notifications</h1><p>Live alerts from appointment and dialysis-center records.</p></div></div>
+    {% if notifications %}
+        <section class="admin-notification-list" aria-label="System alerts">
+            {% for notification in notifications %}
+                <a class="admin-notification-card alert-{{ notification.tone }}" href="{{ path(notification.route) }}">
+                    <span class="admin-notification-count">{{ notification.count }}</span>
+                    <span><strong>{{ notification.title }}</strong><small>{{ notification.description }}</small><small class="admin-notification-link">Review related records →</small></span>
+                </a>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="admin-panel"><div class="admin-empty-state"><span>✓</span><strong>No outstanding alerts</strong><p>There are no pending requests, overdue confirmed appointments, or inactive centers.</p></div></section>
+    {% endif %}
+    <section class="admin-panel admin-notification-activity">
+        <div class="admin-panel-heading"><div><h2>Latest system activity</h2><p>Recent recorded events</p></div><a class="admin-text-link" href="{{ path('app_admin_activity') }}">View activity log →</a></div>
+        {% if recent_activities %}
+            <div class="admin-activity-list">{% for activity in recent_activities %}<div class="admin-activity-row"><span class="admin-activity-dot"></span><span class="admin-activity-copy"><strong>{{ activity.summary }}</strong><small>{{ activity.actorName }} · {{ activity.actorEmail }}</small></span><time datetime="{{ activity.createdAt|date('c') }}">{{ activity.createdAt|date('M j, Y · g:i A') }}</time></div>{% endfor %}</div>
+        {% else %}<div class="admin-empty-state admin-empty-compact"><strong>No system activity recorded yet</strong></div>{% endif %}
+        <p class="admin-form-note">Alerts are calculated from current records. They are not individually marked read or unread.</p>
+    </section>
+{% endblock %}

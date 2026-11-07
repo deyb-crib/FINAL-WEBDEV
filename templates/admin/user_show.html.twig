@@ -1,0 +1,26 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set active_nav = 'users' %}
+{% block title %}{{ managed_user.name }}{% endblock %}
+{% block section_label %}User details{% endblock %}
+
+{% block body %}
+    <a class="admin-back-link" href="{{ path('app_admin_users') }}">← Back to users</a>
+    <div class="admin-page-heading">
+        <div><span class="admin-eyebrow">ACCOUNT DETAILS</span><h1>{{ managed_user.name }}</h1><p>{{ managed_user.email }}</p></div>
+        <a class="admin-button admin-button-primary" href="{{ path('app_admin_user_edit', {id: managed_user.id}) }}">Edit account</a>
+    </div>
+    <section class="admin-stats-grid admin-user-summary">
+        <div class="admin-stat-card"><span class="admin-stat-label">Role</span><strong class="admin-stat-text">{{ managed_user.isAdmin ? 'Administrator' : 'Patient' }}</strong><span class="admin-stat-footnote">KATOC account role</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-label">Account status</span><strong class="admin-stat-text">{{ managed_user.active ? 'Active' : 'Inactive' }}</strong><span class="admin-stat-footnote">Created {{ managed_user.createdAt|date('M j, Y') }}</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-label">Appointment records</span><strong>{{ appointment_count }}</strong><span class="admin-stat-footnote">Associated care requests</span></div>
+    </section>
+    <section class="admin-panel">
+        <div class="admin-panel-heading"><div><h2>Appointment history</h2><p>Most recent records associated with this account</p></div><a class="admin-text-link" href="{{ path('app_admin_records', {q: managed_user.email}) }}">Find records</a></div>
+        {% if appointments %}
+            <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Center</th><th>Appointment date</th><th>Treatment</th><th>Status</th></tr></thead><tbody>
+                {% for appointment in appointments %}<tr><td>{{ appointment.center }}</td><td>{{ appointment.appointmentDate|date('M j, Y') }}</td><td>{{ appointment.dialysisType }}</td><td><span class="admin-status status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td></tr>{% endfor %}
+            </tbody></table></div>
+        {% else %}<div class="admin-empty-state"><strong>No appointment records</strong><p>This account has no associated appointment requests.</p></div>{% endif %}
+    </section>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\AdminActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/signup', name: 'app_register', methods: ['GET', 'POST'])]
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, AdminActivityLogger $activityLogger): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
@@ -53,6 +54,7 @@ class RegistrationController extends AbstractController
                 $user->setPassword($hasher->hashPassword($user, $password));
                 $em->persist($user);
                 $em->flush();
+                $activityLogger->record($user, 'user.register', 'user', (string) $user->getId(), 'Created a patient account');
                 $this->addFlash('success', 'Account created. You can now log in.');
 
                 return $this->redirectToRoute('app_login');
