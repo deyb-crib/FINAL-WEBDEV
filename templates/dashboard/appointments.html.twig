@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My appointments | KATOC</title>
+    <link rel="stylesheet" href="/css/app.css?v=patient-dashboard-aria-20261108">
+    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-chrome-appointments-20261108">
+</head>
+<body class="patient-portal site-patient-page has-patient-sidebar">
+    {% include 'shared/_patient_navigation.html.twig' with {active_page: 'appointments'} %}
+    <main class="site-patient-main appointments-main">
+        {% for type in ['success', 'error'] %}
+            {% for message in app.flashes(type) %}
+                <div class="flash flash-{{ type }}" role="status">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <section class="appointments-page-heading">
+            <div>
+                <p class="dashboard-eyebrow">YOUR CARE ACTIVITY</p>
+                <h1>My appointments</h1>
+                <p>Review the appointment requests you’ve made and check their current status.</p>
+            </div>
+            <a class="appointments-book-button" href="{{ path('app_hospitals') }}">Find a center <span aria-hidden="true">→</span></a>
+        </section>
+
+        <section class="appointments-summary" aria-label="Appointment request summary">
+            <article class="appointments-summary-total">
+                <span class="appointments-summary-icon" aria-hidden="true">▤</span>
+                <span><small>Total requests</small><strong>{{ total_count }}</strong></span>
+            </article>
+            {% for status, count in status_counts %}
+                <article class="appointments-summary-item">
+                    <span class="appointments-status-dot is-{{ status|lower }}" aria-hidden="true"></span>
+                    <span><small>{{ status }}</small><strong>{{ count }}</strong></span>
+                </article>
+            {% endfor %}
+        </section>
+
+        <section class="appointments-records" aria-labelledby="appointments-records-title">
+            <div class="appointments-records-heading">
+                <div>
+                    <h2 id="appointments-records-title">Appointment requests</h2>
+                    <p>Sorted by the most recently submitted request.</p>
+                </div>
+                <span class="appointments-record-count">{{ appointments|length }} shown</span>
+            </div>
+
+            <form class="appointments-search-form" method="get" action="{{ path('app_user_appointments') }}">
+                <label class="sr-only" for="appointments-search">Search appointments</label>
+                <input id="appointments-search" type="search" name="q" value="{{ search }}" placeholder="Search center, location, treatment or date">
+                <label class="sr-only" for="appointments-status">Filter by status</label>
+                <select id="appointments-status" name="status">
+                    <option value="">All statuses</option>
+                    {% for status in status_counts|keys %}
+                        <option value="{{ status }}" {{ status_filter == status ? 'selected' : '' }}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Search</button>
+                {% if search or status_filter %}
+                    <a href="{{ path('app_user_appointments') }}">Clear</a>
+                {% endif %}
+            </form>
+
+            {% if appointments is not empty %}
+                <div class="appointments-summary-list">
+                    {% for appointment in appointments %}
+                        <article class="appointments-summary-card">
+                            <div class="appointments-summary-date">
+                                <span>{{ appointment.appointmentDate|date('M') }}</span>
+                                <strong>{{ appointment.appointmentDate|date('d') }}</strong>
+                                <small>{{ appointment.appointmentDate|date('Y') }}</small>
+                            </div>
+                            <div class="appointments-summary-details">
+                                <div class="appointments-card-title">
+                                    <h3>{{ appointment.center }}</h3>
+                                    <span class="appointments-status-badge is-{{ appointment.status|lower }}">{{ appointment.status }}</span>
+                                </div>
+                                <p class="appointments-location">{{ appointment.location }}</p>
+                                <div class="appointments-meta">
+                                    <span>{{ appointment.dialysisType }}</span>
+                                    <span>{{ ('2000-01-01 ' ~ appointment.appointmentTime)|date('g:i A') }} · {{ appointment.session }}</span>
+                                </div>
+                                <p class="appointments-submitted">Request submitted {{ appointment.createdAt|date('M j, Y') }}</p>
+                                {% if appointment.notes %}
+                                    <details class="appointments-notes">
+                                        <summary>View your note</summary>
+                                        <p>{{ appointment.notes }}</p>
+                                    </details>
+                                {% endif %}
+                            </div>
+                            {% if appointment.id in can_cancel_ids %}
+                                <form method="post" action="{{ path('app_appointment_cancel', {id: appointment.id}) }}" class="appointments-cancel-form" onsubmit="return confirm('Cancel this pending appointment request?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ appointment.id) }}">
+                                    <input type="hidden" name="_return_to" value="appointments">
+                                    <button type="submit">Cancel request</button>
+                                </form>
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="appointments-summary-empty">
+                    <span aria-hidden="true">▤</span>
+                    <h3>{{ search or status_filter ? 'No matching appointment requests' : 'No appointment requests yet' }}</h3>
+                    <p>{{ search or status_filter ? 'Try another search or clear the selected filters.' : 'When you request an appointment, its details and status will appear here.' }}</p>
+                    {% if search or status_filter %}
+                        <a href="{{ path('app_user_appointments') }}">Clear filters</a>
+                    {% else %}
+                        <a href="{{ path('app_hospitals') }}">Find a dialysis center</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

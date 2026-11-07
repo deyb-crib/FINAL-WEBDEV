@@ -6,10 +6,14 @@
 
     <title>KATOC | Kidney Access and Treatment Operation Center</title>
 
-    <link rel="stylesheet" href="/style.css?v=20260908-booking-layout">
+    <link rel="stylesheet" href="/style.css?v=simple-booking-20261108">
+    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-chrome-20261108">
 </head>
 
-<body class="{{ app.user ? 'has-dashboard-sidebar' : '' }}">
+<body class="{{ app.user ? 'site-patient-page has-patient-sidebar is-patient-home' : '' }}">
+    {% if app.user %}
+        {% include 'shared/_patient_navigation.html.twig' with {active_page: 'home'} %}
+    {% endif %}
 
     <!-- =========================
          KATOC HERO SECTION
@@ -17,6 +21,7 @@
 
     <section class="hero" id="hero-home">
 
+        {% if not app.user %}
         <!-- NAVIGATION -->
         <nav class="navbar">
 
@@ -34,38 +39,12 @@
 
             <!-- LOGIN / SIGN UP -->
             <div class="nav-account">
-                {% if app.user %}
-                    <a href="{{ path('app_dashboard') }}" class="nav-user" aria-label="Open dashboard" title="Open dashboard">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <circle cx="12" cy="8" r="4"></circle>
-                            <path d="M4 21c.7-4 3.3-6 8-6s7.3 2 8 6"></path>
-                        </svg>
-                    </a>
-                    <a href="{{ path('app_dashboard') }}" class="login">Dashboard</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="login">Log in</a>
-                    <a href="{{ path('app_register') }}" class="signup">Sign up</a>
-                {% endif %}
+                <a href="{{ path('app_login') }}" class="login">Log in</a>
+                <a href="{{ path('app_register') }}" class="signup">Sign up</a>
             </div>
 
         </nav>
 
-        {% if app.user %}
-            <aside class="home-dashboard-sidebar" aria-label="Dashboard navigation">
-                <div class="home-sidebar-heading">
-                    <span class="home-sidebar-eyebrow">{{ is_granted('ROLE_ADMIN') ? 'ADMIN MENU' : 'PATIENT MENU' }}</span>
-                    <strong>{{ app.user.name }}</strong>
-                </div>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="home-sidebar-link" href="{{ path('app_admin_dashboard') }}">Admin panel</a>
-                    <a class="home-sidebar-link" href="{{ path('app_admin_centers') }}">Manage centers</a>
-                {% endif %}
-                <a class="home-sidebar-link is-active" href="{{ path('app_dashboard') }}" aria-current="page">Dashboard</a>
-                <a class="home-sidebar-link" href="#services" data-section="services">Find a center</a>
-                <a class="home-sidebar-link" href="#appointment" data-section="appointment">Appointments</a>
-                <a class="home-sidebar-link" href="#kidney-care" data-section="kidney-care">Kidney care guide</a>
-                <a class="home-sidebar-logout" href="{{ path('app_logout') }}">Log out</a>
-            </aside>
         {% endif %}
 
         <!-- =========================
@@ -96,7 +75,7 @@
 
             <!-- RIGHT MEDICAL VISUAL -->
             <div class="medical-visual">
-                <img src="/images/blood-cells.png" alt="Red blood cells" class="dialysis-image">
+                <img src="/images/dialysis-machine.png" alt="Dialysis machine" class="dialysis-image">
                 <div class="red-overlay"></div>
             </div>
 
@@ -250,8 +229,8 @@
         <div class="centers-grid">
             {% for center in centers %}
             <div class="center-card" data-location="{{ center.address|lower }}" data-facility="{{ center.name|lower }}" data-type="{{ center.dialysisTypes|lower }}" data-hours="open">
-                <div class="card-image-wrapper{{ center.imagePath ? '' : ' card-image-placeholder' }}">
-                    {% if center.imagePath %}<img src="/{{ center.imagePath }}" alt="{{ center.name }}">{% else %}Photo coming soon{% endif %}
+                <div class="card-image-wrapper">
+                    {% include 'home/_center_image.html.twig' with {center: center} %}
                     <div class="card-gradient-overlay"></div>
                 </div>
                 <div class="center-info-box">
@@ -465,7 +444,7 @@
         </div>
     </section>
 
-    <script src="/script.js?v=20260908-booking-input-layer"></script>
+    <script src="/script.js?v=simple-booking-20261108"></script>
 
 </body>
 </html>

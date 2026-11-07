@@ -1,0 +1,9 @@
+{% set default_center_images = [
+    '/images/hospital1.png',
+    '/images/hospital2.png',
+    '/images/hospital3.png'
+] %}
+{% set center_image = center.imagePath
+    ? '/' ~ center.imagePath
+    : default_center_images[center.id % (default_center_images|length)] %}
+<img src="{{ center_image }}" alt="{{ center.name }}" loading="lazy">

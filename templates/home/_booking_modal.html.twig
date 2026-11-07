@@ -1,7 +1,7 @@
     <div class="availability-modal" id="availability-modal" aria-hidden="true">
         <div class="availability-modal-backdrop" data-close-availability-modal="true"></div>
         <div class="availability-modal-card" role="dialog" aria-modal="true" aria-labelledby="availability-modal-title">
-            <button type="button" class="availability-close" aria-label="Close sign-up prompt" data-close-availability-modal="true">&times;</button>
+            <button type="button" class="availability-close" aria-label="Close booking dialog" data-close-availability-modal="true">&times;</button>
             <div class="availability-icon" aria-hidden="true">+</div>
             <p class="availability-label" id="availability-modal-label">Member access required</p>
             <h3 id="availability-modal-title">Sign in or sign up first</h3>
@@ -18,44 +18,55 @@
                 <input type="hidden" name="hours" id="availability-booking-hours">
                 <div class="availability-booking-main">
                 <section class="booking-step" id="availability-booking-details-step">
-                    <h4>Appointment Details</h4>
-                <fieldset>
-                    <legend>Dialysis Type</legend>
-                    <label><input type="radio" name="dialysis_type" value="Hemodialysis" required> Hemodialysis</label>
-                    <label><input type="radio" name="dialysis_type" value="Peritoneal Dialysis"> Peritoneal Dialysis</label>
-                    <label><input type="radio" name="dialysis_type" value="Home Hemodialysis"> Home Hemodialysis</label>
-                    <label><input type="radio" name="dialysis_type" value="Continuous Ambulatory Peritoneal Dialysis"> Continuous Ambulatory Peritoneal Dialysis</label>
-                    <label><input type="radio" name="dialysis_type" value="Automated Peritoneal Dialysis"> Automated Peritoneal Dialysis</label>
-                </fieldset>
-                <label for="availability-booking-date">Preferred date</label>
-                <input type="date" name="date" id="availability-booking-date" required>
-                <label for="availability-booking-session">Preferred Session</label>
-                <select name="session" id="availability-booking-session" required>
-                    <option value="">Select a session</option>
-                    <option value="Morning">Morning</option>
-                    <option value="Afternoon">Afternoon</option>
-                    <option value="Evening">Evening</option>
-                </select>
-                <div class="availability-slot-heading"><strong>Preferred Time</strong><span>Available time slots</span></div>
-                <div class="availability-time-slots" id="availability-time-slots" role="group" aria-label="Available appointment times"></div>
-                <input type="hidden" name="time" id="availability-booking-time" required>
-                <div class="availability-slot-legend" aria-label="Time slot status"><span><i class="is-available"></i> Available</span><span><i class="is-full"></i> Fully booked</span><span><i class="is-selected"></i> Selected</span></div>
+                    <h4>Choose your appointment</h4>
+                    <p class="booking-step-help">Select a treatment, date and available time.</p>
+                    <label for="availability-booking-type">Dialysis type</label>
+                    <select name="dialysis_type" id="availability-booking-type" required>
+                        <option value="">Select a dialysis type</option>
+                        <option value="Hemodialysis">Hemodialysis</option>
+                        <option value="Peritoneal Dialysis">Peritoneal Dialysis</option>
+                        <option value="Home Hemodialysis">Home Hemodialysis</option>
+                        <option value="Continuous Ambulatory Peritoneal Dialysis">Continuous Ambulatory Peritoneal Dialysis</option>
+                        <option value="Automated Peritoneal Dialysis">Automated Peritoneal Dialysis</option>
+                    </select>
+                    <div class="booking-fields-grid">
+                        <div>
+                            <label for="availability-booking-date">Preferred date</label>
+                            <input type="date" name="date" id="availability-booking-date" required>
+                        </div>
+                        <div>
+                            <label for="availability-booking-session">Session</label>
+                            <select name="session" id="availability-booking-session" required>
+                                <option value="">Select a session</option>
+                                <option value="Morning">Morning</option>
+                                <option value="Afternoon">Afternoon</option>
+                                <option value="Evening">Evening</option>
+                            </select>
+                        </div>
+                        <div class="booking-time-field">
+                            <label for="availability-time-slots">Available time</label>
+                            <select name="time" id="availability-time-slots" aria-label="Available appointment times" required>
+                                <option value="">Select date and session first</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="availability-slot-help" id="availability-slot-help">Choose a date and session to load available times.</p>
                 </section>
                 <section class="booking-step" id="availability-patient-step" hidden>
-                    <h4>Patient Information</h4>
-                    <label for="availability-patient-name">Full Name</label>
-                    <input type="text" name="patient_name" id="availability-patient-name" value="{{ app.user ? app.user.name : '' }}" minlength="2" maxlength="100" pattern="[A-Za-zÀ-ÖØ-öø-ÿ .'-]+" required>
-                    <label for="availability-patient-contact">Contact Number</label>
-                    <input type="tel" name="patient_contact" id="availability-patient-contact" maxlength="30" pattern="[0-9+() .-]{7,30}" placeholder="Enter contact number" required>
-                    <label for="availability-patient-email">Email Address</label>
-                    <input type="email" name="patient_email" id="availability-patient-email" value="{{ app.user ? app.user.email : '' }}" maxlength="254" required>
-                    <h4>Emergency Contact</h4>
-                    <label for="availability-emergency-name">Name</label>
-                    <input type="text" name="emergency_name" id="availability-emergency-name" minlength="2" maxlength="100" pattern="[A-Za-zÀ-ÖØ-öø-ÿ .'-]+" required>
-                    <label for="availability-emergency-contact">Contact Number</label>
-                    <input type="tel" name="emergency_contact" id="availability-emergency-contact" maxlength="30" pattern="[0-9+() .-]{7,30}" required>
-                    <label for="availability-notes">Additional Notes <span>(optional)</span></label>
-                    <textarea name="notes" id="availability-notes" maxlength="1000" placeholder="Enter any important information you would like the dialysis center to know."></textarea>
+                    <h4>Your information</h4>
+                    <p class="booking-step-help">We’ll share these details with the center for your request.</p>
+                    <div class="booking-fields-grid">
+                        <div><label for="availability-patient-name">Full name</label><input type="text" name="patient_name" id="availability-patient-name" value="{{ app.user ? app.user.name : '' }}" minlength="2" maxlength="100" pattern="[A-Za-zÀ-ÖØ-öø-ÿ .'-]+" required></div>
+                        <div><label for="availability-patient-contact">Contact number</label><input type="tel" name="patient_contact" id="availability-patient-contact" maxlength="30" pattern="[0-9+() .-]{7,30}" placeholder="Enter contact number" required></div>
+                        <div class="booking-field-wide"><label for="availability-patient-email">Email address</label><input type="email" name="patient_email" id="availability-patient-email" value="{{ app.user ? app.user.email : '' }}" maxlength="254" required></div>
+                    </div>
+                    <h4 class="booking-subheading">Emergency contact</h4>
+                    <div class="booking-fields-grid">
+                        <div><label for="availability-emergency-name">Contact name</label><input type="text" name="emergency_name" id="availability-emergency-name" minlength="2" maxlength="100" pattern="[A-Za-zÀ-ÖØ-öø-ÿ .'-]+" required></div>
+                        <div><label for="availability-emergency-contact">Contact number</label><input type="tel" name="emergency_contact" id="availability-emergency-contact" maxlength="30" pattern="[0-9+() .-]{7,30}" required></div>
+                    </div>
+                    <label for="availability-notes">Additional notes <span>(optional)</span></label>
+                    <textarea name="notes" id="availability-notes" maxlength="1000" placeholder="Anything else the center should know?"></textarea>
                     <button type="button" class="availability-primary" id="availability-summary-button">Review Appointment</button>
                 </section>
                 <section class="booking-step booking-summary" id="availability-summary-step" hidden>
@@ -69,13 +80,13 @@
                     <p><strong>Patient:</strong> <span data-summary="patient_name"></span></p>
                     <p><strong>Contact:</strong> <span data-summary="patient_contact"></span></p>
                     <div class="booking-summary-actions">
-                        <button type="button" class="availability-cancel" id="availability-back-button">Back / Edit</button>
+                        <button type="button" class="availability-cancel" id="availability-back-button">Edit details</button>
                         <button type="submit" class="availability-primary">Book Appointment</button>
                     </div>
                 </section>
                 </div>
                 <aside class="availability-booking-aside" aria-label="Booking details">
-                    <span class="availability-aside-eyebrow">BOOKING DETAILS</span>
+                    <span class="availability-aside-eyebrow">YOUR APPOINTMENT</span>
                     <h4 id="availability-aside-center">Dialysis Center</h4>
                     <dl>
                         <div><dt>Location</dt><dd id="availability-aside-location" data-summary="location"></dd></div>
@@ -86,8 +97,8 @@
                         <div><dt>Time</dt><dd data-summary="time">Not selected</dd></div>
                         <div><dt>Patient</dt><dd data-summary="patient_name">Not entered</dd></div>
                     </dl>
-                    <p class="availability-aside-note">Your selected appointment details will appear here.</p>
-                    <button type="button" class="availability-primary availability-aside-action" id="availability-review-button">Continue to review</button>
+                    <p class="availability-aside-note">Details update as you make your selections.</p>
+                    <button type="button" class="availability-primary availability-aside-action" id="availability-review-button">Continue to patient details</button>
                 </aside>
             </form>
             <div class="availability-actions" id="availability-actions">
@@ -99,4 +110,3 @@
             </div>
         </div>
     </div>
-

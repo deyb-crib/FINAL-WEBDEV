@@ -50,6 +50,11 @@ class BookingController extends AbstractController
     #[Route('/booking/create', name: 'app_booking_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, AdminActivityLogger $activityLogger): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
         $p = $request->request;
         if (!$this->isCsrfTokenValid('booking', (string) $p->get('csrf_token'))) {
             $this->addFlash('error', 'Your session expired. Please try booking again.');
@@ -113,7 +118,7 @@ class BookingController extends AbstractController
         }
 
         $a = new Appointment();
-        $a->user = $this->getUser();
+        $a->user = $user;
         $a->center = $center->name;
         $a->location = $center->address;
         $a->dialysisType = $type;
@@ -128,9 +133,8 @@ class BookingController extends AbstractController
         $a->notes = $notes !== '' ? $notes : null;
         $em->persist($a);
         $em->flush();
-        $actor = $this->getUser();
         $activityLogger->record(
-            $actor instanceof User ? $actor : null,
+            $user,
             'appointment.create',
             'appointment',
             (string) $a->id,

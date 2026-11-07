@@ -1,0 +1,35 @@
+<header class="site-patient-header">
+    <a class="site-patient-logo" href="{{ path('app_home') }}" aria-label="KATOC home">
+        <img src="/images/katoc-icon.png" alt="">
+    </a>
+    <nav class="site-patient-top-links" aria-label="Main navigation">
+        <a href="{{ path('app_home') }}">Home</a>
+        <a href="{{ path('app_home') }}#why-katoc">Why KATOC</a>
+        <a class="{{ active_page == 'about' ? 'is-active' : '' }}" href="{{ path('app_about') }}">About</a>
+    </nav>
+    <div class="site-patient-account">
+        {% if app.user %}
+            <a class="site-patient-dashboard-link" href="{{ path('app_dashboard') }}">Dashboard</a>
+        {% else %}
+            <a class="site-patient-dashboard-link" href="{{ path('app_login') }}">Log in</a>
+        {% endif %}
+    </div>
+</header>
+
+{% if app.user %}
+    <aside class="site-patient-sidebar" aria-label="Patient navigation">
+        <div class="site-patient-sidebar-heading">
+            <span>{{ is_granted('ROLE_ADMIN') ? 'ADMIN MENU' : 'PATIENT MENU' }}</span>
+            <strong>{{ app.user.name }}</strong>
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="{{ active_page == 'admin' ? 'is-active' : '' }}" href="{{ path('app_admin_dashboard') }}">Admin panel</a>
+            <a href="{{ path('app_admin_centers') }}">Manage centers</a>
+        {% endif %}
+        <a class="{{ active_page == 'dashboard' ? 'is-active' : '' }}" href="{{ path('app_dashboard') }}" {% if active_page == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+        <a class="{{ active_page == 'centers' ? 'is-active' : '' }}" href="{{ path('app_hospitals') }}" {% if active_page == 'centers' %}aria-current="page"{% endif %}>Find a center</a>
+        <a class="{{ active_page == 'appointments' ? 'is-active' : '' }}" href="{{ path('app_user_appointments') }}" {% if active_page == 'appointments' %}aria-current="page"{% endif %}>Appointments</a>
+        <a href="{{ path('app_home') }}#kidney-care">Kidney care guide</a>
+        <a class="site-patient-logout" href="{{ path('app_logout') }}">Log out</a>
+    </aside>
+{% endif %}

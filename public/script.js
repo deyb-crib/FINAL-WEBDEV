@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const availabilityBookingDate = document.querySelector("#availability-booking-date");
     const availabilityBookingSession = document.querySelector("#availability-booking-session");
     const availabilityTimeSlots = document.querySelector("#availability-time-slots");
-    const availabilityBookingTime = document.querySelector("#availability-booking-time");
+    const availabilitySlotHelp = document.querySelector("#availability-slot-help");
+    const availabilityBookingTime = availabilityTimeSlots;
     const availabilityDetailsStep = document.querySelector("#availability-booking-details-step");
     const availabilityPatientStep = document.querySelector("#availability-patient-step");
     const availabilitySummaryStep = document.querySelector("#availability-summary-step");
@@ -83,12 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
         availabilityDetailsStep?.removeAttribute("hidden");
         availabilitySummaryStep?.setAttribute("hidden", "true");
         setPatientStep(false);
+        availabilityReviewButton?.removeAttribute("hidden");
     };
 
     const showPatientStep = () => {
+        if (!availabilityBookingForm?.reportValidity()) return;
+
         availabilityDetailsStep?.setAttribute("hidden", "true");
         availabilitySummaryStep?.setAttribute("hidden", "true");
         setPatientStep(true);
+        availabilityReviewButton?.setAttribute("hidden", "true");
         updateBookingAside();
     };
 
@@ -120,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
         availabilityDetailsStep?.setAttribute("hidden", "true");
         setPatientStep(false);
         availabilitySummaryStep?.removeAttribute("hidden");
+        availabilityReviewButton?.setAttribute("hidden", "true");
         updateBookingAside();
     };
 
@@ -145,22 +151,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
         availabilityTimeSlots.replaceChildren();
         if (availabilityBookingTime) availabilityBookingTime.value = "";
+        const addTimePlaceholder = (message) => {
+            const option = document.createElement("option");
+            option.value = "";
+            option.textContent = message;
+            option.selected = true;
+            availabilityTimeSlots.append(option);
+            if (availabilitySlotHelp) availabilitySlotHelp.textContent = message;
+        };
 
         const hours = availabilityBookingHours?.value ?? "";
         const session = availabilityBookingSession?.value ?? "";
+        if (!availabilityBookingDate?.value || !session) {
+            addTimePlaceholder("Select date and session first");
+            return;
+        }
+
         const hourMatches = hours.match(/\d{1,2}:\d{2}\s*(?:am|pm)/gi) ?? [];
         const opening = parseTime(hourMatches[0] ?? "");
         const closing = parseTime(hourMatches[1] ?? "");
         let bookedTimes = [];
-        if (availabilityBookingCenter?.value && availabilityBookingDate?.value) {
-            try {
-                const response = await fetch(`/booking/availability?center=${encodeURIComponent(availabilityBookingCenter.value)}&date=${encodeURIComponent(availabilityBookingDate.value)}`);
-                if (response.ok) {
-                    bookedTimes = (await response.json()).bookedTimes ?? [];
-                }
-            } catch (error) {
-                bookedTimes = [];
+        try {
+            const response = await fetch(`/booking/availability?center=${encodeURIComponent(availabilityBookingCenter?.value ?? "")}&date=${encodeURIComponent(availabilityBookingDate.value)}`);
+            if (!response.ok) {
+                throw new Error("Unable to load appointment availability.");
             }
+            bookedTimes = (await response.json()).bookedTimes ?? [];
+        } catch (error) {
+            addTimePlaceholder("Availability could not be loaded. Please try again.");
+            if (availabilitySlotHelp) availabilitySlotHelp.setAttribute("role", "status");
+            return;
         }
         const availableSlots = timeSlots.filter((slot) => {
             const minutes = parseTime(slot.label);
@@ -169,34 +189,32 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (!availableSlots.length) {
-            const emptyMessage = document.createElement("p");
-            emptyMessage.className = "availability-no-slots";
-            emptyMessage.textContent = session ? "No sessions are available during this center's operating hours." : "Select a session to see available times.";
-            availabilityTimeSlots.append(emptyMessage);
+            addTimePlaceholder("No times are available for this session.");
             return;
         }
 
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Choose an available time";
+        placeholder.selected = true;
+        availabilityTimeSlots.append(placeholder);
+
         availableSlots.forEach((slot) => {
-            const slotButton = document.createElement("button");
-            slotButton.type = "button";
+            const slotOption = document.createElement("option");
             const isBooked = bookedTimes.includes(slot.value);
-            slotButton.className = `availability-time-slot ${isBooked ? "is-full" : "is-available"}`;
-            slotButton.textContent = isBooked ? `${slot.label} - Fully booked` : slot.label;
-            slotButton.dataset.time = slot.value;
-            slotButton.disabled = isBooked;
-            if (isBooked) return;
-            slotButton.addEventListener("click", () => {
-                availabilityTimeSlots.querySelectorAll(".availability-time-slot").forEach((item) => {
-                    item.classList.remove("is-selected");
-                    item.setAttribute("aria-pressed", "false");
-                });
-                slotButton.classList.add("is-selected");
-                slotButton.setAttribute("aria-pressed", "true");
-                if (availabilityBookingTime) availabilityBookingTime.value = slot.value;
-                updateBookingAside();
-            });
-            availabilityTimeSlots.append(slotButton);
+            slotOption.value = slot.value;
+            slotOption.textContent = isBooked ? `${slot.label} - Fully booked` : slot.label;
+            slotOption.dataset.time = slot.value;
+            slotOption.disabled = isBooked;
+            availabilityTimeSlots.append(slotOption);
         });
+        if (availabilitySlotHelp) {
+            const openSlots = availableSlots.filter((slot) => !bookedTimes.includes(slot.value)).length;
+            availabilitySlotHelp.textContent = openSlots
+                ? `${openSlots} time ${openSlots === 1 ? "slot" : "slots"} available.`
+                : "All times for this session are fully booked.";
+            availabilitySlotHelp.setAttribute("role", "status");
+        }
     };
 
     const openAvailabilityModal = (button) => {
@@ -252,6 +270,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     availabilityBookingSession?.addEventListener("change", renderTimeSlots);
     availabilityBookingDate?.addEventListener("change", renderTimeSlots);
+    availabilityTimeSlots?.addEventListener("change", () => {
+        updateBookingAside();
+    });
     availabilityBookingForm?.addEventListener("input", updateBookingAside);
     availabilityBookingForm?.addEventListener("change", updateBookingAside);
     availabilityReviewButton?.addEventListener("click", showPatientStep);

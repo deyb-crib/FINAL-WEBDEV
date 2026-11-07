@@ -4,24 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Dialysis Hospitals | KATOC</title>
-    <link rel="stylesheet" href="/style.css?v=20260908-booking-layout">
-    <script src="/script.js?v=20260908-booking-input-layer" defer></script>
+    <link rel="stylesheet" href="/style.css?v=simple-booking-20261108">
+    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-chrome-20261108">
+    <script src="/script.js?v=simple-booking-20261108" defer></script>
 </head>
-<body class="all-hospitals-page">
-    <header class="hospitals-header">
-        <a href="{{ path('app_home') }}" class="hospitals-brand">KATOC</a>
-        <div class="hospitals-actions">
-            {% if app.user %}
-                <a href="{{ path('app_dashboard') }}">Dashboard</a>
-                <a href="{{ path('app_logout') }}">Log out</a>
-            {% else %}
-                <a href="{{ path('app_login') }}">Log in</a>
-                <a href="{{ path('app_register') }}" class="hospitals-signup">Sign up</a>
-            {% endif %}
-        </div>
-    </header>
+<body class="all-hospitals-page site-patient-page {{ app.user ? 'has-patient-sidebar' : '' }}">
+    {% include 'shared/_patient_navigation.html.twig' with {active_page: 'centers'} %}
 
-    <main class="hospitals-main">
+    <main class="hospitals-main site-patient-main">
         <div class="hospitals-intro">
             <span class="section-eyebrow">KATOC CARE NETWORK</span>
             <h1>All dialysis hospitals</h1>
@@ -37,8 +27,8 @@
             <div class="centers-grid">
                 {% for center in centers %}
                 <article class="center-card">
-                    <div class="card-image-wrapper{{ center.imagePath ? '' : ' card-image-placeholder' }}">
-                        {% if center.imagePath %}<img src="/{{ center.imagePath }}" alt="{{ center.name }}">{% else %}Photo coming soon{% endif %}
+                    <div class="card-image-wrapper">
+                        {% include 'home/_center_image.html.twig' with {center: center} %}
                         <div class="card-gradient-overlay"></div>
                     </div>
                     <div class="center-info-box">

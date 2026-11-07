@@ -10,11 +10,11 @@
 
 body {
     font-family: 'Alata', sans-serif;
-    background: #ffffff;
+    background: #f0f0f0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 0;
+    padding: 20px 0 40px;
 }
 
 body.has-dashboard-sidebar {
@@ -30,34 +30,37 @@ a {
    HERO CONTAINER
 ========================================= */
 .hero {
-    width: 95%;
-    max-width: 1200px;
-    background: linear-gradient(180deg, #931c21 0%, #a81c22 58%, #ffffff 100%);
-    border-radius: 12px;
-    padding: 74px 24px 24px 24px;
+    width: min(96vw, 1280px);
+    max-width: 1280px;
+    background:
+        linear-gradient(90deg, rgba(242, 242, 242, 0.98) 0%, rgba(242, 242, 242, 0.96) 49.5%, rgba(166, 20, 32, 0.96) 49.5%, rgba(200, 24, 35, 0.96) 100%),
+        url('/images/hero-red-gradient.png') center right/cover no-repeat;
+    border: 3px solid #a61420;
+    border-radius: 25px;
+    padding: 0;
     position: relative;
-    overflow: hidden; /* Contains children within the hero bounds */
-    height: auto;     /* Allows hero to grow dynamically */
-    margin-bottom: 50px; /* Creates clean spacing above the feature cards */
+    overflow: hidden;
+    min-height: 610px;
+    margin: 0 0 36px;
+    box-shadow: 0 0 0 1px rgba(120, 20, 30, 0.25);
 }
 
 /* NAVIGATION */
 .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
+    top: auto;
+    left: auto;
     width: 100%;
-    height: 58px;
+    min-height: 74px;
     margin: 0;
-    padding: 8px 24px;
-    transform: none;
+    padding: 16px 24px 12px 24px;
     display: flex;
     align-items: center;
-    background: rgba(132, 15, 20, 0.96);
-    border-bottom: 1px solid #690d12;
+    background: rgba(166, 20, 32, 0.98);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 0;
-    box-shadow: 0 5px 16px rgba(55, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
+    box-shadow: none;
+    backdrop-filter: none;
     z-index: 20;
 }
 
@@ -129,32 +132,35 @@ a {
 .nav-logo {
     display: flex;
     align-items: center;
-    margin-right: 40px;
+    margin-right: 42px;
 }
 
 .nav-logo img {
-    height: 38px;
+    height: 56px;
     width: auto;
     object-fit: contain;
+    filter: brightness(0) invert(1);
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 36px;
+    gap: 32px;
+    margin-right: auto;
 }
 
 .nav-links a {
     color: #ffffff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
 .nav-account {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
 }
 
 .nav-user {
@@ -182,12 +188,15 @@ a {
 }
 
 .signup {
-    background: #b71922;
+    background: rgba(255, 255, 255, 0.12);
     color: #ffffff;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 13px;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 9px;
+    font-size: 14px;
     font-weight: 600;
+    min-width: 150px;
+    text-align: center;
 }
 
 .all-hospitals-page {
@@ -279,57 +288,62 @@ a {
 /* HERO CONTENT GRID */
 .hero-content {
     display: grid;
-    grid-template-columns: 36% minmax(0, 1fr);
-    gap: 16px;
+    grid-template-columns: 42% minmax(0, 1fr);
+    gap: 0;
     position: relative;
     align-items: stretch;
+    padding: 0 12px 20px;
+    min-height: 520px;
 }
 
 /* LEFT WHITE CARD */
 .katoc-info {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 24px 20px 16px;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 18px 0 0 18px;
+    padding: 20px 28px 18px 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    justify-content: flex-start;
+    box-shadow: none;
     position: relative;
     z-index: 5;
-    min-height: 310px; /* Match the medical visual height */
+    min-height: 420px;
+    margin: 14px 0 0 8px;
 }
 
 .katoc-logo {
     width: 100%;
-    max-width: 320px; /* Increased from 240px/280px */
+    max-width: 380px;
     height: auto;
-    margin-top: 4px;
+    margin-top: 2px;
+    margin-bottom: 10px;
 }
 
 /* DESCRIPTION PARAGRAPH */
 .description {
     position: relative;
-    top: -20px;
-    font-size: 13px;  /* Increased from 11px */
-    color: #333333;
-    line-height: 1.5;
-    margin-top: 16px;
-    margin-bottom: 30px;
-    max-width: 340px;  /* Slightly wider to accommodate larger text */
+    top: 0;
+    font-size: 20px;
+    color: #2c1d1d;
+    line-height: 1.35;
+    margin: 26px 0 24px;
+    max-width: 520px;
+    letter-spacing: -0.02em;
 }
 
 .description span {
     color: #931c21;
     font-weight: 700;
-    font-size: 18px; /* Increased from 15px */
+    font-size: 26px;
 }
 
 /* BUTTONS */
 .hero-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
-    justify-content: center;
+    gap: 20px;
+    justify-content: flex-start;
+    margin-top: 8px;
 }
 
 .services-btn,
@@ -337,13 +351,13 @@ a {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    padding: 7px 14px;
-    border-radius: 6px;
-    font-size: 11px;
+    padding: 0 18px 0 14px;
+    border-radius: 8px;
+    font-size: 15px;
     font-weight: 600;
-    width: 115px;
-    min-height: 44px;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    width: 170px;
+    min-height: 52px;
+    transition: all 0.2s ease;
 }
 
 .services-btn:hover,
@@ -351,30 +365,20 @@ a {
 .services-btn:focus-visible,
 .about-btn:focus-visible {
     transform: translateY(-2px);
-    outline: 2px solid #931c21;
-    outline-offset: 3px;
-}
-
-.services-btn:hover,
-.services-btn:focus-visible {
-    background: #690d12;
-}
-
-.about-btn:hover,
-.about-btn:focus-visible {
-    background: #fff4f4;
+    outline: none;
 }
 
 .services-btn {
     background: #931c21;
     color: #ffffff;
     border: 1px solid #931c21;
+    box-shadow: 0 4px 12px rgba(147, 28, 33, 0.2);
 }
 
 .about-btn {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.22);
     color: #931c21;
-    border: 1px solid #931c21;
+    border: 1px solid rgba(147, 28, 33, 0.7);
 }
 
 #services,
@@ -384,9 +388,11 @@ a {
 
 .medical-visual {
     position: relative;
-    border-radius: 50px;
+    border-radius: 0;
     overflow: hidden;
-    min-height: 310px; /* Match the left information card */
+    min-height: 420px;
+    margin-top: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
 }
 
 .dialysis-image {
@@ -394,14 +400,16 @@ a {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    border-radius: 10px;
+    border-radius: 0;
+    opacity: 0.92;
+    filter: saturate(0.9) contrast(1.08);
 }
 
 .red-overlay {
     position: absolute;
     inset: 0;
-    border-radius: 10px;
-    background: linear-gradient(90deg, rgba(147, 28, 33, 0.5) 0%, rgba(147, 28, 33, 0.1) 100%);
+    border-radius: 0;
+    background: linear-gradient(90deg, rgba(165, 10, 25, 0.35) 0%, rgba(165, 10, 25, 0.08) 100%);
     pointer-events: none;
     z-index: 2;
 }
@@ -409,20 +417,20 @@ a {
 /* OVERLAY GRAPHICS */
 .syringe {
     position: absolute;
-    width: 550px;
-    right: 430px; 
-    top: 55%;
-    transform: translateY(-50%) rotate(-8deg);
+    width: 420px;
+    left: 36%;
+    top: 48%;
+    transform: translate(-50%, -50%) rotate(-18deg);
     z-index: 10;
-    filter: drop-shadow(-8px 10px 14px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(-8px 10px 14px rgba(0, 0, 0, 0.25));
     pointer-events: none;
 }
 
 .kidney {
     position: absolute;
-    width: 600px;
-    right: -80px;
-    bottom: -100px;
+    width: 520px;
+    right: -40px;
+    bottom: -40px;
     z-index: 10;
     filter: drop-shadow(-5px 10px 16px rgba(0, 0, 0, 0.35));
     pointer-events: none;
@@ -454,54 +462,60 @@ a {
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: 16px;
-    width: 95%;
-    max-width: 1200px;
-    margin: 0 auto;
+    gap: 18px;
+    width: min(96vw, 1280px);
+    max-width: 1280px;
+    margin: 0 auto 10px;
+    padding: 0 10px;
 }
 
 .feature-card {
     flex: 1 1 0;
     min-width: 0;
-    background-color: #9e1b21;
-    border-radius: 12px;
+    background-color: rgba(166, 20, 32, 0.95);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 8px 18px rgba(82, 6, 10, 0.18);
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(255,255,255,0.35);
 }
 
 .card-header {
     background-color: #ffffff;
-    padding: 16px 12px;
+    padding: 21px 12px 18px;
     text-align: center;
 }
 
 .card-header h3 {
-    color: #9e1b21;
+    color: #a61420;
     font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
 }
 
 .card-body {
-    padding: 20px 16px 24px;
+    padding: 20px 18px 22px;
     text-align: center;
     color: #ffffff;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    min-height: 152px;
 }
 
 .card-body h4 {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     margin-bottom: 12px;
+    line-height: 1.4;
 }
 
 .card-body p {
-    font-size: 11px;
-    line-height: 1.45;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.95);
 }
 
 /* RESPONSIVE */
@@ -2905,4 +2919,59 @@ a {
         order: -1;
         width: 100%;
     }
+}
+
+/* Simplified appointment booking */
+.availability-modal.has-booking-form .availability-icon,
+.availability-modal.has-booking-form > .availability-modal-card > .availability-label { display:none; }
+.availability-modal.has-booking-form .availability-modal-card { width:min(940px,calc(100vw - 32px)) !important; }
+.availability-modal.has-booking-form .availability-modal-card > h3 { margin:4px 42px 0 !important; font-size:clamp(22px,2vw,30px) !important; text-align:left; }
+.availability-modal.has-booking-form .availability-copy { margin:6px 0 0; max-width:none; font-size:13px; text-align:left; }
+.availability-booking-form [hidden], .availability-booking-form .booking-step[hidden] { display:none !important; }
+.availability-booking-form { grid-template-columns:minmax(0,1.55fr) minmax(230px,.8fr); gap:18px; margin-top:14px; }
+.availability-booking-main { max-height:calc(100vh - 205px); padding:0 12px 10px 0; }
+.booking-step { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:9px 14px; }
+.booking-step h4, .booking-step .booking-step-help, .booking-step > select, .booking-fields-grid, .booking-step > label, .booking-step > textarea, .booking-step > button { grid-column:1 / -1; }
+.booking-step h4 { margin:1px 0 0; font-size:18px; }
+.booking-step .booking-step-help { margin:-5px 0 3px; color:#6d5a5a; font-size:12px; }
+.booking-step label { margin:0; color:#6c4547; font-size:11px; font-weight:700; }
+.booking-step input:not([type="hidden"]), .booking-step select, .booking-step textarea { min-height:40px; margin-top:4px; padding:9px 11px; border-color:#dfc4c6; border-radius:7px; color:#352b2b; font-size:13px; }
+.booking-fields-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 12px; }
+.booking-fields-grid > div { min-width:0; }
+.booking-fields-grid input, .booking-fields-grid select { display:block; }
+.booking-field-wide, .booking-time-field { grid-column:1 / -1; }
+.booking-step h4.booking-subheading { margin-top:6px; padding-top:11px; border-top:1px solid #eee1e2; font-size:15px; }
+.booking-step textarea { min-height:64px; }
+.booking-step .availability-primary { min-height:42px; margin-top:3px; border-radius:7px; background:#a71920; font-size:13px; font-weight:700; }
+.booking-step .availability-primary:hover, .availability-aside-action:hover { background:#7d1117; }
+.availability-slot-help { margin:-4px 0 0; color:#747076; font-size:11px; }
+.availability-booking-aside { padding:17px 17px 16px; border-radius:10px; background:#fffafa; }
+.availability-aside-eyebrow { font-size:9px; }
+.availability-booking-aside h4 { margin:6px 0 12px; font-size:19px; }
+.availability-booking-aside dl { gap:9px; }
+.availability-booking-aside dt { font-size:10px; }
+.availability-booking-aside dd { font-size:12px; }
+.availability-aside-note { margin:13px 0 0; padding-top:10px; font-size:11px; }
+.availability-aside-action { min-height:40px; margin-top:14px; border-radius:7px; font-size:12px; font-weight:700; }
+.availability-modal.has-booking-form .availability-actions { margin-top:4px; }
+.booking-summary { display:block; }
+.booking-summary h4 { margin-bottom:10px; }
+.booking-summary p { padding:8px 0; border-bottom:1px solid #f1e7e8; font-size:12px; }
+.booking-summary-actions { justify-content:flex-start; }
+
+@media (max-width:760px) {
+    .availability-modal.has-booking-form { padding:10px !important; }
+    .availability-modal.has-booking-form .availability-modal-card { width:min(580px,calc(100vw - 20px)) !important; max-height:calc(100vh - 20px) !important; margin:0 auto !important; padding:20px 17px !important; }
+    .availability-modal.has-booking-form .availability-modal-card > h3 { margin:5px 34px 0 0 !important; font-size:24px !important; }
+    .availability-booking-form { display:flex; flex-direction:column; gap:12px; }
+    .availability-booking-main { width:100%; max-height:none; overflow:visible; padding:0; }
+    .availability-booking-aside { order:-1; width:100%; min-height:0; }
+    .availability-booking-aside dl { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 12px; }
+    .availability-aside-note, .availability-aside-action { display:none; }
+    .availability-modal.has-booking-form .availability-actions { justify-content:flex-start; }
+}
+@media (max-width:480px) {
+    .availability-booking-aside dl { grid-template-columns:1fr 1fr; }
+    .booking-fields-grid { grid-template-columns:1fr; }
+    .booking-field-wide, .booking-time-field { grid-column:auto; }
 }
