@@ -11,10 +11,16 @@
         <a class="admin-button admin-button-primary" href="{{ path('app_admin_user_edit', {id: managed_user.id}) }}">Edit account</a>
     </div>
     <section class="admin-stats-grid admin-user-summary">
-        <div class="admin-stat-card"><span class="admin-stat-label">Role</span><strong class="admin-stat-text">{{ managed_user.isAdmin ? 'Administrator' : 'Patient' }}</strong><span class="admin-stat-footnote">KATOC account role</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-label">Role</span><strong class="admin-stat-text">{{ managed_user.isAdmin ? 'System administrator' : (managed_user.isHospitalAdmin ? 'Hospital administrator' : 'Patient') }}</strong><span class="admin-stat-footnote">KATOC account role</span></div>
         <div class="admin-stat-card"><span class="admin-stat-label">Account status</span><strong class="admin-stat-text">{{ managed_user.active ? 'Active' : 'Inactive' }}</strong><span class="admin-stat-footnote">Created {{ managed_user.createdAt|date('M j, Y') }}</span></div>
         <div class="admin-stat-card"><span class="admin-stat-label">Appointment records</span><strong>{{ appointment_count }}</strong><span class="admin-stat-footnote">Associated care requests</span></div>
     </section>
+    {% if managed_user.isHospitalAdmin %}
+        <section class="admin-panel">
+            <div class="admin-panel-heading"><div><h2>Assigned dialysis centers</h2><p>This account can access bookings for these centers only.</p></div></div>
+            <ul>{% for center in managed_user.assignedCenters %}<li>{{ center.name }}</li>{% else %}<li>No centers assigned</li>{% endfor %}</ul>
+        </section>
+    {% endif %}
     <section class="admin-panel">
         <div class="admin-panel-heading"><div><h2>Appointment history</h2><p>Most recent records associated with this account</p></div><a class="admin-text-link" href="{{ path('app_admin_records', {q: managed_user.email}) }}">Find records</a></div>
         {% if appointments %}

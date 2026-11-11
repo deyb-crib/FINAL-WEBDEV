@@ -24,6 +24,8 @@ body { margin:0; font-family:'Alata',system-ui,sans-serif; color:var(--ink); bac
 .auth-admin-entry { display:grid; gap:9px; margin-top:18px; text-align:center; color:var(--muted); font-size:.9rem; }
 .auth-admin-button { display:block; width:100%; padding:11px 13px; border:1.5px solid var(--red); border-radius:999px; color:var(--red); text-decoration:none; font:inherit; transition:background .2s,color .2s; }
 .auth-admin-button:hover { background:var(--red); color:#fff; }
+.auth-hospital-button { border-color:#344b70; color:#344b70; }
+.auth-hospital-button:hover { background:#344b70; color:#fff; }
 .auth-admin-logout { display:block; text-align:center; text-decoration:none; }
 .auth-error, .auth-success { padding:12px 14px; border-radius:10px; margin-bottom:16px; font-size:.9rem; }
 .auth-error { background:#fdecee; color:#8a0f17; }

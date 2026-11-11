@@ -13,6 +13,8 @@ echo ">> Creating / updating database tables..."
 php bin/console doctrine:schema:update --force --complete --no-interaction
 echo ">> Seeding dialysis centers..."
 php bin/console app:seed
+echo ">> Linking existing appointments to dialysis centers..."
+php bin/console app:backfill-appointment-centers
 
 chown -R www-data:www-data var
 echo ">> KATOC is ready: http://localhost:8082"

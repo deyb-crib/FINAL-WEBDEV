@@ -189,6 +189,12 @@ class AdminController extends AbstractController
                     }.'.';
                 }
             }
+            if ($values['name'] !== '') {
+                $existingCenter = $em->getRepository(DialysisCenter::class)->findOneBy(['name' => $values['name']]);
+                if ($existingCenter && $existingCenter->id !== $center->id) {
+                    $errors[] = 'A dialysis center with this name already exists.';
+                }
+            }
 
             $unsafeImagePath = str_contains('/'.$values['imagePath'].'/', '/../');
             if (mb_strlen($values['imagePath']) > 255 || ($values['imagePath'] !== '' && (!preg_match('~^images/[A-Za-z0-9._/-]+$~', $values['imagePath']) || $unsafeImagePath))) {

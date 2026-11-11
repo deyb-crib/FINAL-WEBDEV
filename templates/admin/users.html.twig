@@ -6,7 +6,7 @@
 
 {% block body %}
     <div class="admin-page-heading">
-        <div><span class="admin-eyebrow">ACCOUNTS</span><h1>User management</h1><p>Manage patient and administrator accounts and access.</p></div>
+        <div><span class="admin-eyebrow">ACCOUNTS</span><h1>User management</h1><p>Manage patient, hospital administrator, and system administrator accounts and access.</p></div>
         <a class="admin-button admin-button-primary" href="{{ path('app_admin_user_new') }}">＋ Add user</a>
     </div>
     <section class="admin-panel">
@@ -14,7 +14,7 @@
             <label class="sr-only" for="user-search">Search users</label>
             <input id="user-search" name="q" value="{{ search }}" placeholder="Search name or email">
             <label class="sr-only" for="user-role">Filter by role</label>
-            <select id="user-role" name="role"><option value="all">All roles</option><option value="patient"{{ role_filter == 'patient' ? ' selected' : '' }}>Patient</option><option value="admin"{{ role_filter == 'admin' ? ' selected' : '' }}>Administrator</option></select>
+            <select id="user-role" name="role"><option value="all">All roles</option><option value="patient"{{ role_filter == 'patient' ? ' selected' : '' }}>Patient</option><option value="hospital_admin"{{ role_filter == 'hospital_admin' ? ' selected' : '' }}>Hospital administrator</option><option value="admin"{{ role_filter == 'admin' ? ' selected' : '' }}>System administrator</option></select>
             <label class="sr-only" for="user-status">Filter by account status</label>
             <select id="user-status" name="status"><option value="all">All accounts</option><option value="active"{{ status_filter == 'active' ? ' selected' : '' }}>Active</option><option value="inactive"{{ status_filter == 'inactive' ? ' selected' : '' }}>Inactive</option></select>
             <button class="admin-button admin-button-primary" type="submit">Apply filters</button>
@@ -29,7 +29,7 @@
                     {% for user in users %}
                         <tr>
                             <td><a class="admin-user-cell" href="{{ path('app_admin_user_show', {id: user.id}) }}"><span class="admin-avatar">{{ user.name|slice(0, 1)|upper }}</span><span><strong>{{ user.name }}</strong><small>{{ user.email }}</small></span></a></td>
-                            <td><span class="admin-role-pill">{{ user.isAdmin ? 'Administrator' : 'Patient' }}</span></td>
+                            <td><span class="admin-role-pill">{{ user.isAdmin ? 'System administrator' : (user.isHospitalAdmin ? 'Hospital administrator' : 'Patient') }}</span></td>
                             <td>{{ user.createdAt|date('M j, Y') }}</td>
                             <td><span class="admin-status {{ user.active ? 'status-active' : 'status-inactive' }}">{{ user.active ? 'Active' : 'Inactive' }}</span></td>
                             <td><div class="admin-row-actions">

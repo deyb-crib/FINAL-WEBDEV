@@ -28,13 +28,18 @@ If admin signup is not configured, `/admin/signup` is disabled. To grant admin a
 Open `/admin` after signing in with an active administrator account. The dashboard summarizes registered/active/inactive accounts, appointment requests, completed requests, active centers, live alerts, and recent audited activity.
 
 The admin navigation includes:
-- **User management:** search/filter accounts, inspect account appointment history, create and edit accounts, grant/revoke admin roles, deactivate/activate accounts, and delete accounts only when they have no appointment history. The last active administrator and the signed-in administrator are protected from lockout.
+- **User management:** search/filter accounts, inspect account appointment history, create and edit patient, hospital administrator, and system administrator accounts, assign hospital administrators to one or more dialysis centers, deactivate/activate accounts, and delete accounts only when they have no appointment history. The last active administrator and the signed-in administrator are protected from lockout.
 - **Records management:** search/filter appointment requests and update statuses; dialysis centers can be added, edited, activated, or deactivated.
 - **Reports & analytics:** database-backed appointment trends, status and registration distributions, date filtering (up to one year), and CSV export.
 - **Activity logs and notifications:** login/logout and account/appointment/center changes are audited; notifications are live summaries of pending appointments, past confirmed dates, and inactive centers. Notifications are derived from current records and do not have individual read/unread states.
 - **Profile and system settings:** edit the signed-in administrator's own name/email and view read-only runtime/database health. Secrets and database credentials remain outside the dashboard in the environment.
 
 The dashboard adds `users.is_active` and the `admin_activities` audit table. Docker startup applies these additive Doctrine schema changes automatically; on a deployment without the included startup script, run `php bin/console doctrine:schema:update --force --no-interaction` after reviewing the schema diff. Back up the database before applying schema updates.
+
+## Hospital administrator access
+Create a hospital administrator from **Admin → User management → Add user**, select the **Hospital administrator** role, and assign one or more dialysis centers. Each account can be assigned to a center independently, so a center can have multiple hospital administrators. Sign-in redirects them to `/hospital-admin`, where they can view bookings and update appointment statuses only for their assigned centers. The system administrator retains global access.
+
+Appointments now have a center relationship in addition to the saved center-name snapshot. On Docker startup, `app:backfill-appointment-centers` links existing bookings to centers by exact name after the schema update and center seeding. If you deploy without the included startup script, run the schema update, `php bin/console app:seed` if needed, and `php bin/console app:backfill-appointment-centers`. Unmatched or ambiguous legacy center names are deliberately left unassigned; review those records before assigning access.
 
 ## Useful commands
 - Console: `docker compose exec php php bin/console list`

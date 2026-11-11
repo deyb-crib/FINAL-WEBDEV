@@ -6,16 +6,72 @@
 
 {% block body %}
     <a class="admin-back-link" href="{{ is_new ? path('app_admin_users') : path('app_admin_user_show', {id: managed_user.id}) }}">← Back to user management</a>
-    <div class="admin-page-heading"><div><span class="admin-eyebrow">ACCOUNT</span><h1>{{ is_new ? 'Add a user' : 'Edit account' }}</h1><p>{{ is_new ? 'Create a patient or administrator account.' : 'Update account details and access.' }}</p></div></div>
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">ACCOUNT</span><h1>{{ is_new ? 'Add a user' : 'Edit account' }}</h1><p>{{ is_new ? 'Create a patient, hospital administrator, or system administrator account.' : 'Update account details and access.' }}</p></div></div>
     {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
-    <form class="admin-panel admin-edit-form" method="post">
-        <input type="hidden" name="_token" value="{{ csrf_token('admin-user-form' ~ (managed_user.id ?? 'new')) }}">
-        <label for="name">Full name</label><input id="name" name="name" value="{{ name }}" maxlength="100" required>
-        <label for="email">Email address</label><input type="email" id="email" name="email" value="{{ email }}" maxlength="180" required>
-        <label for="password">{{ is_new ? 'Temporary password' : 'New password (leave blank to keep current password)' }}</label><input type="password" id="password" name="password" autocomplete="new-password" minlength="8" {{ is_new ? 'required' : '' }}>
-        <label for="role">Role</label><select id="role" name="role"><option value="patient"{{ not is_admin ? ' selected' : '' }}>Patient</option><option value="admin"{{ is_admin ? ' selected' : '' }}>Administrator</option></select>
-        <label class="admin-checkbox-label"><input type="checkbox" name="is_active" value="1"{{ is_active ? ' checked' : '' }}> Account active</label>
-        {% if managed_user.id == app.user.id %}<p class="admin-form-note">You cannot remove your own administrator access or deactivate your account.</p>{% endif %}
-        <div class="admin-form-actions"><button class="admin-button admin-button-primary" type="submit">{{ is_new ? 'Create account' : 'Save changes' }}</button><a class="admin-button admin-button-quiet" href="{{ is_new ? path('app_admin_users') : path('app_admin_user_show', {id: managed_user.id}) }}">Cancel</a></div>
-    </form>
+    <div class="admin-user-form-layout" data-user-form>
+        <form class="admin-panel admin-edit-form admin-user-form" method="post">
+            <div class="admin-panel-heading">
+                <div><h2>Account details</h2><p>Set up sign-in details and choose what this account can access.</p></div>
+            </div>
+            <input type="hidden" name="_token" value="{{ csrf_token('admin-user-form' ~ (managed_user.id ?? 'new')) }}">
+            <label for="name">Full name</label><input id="name" name="name" value="{{ name }}" maxlength="100" autocomplete="name" required>
+            <label for="email">Email address</label><input type="email" id="email" name="email" value="{{ email }}" maxlength="180" autocomplete="email" required>
+            <label for="password">{{ is_new ? 'Temporary password' : 'New password (leave blank to keep current password)' }}</label><input type="password" id="password" name="password" autocomplete="new-password" minlength="8" {{ is_new ? 'required' : '' }}>
+            <label for="role">Account role</label>
+            <select id="role" name="role" data-role-select>
+                <option value="patient"{{ not is_admin and not is_hospital_admin ? ' selected' : '' }}>Patient</option>
+                <option value="hospital_admin"{{ is_hospital_admin ? ' selected' : '' }}>Hospital administrator</option>
+                <option value="admin"{{ is_admin ? ' selected' : '' }}>System administrator</option>
+            </select>
+
+            <fieldset class="admin-center-assignment" data-center-assignment {% if not is_hospital_admin %}hidden{% endif %}>
+                <legend>Assigned dialysis centers</legend>
+                <p class="admin-form-note" id="assigned-centers-help">Choose the centers this administrator represents. They will only see bookings for the centers selected here.</p>
+                <div class="admin-center-options">
+                    {% for center in centers %}
+                        <label class="admin-center-option">
+                            <input type="checkbox" name="assigned_centers[]" value="{{ center.id }}"{{ center.id in assigned_center_ids ? ' checked' : '' }}>
+                            <span><strong>{{ center.name }}</strong><small>{{ center.address }}</small></span>
+                        </label>
+                    {% else %}
+                        <p class="admin-form-note">No centers are available yet. Add a dialysis center before creating a hospital administrator.</p>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <label class="admin-checkbox-label"><input type="checkbox" name="is_active" value="1"{{ is_active ? ' checked' : '' }}> Account active</label>
+            {% if managed_user.id == app.user.id %}<p class="admin-form-note">You cannot remove your own administrator access or deactivate your account.</p>{% endif %}
+            <div class="admin-form-actions"><button class="admin-button admin-button-primary" type="submit">{{ is_new ? 'Create account' : 'Save changes' }}</button><a class="admin-button admin-button-quiet" href="{{ is_new ? path('app_admin_users') : path('app_admin_user_show', {id: managed_user.id}) }}">Cancel</a></div>
+        </form>
+
+        <aside class="admin-user-form-aside">
+            <section class="admin-panel admin-role-guide">
+                <span class="admin-guide-icon" aria-hidden="true">♙</span>
+                <span class="admin-eyebrow">ACCESS GUIDE</span>
+                <h2>Choose the right role</h2>
+                <p class="admin-guide-intro">Each account type has a different level of access in KATOC.</p>
+                <div class="admin-role-options">
+                    <article class="admin-role-option{{ not is_admin and not is_hospital_admin ? ' is-selected' : '' }}" data-role-card="patient">
+                        <span class="admin-role-number">01</span>
+                        <div><h3>Patient</h3><p>Books appointments and manages their own requests.</p></div>
+                        <span class="admin-role-badge">Personal</span>
+                    </article>
+                    <article class="admin-role-option{{ is_hospital_admin ? ' is-selected' : '' }}" data-role-card="hospital_admin">
+                        <span class="admin-role-number">02</span>
+                        <div><h3>Hospital administrator</h3><p>Reviews and updates appointments for assigned centers only.</p></div>
+                        <span class="admin-role-badge">Center access</span>
+                    </article>
+                    <article class="admin-role-option{{ is_admin ? ' is-selected' : '' }}" data-role-card="admin">
+                        <span class="admin-role-number">03</span>
+                        <div><h3>System administrator</h3><p>Manages all users, centers, bookings, and system settings.</p></div>
+                        <span class="admin-role-badge">Global access</span>
+                    </article>
+                </div>
+            </section>
+            <section class="admin-panel admin-account-tip">
+                <span class="admin-tip-mark" aria-hidden="true">i</span>
+                <div><h3>Keep access secure</h3><p>Use a unique email address, assign only the centers the administrator needs, and share the temporary password privately.</p></div>
+            </section>
+        </aside>
+    </div>
 {% endblock %}

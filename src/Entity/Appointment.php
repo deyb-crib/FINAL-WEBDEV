@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'appointments')]
-#[ORM\Index(name: 'idx_slot', columns: ['center', 'appointment_date', 'appointment_time'])]
+#[ORM\Index(name: 'idx_center_slot', columns: ['dialysis_center_id', 'appointment_date', 'appointment_time'])]
 class Appointment
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
@@ -19,6 +19,10 @@ class Appointment
 
     #[ORM\Column(length: 150)]
     public string $center = '';
+
+    #[ORM\ManyToOne(targetEntity: DialysisCenter::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    public ?DialysisCenter $dialysisCenter = null;
 
     #[ORM\Column(length: 255)]
     public string $location = '';

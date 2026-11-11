@@ -21,6 +21,9 @@ class DashboardController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('app_admin_dashboard');
         }
+        if ($this->isGranted('ROLE_HOSPITAL_ADMIN')) {
+            return $this->redirectToRoute('app_hospital_admin_dashboard');
+        }
 
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -102,6 +105,9 @@ class DashboardController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('app_admin_dashboard');
         }
+        if ($this->isGranted('ROLE_HOSPITAL_ADMIN')) {
+            return $this->redirectToRoute('app_hospital_admin_dashboard');
+        }
 
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -165,6 +171,10 @@ class DashboardController extends AbstractController
     #[Route('/dashboard/appointments/{id}/cancel', name: 'app_appointment_cancel', methods: ['POST'])]
     public function cancel(int $id, Request $request, EntityManagerInterface $em, AdminActivityLogger $activityLogger): Response
     {
+        if ($this->isGranted('ROLE_HOSPITAL_ADMIN') && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = $this->getUser();
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException();

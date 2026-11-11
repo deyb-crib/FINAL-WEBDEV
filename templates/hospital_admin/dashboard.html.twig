@@ -1,0 +1,52 @@
+{% extends 'hospital_admin/layout.html.twig' %}
+
+{% set active_nav = 'dashboard' %}
+{% block title %}Hospital dashboard{% endblock %}
+{% block section_label %}Hospital dashboard{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading">
+        <div><span class="admin-eyebrow">HOSPITAL WORKSPACE</span><h1>Appointment overview</h1><p>Bookings and status totals for your assigned dialysis centers.</p></div>
+        <a class="admin-button admin-button-primary" href="{{ path('app_hospital_admin_records') }}">View appointments</a>
+    </div>
+
+    <section class="admin-stats-grid">
+        <div class="admin-stat-card"><span class="admin-stat-label">Total bookings</span><strong>{{ total_count }}</strong><span class="admin-stat-footnote">For your assigned centers</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-label">Pending</span><strong>{{ status_counts.Pending }}</strong><span class="admin-stat-footnote">Awaiting review</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-label">Confirmed</span><strong>{{ status_counts.Confirmed }}</strong><span class="admin-stat-footnote">Scheduled appointments</span></div>
+        <div class="admin-stat-card"><span class="admin-stat-label">Completed</span><strong>{{ status_counts.Completed }}</strong><span class="admin-stat-footnote">Completed appointments</span></div>
+    </section>
+
+    <section class="admin-panel">
+        <div class="admin-panel-heading"><div><h2>Your dialysis centers</h2><p>Access is limited to these centers.</p></div></div>
+        {% if centers %}
+            <ul>{% for center in centers %}<li><strong>{{ center.name }}</strong> · {{ center.address }}</li>{% endfor %}</ul>
+        {% else %}
+            <div class="admin-empty-state"><strong>No centers assigned</strong><p>Ask a system administrator to assign your account to a dialysis center.</p></div>
+        {% endif %}
+    </section>
+
+    <section class="admin-panel">
+        <div class="admin-panel-heading"><div><h2>Recent appointments</h2><p>Latest bookings for your assigned centers.</p></div><a class="admin-text-link" href="{{ path('app_hospital_admin_records') }}">All appointments</a></div>
+        {% if appointments %}
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead><tr><th>Patient</th><th>Center</th><th>Appointment</th><th>Treatment</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td><strong>{{ appointment.patientName }}</strong><small>{{ appointment.patientEmail }} · {{ appointment.patientContact }}</small></td>
+                            <td>{{ appointment.center }}</td>
+                            <td>{{ appointment.appointmentDate|date('M j, Y') }}<small>{{ ('2000-01-01 ' ~ appointment.appointmentTime)|date('g:i A') }} · {{ appointment.session }}</small></td>
+                            <td>{{ appointment.dialysisType }}</td>
+                            <td><span class="admin-status status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="admin-empty-state"><strong>No appointments yet</strong><p>Bookings for your assigned centers will appear here.</p></div>
+        {% endif %}
+    </section>
+{% endblock %}

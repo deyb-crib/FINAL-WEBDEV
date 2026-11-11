@@ -21,3 +21,23 @@
     backdrop.addEventListener("click", close);
     sidebar.querySelectorAll("a").forEach((link) => link.addEventListener("click", close));
 })();
+
+(() => {
+    const form = document.querySelector("[data-user-form]");
+    const roleSelect = form?.querySelector("[data-role-select]");
+    const centerAssignment = form?.querySelector("[data-center-assignment]");
+
+    if (!roleSelect || !centerAssignment) {
+        return;
+    }
+
+    const updateRoleGuide = () => {
+        centerAssignment.hidden = roleSelect.value !== "hospital_admin";
+        form.querySelectorAll("[data-role-card]").forEach((card) => {
+            card.classList.toggle("is-selected", card.dataset.roleCard === roleSelect.value);
+        });
+    };
+
+    roleSelect.addEventListener("change", updateRoleGuide);
+    updateRoleGuide();
+})();

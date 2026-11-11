@@ -34,12 +34,16 @@ class BookingController extends AbstractController
         if ($center === '' || !$date) {
             return new JsonResponse(['bookedTimes' => []]);
         }
+        $dialysisCenter = $em->getRepository(DialysisCenter::class)->findOneBy(['name' => $center]);
+        if (!$dialysisCenter) {
+            return new JsonResponse(['bookedTimes' => []]);
+        }
 
         $times = $em->createQuery(
             'SELECT a.appointmentTime FROM App\Entity\Appointment a
-             WHERE a.center = :c AND a.appointmentDate = :d AND a.status <> :x'
+             WHERE a.dialysisCenter = :center AND a.appointmentDate = :d AND a.status <> :x'
         )
-            ->setParameter('c', $center)
+            ->setParameter('center', $dialysisCenter)
             ->setParameter('d', $date, Types::DATE_IMMUTABLE)
             ->setParameter('x', 'Cancelled')
             ->getSingleColumnResult();
@@ -50,6 +54,10 @@ class BookingController extends AbstractController
     #[Route('/booking/create', name: 'app_booking_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, AdminActivityLogger $activityLogger): Response
     {
+        if ($this->isGranted('ROLE_HOSPITAL_ADMIN') && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = $this->getUser();
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException();
@@ -101,11 +109,11 @@ class BookingController extends AbstractController
 
         if (!$errors) {
             $taken = $em->getRepository(Appointment::class)->count([
-                'center' => $center->name, 'appointmentDate' => $date, 'appointmentTime' => $time,
+                'dialysisCenter' => $center, 'appointmentDate' => $date, 'appointmentTime' => $time,
             ]);
             // cancelled bookings free the slot again
             $cancelled = $em->getRepository(Appointment::class)->count([
-                'center' => $center->name, 'appointmentDate' => $date, 'appointmentTime' => $time, 'status' => 'Cancelled',
+                'dialysisCenter' => $center, 'appointmentDate' => $date, 'appointmentTime' => $time, 'status' => 'Cancelled',
             ]);
             if ($taken - $cancelled > 0) {
                 $errors[] = 'That time slot is already fully booked. Please pick another.';
@@ -120,6 +128,7 @@ class BookingController extends AbstractController
         $a = new Appointment();
         $a->user = $user;
         $a->center = $center->name;
+        $a->dialysisCenter = $center;
         $a->location = $center->address;
         $a->dialysisType = $type;
         $a->appointmentDate = $date;

@@ -1,5 +1,8 @@
 security:
     access_denied_url: app_admin_access_denied
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_HOSPITAL_ADMIN, ROLE_USER]
+        ROLE_HOSPITAL_ADMIN: [ROLE_USER]
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     providers:
@@ -31,6 +34,7 @@ security:
         - { path: ^/admin-access-denied$, roles: PUBLIC_ACCESS }
         - { path: ^/login$, roles: PUBLIC_ACCESS }
         - { path: ^/signup$, roles: PUBLIC_ACCESS }
+        - { path: ^/hospital-admin, roles: ROLE_HOSPITAL_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/dashboard, roles: ROLE_USER }
         - { path: ^/booking, roles: ROLE_USER }

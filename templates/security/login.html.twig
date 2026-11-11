@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in | KATOC</title>
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/auth.css?v=20261111-3">
 </head>
 <body class="auth-login-page">
     <main class="auth-shell">
@@ -22,8 +22,16 @@
         <section class="auth-form-panel">
             <div class="auth-form-wrap">
                 <img src="/images/katoc-logo2.png" alt="KATOC" class="auth-form-logo-mark">
-                <h2>{{ admin_mode ? 'Admin sign in' : 'Log in to KATOC' }}</h2>
-                <p class="auth-intro">{{ admin_mode ? 'Sign in with your administrator account to manage appointments and dialysis centers.' : 'Access your dialysis care information and appointment requests.' }}</p>
+                <h2>{{ admin_mode ? 'System admin sign in' : (hospital_mode ? 'Hospital sign in' : 'Log in to KATOC') }}</h2>
+                <p class="auth-intro">
+                    {% if admin_mode %}
+                        Sign in to manage the KATOC system and all dialysis centers.
+                    {% elseif hospital_mode %}
+                        Sign in to view and manage bookings for your assigned hospital.
+                    {% else %}
+                        Access your dialysis care information and appointment requests.
+                    {% endif %}
+                </p>
 
                 {% for message in app.flashes('success') %}
                     <div class="auth-success" role="status">{{ message }}</div>
@@ -33,12 +41,11 @@
                 {% endif %}
 
                 {% if already_authenticated %}
-                    <div class="auth-error" role="status">You are currently signed in with a non-admin account. Log out first, then sign in with an administrator account.</div>
+                    <div class="auth-error" role="status">You are already signed in. Log out first to switch accounts.</div>
                     <a class="auth-submit auth-admin-logout" href="{{ path('app_logout') }}">Log out</a>
                 {% else %}
                     <form class="auth-form" method="post" action="{{ path('app_login') }}">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        {% if admin_mode %}<input type="hidden" name="_target_path" value="{{ path('app_admin_dashboard') }}">{% endif %}
                         <div class="form-field">
                             <label for="email">Email address</label>
                             <input type="email" id="email" name="email" value="{{ last_username }}" autocomplete="email" required>
@@ -51,19 +58,32 @@
                                 <span>Show password</span>
                             </label>
                         </div>
-                        <button type="submit" class="auth-submit">{{ admin_mode ? 'Sign in as admin' : 'Get started' }}</button>
+                        <button type="submit" class="auth-submit">{{ admin_mode ? 'Sign in as system admin' : (hospital_mode ? 'Sign in to hospital portal' : 'Get started') }}</button>
                     </form>
 
-                    {% if admin_mode %}
+                    {% if admin_mode or hospital_mode %}
                         <div class="auth-admin-entry">
-                            <span>New administrator?</span>
-                            <a class="auth-admin-button" href="{{ path('app_admin_register') }}">Admin sign up</a>
+                            {% if admin_mode %}
+                                <span>Need a system administrator account?</span>
+                                <a class="auth-admin-button" href="{{ path('app_admin_register') }}">System admin sign up</a>
+                            {% else %}
+                                <span>Hospital accounts are created by the KATOC system administrator.</span>
+                            {% endif %}
                         </div>
-                        <p class="auth-switch"><a href="{{ path('app_login') }}">Back to regular sign in</a></p>
+                        <p class="auth-switch">
+                            {% if admin_mode %}
+                                <a href="{{ path('app_hospital_login') }}">Hospital administrator sign in</a>
+                                · <a href="{{ path('app_login') }}">Patient sign in</a>
+                            {% else %}
+                                <a href="{{ path('app_admin_login') }}">System administrator sign in</a>
+                                · <a href="{{ path('app_login') }}">Patient sign in</a>
+                            {% endif %}
+                        </p>
                     {% else %}
                         <div class="auth-admin-entry">
-                            <span>Are you an administrator?</span>
-                            <a class="auth-admin-button" href="{{ path('app_admin_login') }}">Admin sign in</a>
+                            <span>Administrator sign in</span>
+                            <a class="auth-admin-button" href="{{ path('app_admin_login') }}">System administrator</a>
+                            <a class="auth-admin-button auth-hospital-button" href="{{ path('app_hospital_login') }}">Hospital administrator</a>
                         </div>
                         <p class="auth-switch">Don't have an account? <a href="{{ path('app_register') }}">Sign up</a></p>
                     {% endif %}

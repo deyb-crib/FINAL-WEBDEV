@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Appointment;
+use App\Entity\DialysisCenter;
 use App\Entity\User;
 use App\Service\AdminActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,8 +38,13 @@ class AdminUserController extends AbstractController
         }
         if ($role === 'admin') {
             $query->andWhere('u.roles LIKE :adminRole')->setParameter('adminRole', '%"ROLE_ADMIN"%');
+        } elseif ($role === 'hospital_admin') {
+            $query->andWhere('u.roles LIKE :hospitalRole')->setParameter('hospitalRole', '%"ROLE_HOSPITAL_ADMIN"%');
         } elseif ($role === 'patient') {
-            $query->andWhere('u.roles NOT LIKE :adminRole')->setParameter('adminRole', '%"ROLE_ADMIN"%');
+            $query->andWhere('u.roles NOT LIKE :adminRole')
+                ->andWhere('u.roles NOT LIKE :hospitalRole')
+                ->setParameter('adminRole', '%"ROLE_ADMIN"%')
+                ->setParameter('hospitalRole', '%"ROLE_HOSPITAL_ADMIN"%');
         } else {
             $role = 'all';
         }
@@ -189,19 +195,39 @@ class AdminUserController extends AbstractController
         $name = $user->getName();
         $email = $user->getEmail();
         $isAdmin = $user->isAdmin();
+        $isHospitalAdmin = $user->isHospitalAdmin();
         $isActive = $user->isActive();
+        $assignedCenterIds = array_map(
+            static fn (DialysisCenter $center): int => (int) $center->id,
+            $user->getAssignedCenters()->toArray(),
+        );
 
         if ($request->isMethod('POST')) {
             $p = $request->request;
             $name = trim((string) $p->get('name'));
             $email = mb_strtolower(trim((string) $p->get('email')));
             $password = (string) $p->get('password');
-            $isAdmin = $p->get('role') === 'admin';
+            $role = (string) $p->get('role');
+            $isAdmin = $role === 'admin';
+            $isHospitalAdmin = $role === 'hospital_admin';
             $isActive = $p->getBoolean('is_active');
+            $selectedCenterIds = [];
+            $selectedCenters = [];
 
             if (!$this->isCsrfTokenValid('admin-user-form'.($user->getId() ?? 'new'), (string) $p->get('_token'))) {
                 $errors[] = 'Your session expired. Please try again.';
             }
+            if (!\in_array($role, ['patient', 'admin', 'hospital_admin'], true)) {
+                $errors[] = 'Please select a valid account role.';
+            }
+            foreach ($p->all('assigned_centers') as $selectedCenterId) {
+                if (!\is_string($selectedCenterId) && !\is_int($selectedCenterId)) {
+                    $errors[] = 'Please select valid dialysis centers.';
+                    continue;
+                }
+                $selectedCenterIds[] = (string) $selectedCenterId;
+            }
+            $selectedCenterIds = array_values(array_unique($selectedCenterIds));
             if (mb_strlen($name) < 2 || mb_strlen($name) > 100) {
                 $errors[] = 'Name must be between 2 and 100 characters.';
             }
@@ -218,6 +244,22 @@ class AdminUserController extends AbstractController
             } elseif (!$isNew && $password !== '' && mb_strlen($password) < 8) {
                 $errors[] = 'A new password must be at least 8 characters.';
             }
+            foreach ($selectedCenterIds as $centerId) {
+                if (!ctype_digit($centerId)) {
+                    $errors[] = 'Please select valid dialysis centers.';
+                    continue;
+                }
+
+                $center = $em->getRepository(DialysisCenter::class)->find((int) $centerId);
+                if (!$center) {
+                    $errors[] = 'One of the selected dialysis centers no longer exists.';
+                    continue;
+                }
+                $selectedCenters[] = $center;
+            }
+            if ($isHospitalAdmin && !$selectedCenters) {
+                $errors[] = 'Assign at least one dialysis center to a hospital administrator.';
+            }
 
             $isSelf = !$isNew && $this->isCurrentUser($user);
             if ($isSelf && (!$isAdmin || !$isActive)) {
@@ -228,7 +270,17 @@ class AdminUserController extends AbstractController
             }
 
             if (!$errors) {
-                $user->setName($name)->setEmail($email)->setActive($isActive)->setAdmin($isAdmin);
+                $user->setName($name)
+                    ->setEmail($email)
+                    ->setActive($isActive)
+                    ->setAdmin($isAdmin)
+                    ->setHospitalAdmin($isHospitalAdmin);
+                foreach ($user->getAssignedCenters()->toArray() as $assignedCenter) {
+                    $user->removeAssignedCenter($assignedCenter);
+                }
+                foreach ($isHospitalAdmin ? $selectedCenters : [] as $center) {
+                    $user->assignCenter($center);
+                }
                 if ($password !== '') {
                     $user->setPassword($hasher->hashPassword($user, $password));
                 }
@@ -247,6 +299,8 @@ class AdminUserController extends AbstractController
 
                 return $this->redirectToRoute('app_admin_user_show', ['id' => $user->getId()]);
             }
+
+            $assignedCenterIds = array_values(array_map('intval', $selectedCenterIds));
         }
 
         return $this->render('admin/user_form.html.twig', [
@@ -256,7 +310,10 @@ class AdminUserController extends AbstractController
             'name' => $name,
             'email' => $email,
             'is_admin' => $isAdmin,
+            'is_hospital_admin' => $isHospitalAdmin,
             'is_active' => $isActive,
+            'centers' => $em->getRepository(DialysisCenter::class)->findBy([], ['name' => 'ASC']),
+            'assigned_center_ids' => $assignedCenterIds,
         ]);
     }
 
