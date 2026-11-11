@@ -47,11 +47,6 @@ class DashboardController extends AbstractController
             [$b->appointmentDate?->getTimestamp(), $b->appointmentTime] <=> [$a->appointmentDate?->getTimestamp(), $a->appointmentTime]
         );
 
-        $latest = $appointments;
-        usort($latest, static fn (Appointment $a, Appointment $b): int =>
-            ($b->createdAt <=> $a->createdAt) ?: ($b->id <=> $a->id)
-        );
-
         $view = $request->query->get('view') === 'history' ? 'history' : 'upcoming';
         $status = (string) $request->query->get('status', '');
         if (!\in_array($status, self::STATUSES, true)) {
@@ -83,9 +78,7 @@ class DashboardController extends AbstractController
             'upcoming_count' => \count($upcoming),
             'history_count' => \count($history),
             'pending_count' => \count(array_filter($appointments, static fn (Appointment $appointment): bool => $appointment->status === 'Pending')),
-            'total_count' => \count($appointments),
             'next_appointment' => $upcoming[0] ?? null,
-            'latest_appointment' => $latest[0] ?? null,
             'can_cancel_ids' => array_map(
                 static fn (Appointment $appointment): int => $appointment->id,
                 array_values(array_filter(

@@ -6,8 +6,8 @@
 
     <title>KATOC | Kidney Access and Treatment Operation Center</title>
 
-    <link rel="stylesheet" href="/style.css?v=hero-reference-v5-20261111">
-    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-chrome-20261108">
+    <link rel="stylesheet" href="/style.css?v=mobile-footer-cleanup-20261112">
+    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-header-logout-20261112">
 </head>
 
 <body class="{{ app.user ? 'site-patient-page has-patient-sidebar is-patient-home' : '' }}">
@@ -80,7 +80,6 @@
             </div>
 
             <!-- OVERLAY IMAGES -->
-            <img src="/images/syringe.png" alt="Syringe" class="syringe">
             <img src="/images/kidney.png" alt="Kidney" class="kidney">
 
         </div>
@@ -110,7 +109,7 @@
         <p class="search-status" id="search-status" role="status"></p>
     </section>
 
-    <section class="features-container" id="about">
+    <section class="features-container" id="about" tabindex="0" aria-label="Scrollable KATOC features">
         <div class="feature-card">
             <div class="card-header">
                 <h3>FIND A CENTER</h3>
@@ -222,7 +221,7 @@
         <div class="centers-header">
             <h2 class="centers-title">FIND YOUR MOST SUITABLE PLACE, WE CARE FOR YOUR HEALTH</h2>
             <a href="{{ path('app_hospitals') }}" class="view-all-btn">
-                VIEW ALL <span>&rarr;</span>
+                VIEW ALL HOSPITALS <span>&rarr;</span>
             </a>
         </div>
 

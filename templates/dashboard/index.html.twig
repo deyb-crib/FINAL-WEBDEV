@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient dashboard | KATOC</title>
-    <link rel="stylesheet" href="/css/app.css?v=patient-dashboard-aria-20261108">
-    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-chrome-20261108">
+    <link rel="stylesheet" href="/css/app.css?v=patient-dashboard-calm-20261112">
+    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-header-logout-20261112">
 </head>
 <body class="patient-portal site-patient-page {{ app.user ? 'has-patient-sidebar' : '' }}">
     {% include 'shared/_patient_navigation.html.twig' with {active_page: view == 'history' ? 'appointments' : 'dashboard'} %}
@@ -27,10 +27,6 @@
 
         <section class="dashboard-stats" aria-label="Appointment overview">
             <article class="dashboard-stat">
-                <span class="dashboard-stat-icon" aria-hidden="true">▦</span>
-                <div><span class="dashboard-stat-label">All requests</span><strong>{{ total_count }}</strong></div>
-            </article>
-            <article class="dashboard-stat">
                 <span class="dashboard-stat-icon" aria-hidden="true">◷</span>
                 <div><span class="dashboard-stat-label">Upcoming</span><strong>{{ upcoming_count }}</strong></div>
             </article>
@@ -38,13 +34,9 @@
                 <span class="dashboard-stat-icon" aria-hidden="true">…</span>
                 <div><span class="dashboard-stat-label">Awaiting confirmation</span><strong>{{ pending_count }}</strong></div>
             </article>
-            <article class="dashboard-stat">
-                <span class="dashboard-stat-icon" aria-hidden="true">✓</span>
-                <div><span class="dashboard-stat-label">History</span><strong>{{ history_count }}</strong></div>
-            </article>
         </section>
 
-        <section class="dashboard-highlights" aria-label="Appointment highlights">
+        <section class="dashboard-highlights" aria-label="Next appointment">
             <article class="dashboard-highlight">
                 <div class="dashboard-section-heading">
                     <span class="dashboard-highlight-icon" aria-hidden="true">↗</span>
@@ -58,20 +50,6 @@
                 {% else %}
                     <p class="muted">No upcoming appointments. Explore a center to request a visit.</p>
                     <a class="text-link" href="{{ path('app_hospitals') }}">Browse dialysis centers →</a>
-                {% endif %}
-            </article>
-            <article class="dashboard-highlight">
-                <div class="dashboard-section-heading">
-                    <span class="dashboard-highlight-icon" aria-hidden="true">⌁</span>
-                    <div><h2>Latest request</h2><p class="muted">Most recently submitted</p></div>
-                </div>
-                {% if latest_appointment %}
-                    <p class="highlight-date">{{ latest_appointment.createdAt|date('F j, Y') }}</p>
-                    <strong>{{ latest_appointment.center }}</strong>
-                    <p class="muted">{{ latest_appointment.appointmentDate|date('D, F j, Y') }} · {{ latest_appointment.dialysisType }}</p>
-                    <span class="badge badge-{{ latest_appointment.status|lower }}">{{ latest_appointment.status }}</span>
-                {% else %}
-                    <p class="muted">Your submitted requests will appear here.</p>
                 {% endif %}
             </article>
         </section>
@@ -155,11 +133,6 @@
             {% endif %}
         </section>
 
-        <nav class="dashboard-shortcuts" aria-label="More from KATOC">
-            <a href="{{ path('app_hospitals') }}"><strong>Find a dialysis center</strong><span>Browse active centers and request a visit →</span></a>
-            <a href="{{ path('app_about') }}"><strong>About KATOC</strong><span>Learn about the platform →</span></a>
-            <a href="{{ path('app_home') }}"><strong>Care information</strong><span>Return to the KATOC home page →</span></a>
-        </nav>
         <p class="dashboard-limit-note">Need to update your account or contact support? Those patient services are not currently available in this portal.</p>
     </main>
     </div>

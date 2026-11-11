@@ -1,5 +1,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');   
+html,
+body {
+    overflow-x: clip;
+}
+
 * 
  {
     margin: 0;
@@ -418,17 +423,6 @@ a {
 }
 
 /* OVERLAY GRAPHICS */
-.syringe {
-    position: absolute;
-    width: clamp(280px, 25vw, 380px);
-    left: 36%;
-    top: 48%;
-    transform: translate(-50%, -50%) rotate(-18deg);
-    z-index: 10;
-    filter: drop-shadow(-8px 10px 14px rgba(0, 0, 0, 0.25));
-    pointer-events: none;
-}
-
 .kidney {
     position: absolute;
     width: clamp(250px, 22vw, 340px);
@@ -437,14 +431,6 @@ a {
     z-index: 10;
     filter: drop-shadow(-5px 10px 16px rgba(0, 0, 0, 0.35));
     pointer-events: none;
-}
-
-/* Keep the logged-in homepage artwork inside the medical visual. */
-.has-dashboard-sidebar .syringe {
-    width: clamp(280px, 25vw, 380px);
-    left: 180px;
-    right: auto;
-    z-index: 6;
 }
 
 .has-dashboard-sidebar .kidney {
@@ -561,13 +547,6 @@ a {
     .red-overlay {
         border-radius: 8px;
         background: linear-gradient(90deg, rgba(167, 25, 32, 0.68) 0%, rgba(167, 25, 32, 0.2) 32%, transparent 65%);
-    }
-
-    .syringe {
-        width: clamp(360px, 40vw, 380px);
-        left: 42%;
-        top: 58%;
-        transform: translate(-50%, -50%) rotate(0deg);
     }
 
     .kidney {
@@ -2133,10 +2112,14 @@ a {
     }
 
     .hero {
-        width: 100%;
-        padding: 0 0 18px;
-        border-radius: 0;
-        margin-bottom: 28px;
+        width: calc(100% - 20px);
+        min-height: 0;
+        padding: 0 0 12px;
+        border: 1px solid #ead7d8;
+        border-radius: 14px;
+        margin: 10px auto 22px;
+        background: #f7f6f6;
+        box-shadow: 0 4px 16px rgba(90, 12, 16, 0.08);
     }
 
     .navbar {
@@ -2163,16 +2146,27 @@ a {
         margin-right: auto;
     }
 
+    .nav-logo img {
+        height: 40px;
+    }
+
     .nav-links {
         order: 3;
         width: 100%;
         justify-content: space-between;
         gap: 12px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .nav-links a,
     .login {
         font-size: 13px;
+    }
+
+    .nav-links a {
+        flex: 1 1 0;
+        text-align: center;
     }
 
     .nav-account {
@@ -2181,16 +2175,38 @@ a {
     }
 
     .signup {
+        min-width: 0;
         padding: 8px 14px;
+        font-size: 12px;
     }
 
     .hero-content {
         grid-template-columns: 1fr;
+        min-height: 0;
+        padding: 0 10px 10px;
     }
 
     .katoc-info {
         min-height: 0;
-        padding: 20px 16px 16px;
+        padding: 16px 14px 12px;
+    }
+
+    .katoc-logo {
+        width: 100%;
+        max-width: 160px;
+        margin: 0 auto 6px;
+        object-fit: contain;
+    }
+
+    .description {
+        margin: 12px 0 14px;
+        font-size: 15px;
+        line-height: 1.45;
+        letter-spacing: 0;
+    }
+
+    .description span {
+        font-size: 1.15em;
     }
 
     .hero-buttons {
@@ -2207,34 +2223,52 @@ a {
     }
 
     .medical-visual {
-        min-height: 220px;
-        border-radius: 24px;
-    }
-
-    .syringe {
-        width: 72vw;
-        right: 28vw;
+        min-height: 180px;
+        margin-top: 10px;
+        border-radius: 12px;
     }
 
     .kidney {
-        width: 85vw;
-        right: -22vw;
-        bottom: -14vw;
+        display: none;
     }
 
-    .has-dashboard-sidebar .syringe {
-        width: 68vw;
-        left: 8vw;
-        right: auto;
-        z-index: 3;
+    .search-copy h1,
+    .section-heading-row h2,
+    .locator-header h2,
+    .options-heading h2,
+    .why-katoc-heading h2,
+    .appointment-cta-section h2,
+    .faq-heading h2 {
+        font-size: 20px;
     }
 
-    .has-dashboard-sidebar .kidney {
-        width: 78vw;
-        right: -18vw;
-        top: 50%;
-        bottom: auto;
-        transform: translateY(-50%);
+    .features-container {
+        display: flex;
+        justify-content: flex-start;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 14px 12px;
+        scroll-padding-inline: 14px;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior-x: contain;
+        scrollbar-color: #a71920 #f1e2e3;
+        scrollbar-width: thin;
+    }
+
+    .feature-card {
+        flex: 0 0 86%;
+        max-width: 310px;
+        scroll-snap-align: start;
+    }
+
+    .features-container::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    .features-container::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background: #a71920;
     }
 
     .centers-section,
@@ -2248,6 +2282,10 @@ a {
     .faq-section,
     .cta-footer-wrapper {
         width: 100%;
+    }
+
+    .why-katoc-section {
+        width: calc(100% - 32px);
     }
 
     .center-search-section,
@@ -2286,6 +2324,10 @@ a {
         align-items: flex-start;
         flex-direction: column;
         gap: 14px;
+    }
+
+    .how-it-works-section {
+        padding: 0 16px;
     }
 
     .locator-actions {
@@ -2416,6 +2458,34 @@ a {
         grid-template-columns: 1fr;
     }
 
+    .centers-section > .bg-cells {
+        display: none;
+    }
+
+    .centers-section:not(.hospitals-list) .center-card:not(:first-child) {
+        display: none;
+    }
+
+    .centers-section .card-image-wrapper {
+        height: 160px;
+    }
+
+    .centers-section .center-info-box {
+        height: auto;
+        min-height: 88px;
+        margin-top: -36px;
+    }
+
+    .centers-section .center-name {
+        font-size: 14px;
+    }
+
+    .centers-section .see-availability {
+        min-height: 42px;
+        margin-top: 10px;
+        padding: 8px 14px;
+    }
+
     .kidney-care-section {
         margin-top: 24px;
         padding: 20px 14px;
@@ -2459,16 +2529,27 @@ a {
         padding-right: 14px;
     }
 
-    .footer-inner-card {
-        width: 100%;
-        padding: 18px 16px;
+    .vessel-graphic,
+    .large-kidney-logo {
+        display: none;
     }
 
-    .large-kidney-logo {
-        opacity: 0.35;
-        width: 220px;
-        height: 220px;
-        left: -70px;
+    .footer-logo-container {
+        height: 72px;
+        justify-content: center;
+    }
+
+    .katoc-logo2 {
+        position: static;
+        width: 72px;
+        height: 72px;
+    }
+
+    .footer-inner-card {
+        width: 100%;
+        top: 0;
+        margin: 0 auto;
+        padding: 18px 16px;
     }
 
     .footer-columns {

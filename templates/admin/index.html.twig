@@ -14,42 +14,24 @@
         <a class="admin-button admin-button-primary" href="{{ path('app_admin_records') }}">Review appointments <span aria-hidden="true">→</span></a>
     </div>
 
-    <section class="admin-stats-grid" aria-label="System statistics">
+    <section class="admin-stats-grid admin-dashboard-stats" aria-label="System statistics">
         <a class="admin-stat-card" href="{{ path('app_admin_users') }}">
             <span class="admin-stat-icon admin-icon-red">♙</span>
             <span class="admin-stat-label">Registered users</span>
             <strong>{{ overview.users.total }}</strong>
-            <span class="admin-stat-footnote">All registered accounts</span>
-        </a>
-        <a class="admin-stat-card" href="{{ path('app_admin_users', {status: 'active'}) }}">
-            <span class="admin-stat-icon admin-icon-green">✓</span>
-            <span class="admin-stat-label">Active users</span>
-            <strong>{{ overview.users.active }}</strong>
-            <span class="admin-stat-footnote">Can sign in to KATOC</span>
-        </a>
-        <a class="admin-stat-card" href="{{ path('app_admin_users', {status: 'inactive'}) }}">
-            <span class="admin-stat-icon admin-icon-amber">Ⅱ</span>
-            <span class="admin-stat-label">Inactive users</span>
-            <strong>{{ overview.users.inactive }}</strong>
-            <span class="admin-stat-footnote">Accounts disabled by admin</span>
+            <span class="admin-stat-footnote">{{ overview.users.active }} active · {{ overview.users.inactive }} inactive</span>
         </a>
         <a class="admin-stat-card" href="{{ path('app_admin_records') }}">
             <span class="admin-stat-icon admin-icon-blue">▤</span>
             <span class="admin-stat-label">Appointment records</span>
             <strong>{{ overview.appointments.total }}</strong>
-            <span class="admin-stat-footnote">Total requests managed</span>
+            <span class="admin-stat-footnote">{{ overview.appointments.completed }} completed · {{ overview.appointments.pending }} pending</span>
         </a>
         <a class="admin-stat-card" href="{{ path('app_admin_records', {status: 'Pending'}) }}">
             <span class="admin-stat-icon admin-icon-amber">◷</span>
             <span class="admin-stat-label">Pending requests</span>
             <strong>{{ overview.appointments.pending }}</strong>
             <span class="admin-stat-footnote">Need a status update</span>
-        </a>
-        <a class="admin-stat-card" href="{{ path('app_admin_records', {status: 'Completed'}) }}">
-            <span class="admin-stat-icon admin-icon-green">✓</span>
-            <span class="admin-stat-label">Completed</span>
-            <strong>{{ overview.appointments.completed }}</strong>
-            <span class="admin-stat-footnote">Completed appointments</span>
         </a>
         <a class="admin-stat-card" href="{{ path('app_admin_centers') }}">
             <span class="admin-stat-icon admin-icon-purple">+</span>
@@ -67,16 +49,16 @@
             </div>
             {% if appointments %}
                 <div class="admin-table-wrap">
-                    <table class="admin-table">
+                    <table class="admin-table admin-dashboard-table">
                         <thead><tr><th>Patient</th><th>Care center</th><th>Date</th><th>Status</th><th></th></tr></thead>
                         <tbody>
                         {% for appointment in appointments %}
                             <tr>
-                                <td><strong>{{ appointment.patientName }}</strong><small>{{ appointment.patientEmail }}</small></td>
-                                <td>{{ appointment.center }}</td>
-                                <td>{{ appointment.appointmentDate|date('M j, Y') }}<small>{{ ('2000-01-01 ' ~ appointment.appointmentTime)|date('g:i A') }}</small></td>
-                                <td><span class="admin-status status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
-                                <td><a class="admin-row-link" href="{{ path('app_admin_records') }}">Manage</a></td>
+                                <td data-label="Patient"><strong>{{ appointment.patientName }}</strong><small>{{ appointment.patientEmail }}</small></td>
+                                <td data-label="Care center">{{ appointment.center }}</td>
+                                <td data-label="Date">{{ appointment.appointmentDate|date('M j, Y') }}<small>{{ ('2000-01-01 ' ~ appointment.appointmentTime)|date('g:i A') }}</small></td>
+                                <td data-label="Status"><span class="admin-status status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+                                <td data-label="Action"><a class="admin-row-link" href="{{ path('app_admin_records') }}">Manage</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
