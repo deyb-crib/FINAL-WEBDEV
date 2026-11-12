@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/hospital-admin')]
@@ -152,6 +153,148 @@ class HospitalAdminController extends AbstractController
         return $this->redirectToRoute('app_hospital_admin_records');
     }
 
+    #[Route('/staff', name: 'app_hospital_admin_staff', methods: ['GET', 'POST'])]
+    public function staff(
+        Request $request,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $hasher,
+        AdminActivityLogger $activityLogger,
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_HOSPITAL_ADMIN');
+
+        $centers = $this->allowedCenters($em);
+        $errors = [];
+        $name = '';
+        $email = '';
+        $selectedCenterIds = [];
+
+        if ($request->isMethod('POST')) {
+            $p = $request->request;
+            $name = trim((string) $p->get('name'));
+            $email = mb_strtolower(trim((string) $p->get('email')));
+            $password = (string) $p->get('password');
+            $submittedCenterIds = $p->all()['assigned_centers'] ?? [];
+
+            if (!$this->isCsrfTokenValid('hospital-staff-form', (string) $p->get('_token'))) {
+                $errors[] = 'Your session expired. Please try again.';
+            }
+            if (mb_strlen($name) < 2 || mb_strlen($name) > 100) {
+                $errors[] = 'Name must be between 2 and 100 characters.';
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 180) {
+                $errors[] = 'Please enter a valid email address.';
+            } elseif ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
+                $errors[] = 'An account with this email already exists.';
+            }
+            if (mb_strlen($password) < 8) {
+                $errors[] = 'Password must be at least 8 characters.';
+            }
+            if (!\is_array($submittedCenterIds)) {
+                $errors[] = 'Please select valid dialysis centers.';
+                $submittedCenterIds = [];
+            }
+
+            $centerById = [];
+            foreach ($centers as $center) {
+                $centerById[(string) $center->id] = $center;
+            }
+            foreach ($submittedCenterIds as $centerId) {
+                if ((!is_string($centerId) && !is_int($centerId)) || !ctype_digit((string) $centerId)) {
+                    $errors[] = 'Please select valid dialysis centers.';
+                    continue;
+                }
+
+                $centerId = (string) $centerId;
+                if (!isset($centerById[$centerId])) {
+                    $errors[] = 'You can only assign staff to your own dialysis centers.';
+                    continue;
+                }
+                $selectedCenterIds[] = (int) $centerId;
+            }
+            $selectedCenterIds = array_values(array_unique($selectedCenterIds));
+            if (!$selectedCenterIds) {
+                $errors[] = 'Assign the staff member to at least one of your dialysis centers.';
+            }
+
+            if (!$errors) {
+                $staff = (new User())
+                    ->setName($name)
+                    ->setEmail($email)
+                    ->setHospitalStaff(true);
+                $staff->setPassword($hasher->hashPassword($staff, $password));
+                foreach ($selectedCenterIds as $centerId) {
+                    $staff->assignCenter($centerById[(string) $centerId]);
+                }
+                $em->persist($staff);
+                $em->flush();
+
+                $actor = $this->getUser();
+                $activityLogger->record(
+                    $actor instanceof User ? $actor : null,
+                    'user.create',
+                    'user',
+                    (string) $staff->getId(),
+                    'Created hospital staff account '.$staff->getEmail(),
+                );
+                $this->addFlash('success', 'Hospital staff account created.');
+
+                return $this->redirectToRoute('app_hospital_admin_staff');
+            }
+        }
+
+        return $this->render('hospital_admin/staff.html.twig', [
+            'centers' => $centers,
+            'staff_users' => $this->staffUsersForCenters($em, $centers),
+            'errors' => $errors,
+            'name' => $name,
+            'email' => $email,
+            'selected_center_ids' => $selectedCenterIds,
+            'active_nav' => 'staff',
+        ]);
+    }
+
+    #[Route('/staff/{id}/status', name: 'app_hospital_admin_staff_status', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function updateStaffStatus(
+        int $id,
+        Request $request,
+        EntityManagerInterface $em,
+        AdminActivityLogger $activityLogger,
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_HOSPITAL_ADMIN');
+
+        $staff = $em->getRepository(User::class)->find($id);
+        if (!$staff instanceof User || !$staff->isHospitalStaff()) {
+            throw $this->createNotFoundException();
+        }
+
+        $allowedCenterIds = $this->centerIds($this->allowedCenters($em));
+        $staffCenterIds = $this->centerIds($staff->getAssignedCenters()->toArray());
+        if (!$allowedCenterIds || !$staffCenterIds || array_diff($staffCenterIds, $allowedCenterIds)) {
+            throw $this->createNotFoundException();
+        }
+
+        $actor = $this->getUser();
+        if (!$this->isCsrfTokenValid('hospital-staff-status-'.$id, (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Your session expired. Please try again.');
+        } elseif ($actor instanceof User && $staff->getId() === $actor->getId()) {
+            $this->addFlash('error', 'You cannot deactivate your own account.');
+        } else {
+            $staff->setActive(!$staff->isActive());
+            $em->flush();
+
+            $activityLogger->record(
+                $actor instanceof User ? $actor : null,
+                $staff->isActive() ? 'user.activate' : 'user.deactivate',
+                'user',
+                (string) $staff->getId(),
+                ($staff->isActive() ? 'Activated ' : 'Deactivated ').$staff->getEmail(),
+            );
+            $this->addFlash('success', $staff->getEmail().' is now '.($staff->isActive() ? 'active.' : 'inactive.'));
+        }
+
+        return $this->redirectToRoute('app_hospital_admin_staff');
+    }
+
     /**
      * @return list<DialysisCenter>
      */
@@ -166,7 +309,7 @@ class HospitalAdminController extends AbstractController
             return $em->getRepository(DialysisCenter::class)->findBy([], ['name' => 'ASC']);
         }
 
-        if (!$user->isHospitalAdmin()) {
+        if (!$user->isHospitalAdmin() && !$user->isHospitalStaff()) {
             throw $this->createAccessDeniedException();
         }
 
@@ -201,6 +344,36 @@ class HospitalAdminController extends AbstractController
         }
 
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param list<DialysisCenter> $centers
+     *
+     * @return list<User>
+     */
+    private function staffUsersForCenters(EntityManagerInterface $em, array $centers): array
+    {
+        $centerIds = $this->centerIds($centers);
+        if (!$centerIds) {
+            return [];
+        }
+
+        $staffUsers = $em->createQueryBuilder()
+            ->select('DISTINCT u')
+            ->from(User::class, 'u')
+            ->join('u.assignedCenters', 'assignedCenter')
+            ->where('u.roles LIKE :staffRole')
+            ->andWhere('assignedCenter.id IN (:centerIds)')
+            ->setParameter('staffRole', '%"ROLE_HOSPITAL_STAFF"%')
+            ->setParameter('centerIds', $centerIds)
+            ->orderBy('u.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return array_values(array_filter(
+            $staffUsers,
+            fn (User $staff): bool => !array_diff($this->centerIds($staff->getAssignedCenters()->toArray()), $centerIds),
+        ));
     }
 
     /**

@@ -40,11 +40,15 @@ class AdminUserController extends AbstractController
             $query->andWhere('u.roles LIKE :adminRole')->setParameter('adminRole', '%"ROLE_ADMIN"%');
         } elseif ($role === 'hospital_admin') {
             $query->andWhere('u.roles LIKE :hospitalRole')->setParameter('hospitalRole', '%"ROLE_HOSPITAL_ADMIN"%');
+        } elseif ($role === 'hospital_staff') {
+            $query->andWhere('u.roles LIKE :staffRole')->setParameter('staffRole', '%"ROLE_HOSPITAL_STAFF"%');
         } elseif ($role === 'patient') {
             $query->andWhere('u.roles NOT LIKE :adminRole')
                 ->andWhere('u.roles NOT LIKE :hospitalRole')
+                ->andWhere('u.roles NOT LIKE :staffRole')
                 ->setParameter('adminRole', '%"ROLE_ADMIN"%')
-                ->setParameter('hospitalRole', '%"ROLE_HOSPITAL_ADMIN"%');
+                ->setParameter('hospitalRole', '%"ROLE_HOSPITAL_ADMIN"%')
+                ->setParameter('staffRole', '%"ROLE_HOSPITAL_STAFF"%');
         } else {
             $role = 'all';
         }
@@ -196,6 +200,7 @@ class AdminUserController extends AbstractController
         $email = $user->getEmail();
         $isAdmin = $user->isAdmin();
         $isHospitalAdmin = $user->isHospitalAdmin();
+        $isHospitalStaff = $user->isHospitalStaff();
         $isActive = $user->isActive();
         $assignedCenterIds = array_map(
             static fn (DialysisCenter $center): int => (int) $center->id,
@@ -210,6 +215,7 @@ class AdminUserController extends AbstractController
             $role = (string) $p->get('role');
             $isAdmin = $role === 'admin';
             $isHospitalAdmin = $role === 'hospital_admin';
+            $isHospitalStaff = $role === 'hospital_staff';
             $isActive = $p->getBoolean('is_active');
             $selectedCenterIds = [];
             $selectedCenters = [];
@@ -217,7 +223,7 @@ class AdminUserController extends AbstractController
             if (!$this->isCsrfTokenValid('admin-user-form'.($user->getId() ?? 'new'), (string) $p->get('_token'))) {
                 $errors[] = 'Your session expired. Please try again.';
             }
-            if (!\in_array($role, ['patient', 'admin', 'hospital_admin'], true)) {
+            if (!\in_array($role, ['patient', 'admin', 'hospital_admin', 'hospital_staff'], true)) {
                 $errors[] = 'Please select a valid account role.';
             }
             foreach ($p->all('assigned_centers') as $selectedCenterId) {
@@ -257,8 +263,8 @@ class AdminUserController extends AbstractController
                 }
                 $selectedCenters[] = $center;
             }
-            if ($isHospitalAdmin && !$selectedCenters) {
-                $errors[] = 'Assign at least one dialysis center to a hospital administrator.';
+            if (($isHospitalAdmin || $isHospitalStaff) && !$selectedCenters) {
+                $errors[] = 'Assign at least one dialysis center to this hospital account.';
             }
 
             $isSelf = !$isNew && $this->isCurrentUser($user);
@@ -274,11 +280,12 @@ class AdminUserController extends AbstractController
                     ->setEmail($email)
                     ->setActive($isActive)
                     ->setAdmin($isAdmin)
-                    ->setHospitalAdmin($isHospitalAdmin);
+                    ->setHospitalAdmin($isHospitalAdmin)
+                    ->setHospitalStaff($isHospitalStaff);
                 foreach ($user->getAssignedCenters()->toArray() as $assignedCenter) {
                     $user->removeAssignedCenter($assignedCenter);
                 }
-                foreach ($isHospitalAdmin ? $selectedCenters : [] as $center) {
+                foreach (($isHospitalAdmin || $isHospitalStaff) ? $selectedCenters : [] as $center) {
                     $user->assignCenter($center);
                 }
                 if ($password !== '') {
@@ -311,6 +318,7 @@ class AdminUserController extends AbstractController
             'email' => $email,
             'is_admin' => $isAdmin,
             'is_hospital_admin' => $isHospitalAdmin,
+            'is_hospital_staff' => $isHospitalStaff,
             'is_active' => $isActive,
             'centers' => $em->getRepository(DialysisCenter::class)->findBy([], ['name' => 'ASC']),
             'assigned_center_ids' => $assignedCenterIds,

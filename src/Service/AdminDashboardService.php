@@ -79,7 +79,12 @@ class AdminDashboardService
         )->fetchAllAssociative();
 
         $userDistribution = $connection->fetchAllAssociative(
-            "SELECT CASE WHEN JSON_CONTAINS(roles, JSON_QUOTE('ROLE_ADMIN')) THEN 'Administrators' ELSE 'Patients' END AS role,
+            "SELECT CASE
+                        WHEN JSON_CONTAINS(roles, JSON_QUOTE('ROLE_ADMIN')) THEN 'System administrators'
+                        WHEN JSON_CONTAINS(roles, JSON_QUOTE('ROLE_HOSPITAL_ADMIN')) THEN 'Hospital administrators'
+                        WHEN JSON_CONTAINS(roles, JSON_QUOTE('ROLE_HOSPITAL_STAFF')) THEN 'Hospital staff'
+                        ELSE 'Patients'
+                    END AS role,
                     COUNT(*) AS total
              FROM users
              WHERE created_at >= :from AND created_at < :to

@@ -72,7 +72,7 @@
                         </div>
                         <p class="auth-switch">
                             {% if admin_mode %}
-                                <a href="{{ path('app_hospital_login') }}">Hospital administrator sign in</a>
+                                <a href="{{ path('app_hospital_login') }}">Hospital admin or staff sign in</a>
                                 · <a href="{{ path('app_login') }}">Patient sign in</a>
                             {% else %}
                                 <a href="{{ path('app_admin_login') }}">System administrator sign in</a>
@@ -83,7 +83,7 @@
                         <div class="auth-admin-entry">
                             <span>Administrator sign in</span>
                             <a class="auth-admin-button" href="{{ path('app_admin_login') }}">System administrator</a>
-                            <a class="auth-admin-button auth-hospital-button" href="{{ path('app_hospital_login') }}">Hospital administrator</a>
+                            <a class="auth-admin-button auth-hospital-button" href="{{ path('app_hospital_login') }}">Hospital admin or staff</a>
                         </div>
                         <p class="auth-switch">Don't have an account? <a href="{{ path('app_register') }}">Sign up</a></p>
                     {% endif %}

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Hospital portal{% endblock %} | KATOC</title>
     <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/admin.css?v=hospital-context-20261113">
 </head>
 <body class="admin-body">
     <button class="admin-menu-toggle" type="button" aria-expanded="false" aria-controls="admin-sidebar">
@@ -22,13 +22,16 @@
                 <span class="admin-nav-label">WORKSPACE</span>
                 <a class="{{ active_nav == 'dashboard' ? 'is-active' : '' }}" href="{{ path('app_hospital_admin_dashboard') }}"><span class="admin-nav-icon">⌂</span>Dashboard</a>
                 <a class="{{ active_nav == 'records' ? 'is-active' : '' }}" href="{{ path('app_hospital_admin_records') }}"><span class="admin-nav-icon">▤</span>Appointments</a>
+                {% if is_granted('ROLE_HOSPITAL_ADMIN') %}
+                    <a class="{{ active_nav == 'staff' ? 'is-active' : '' }}" href="{{ path('app_hospital_admin_staff') }}"><span class="admin-nav-icon">♙</span>Staff</a>
+                {% endif %}
             </nav>
             <div class="admin-sidebar-footer">
                 <a href="{{ path('app_home') }}" class="admin-view-site">← View KATOC website</a>
                 <a href="{{ path('app_logout') }}" class="admin-logout"><span class="admin-nav-icon">↪</span>Log out</a>
                 <div class="admin-sidebar-user">
                     <span class="admin-avatar">{{ app.user.name|slice(0, 1)|upper }}</span>
-                    <span><strong>{{ app.user.name }}</strong><small>Hospital administrator</small></span>
+                    <span><strong>{{ app.user.name }}</strong><small>{{ is_granted('ROLE_HOSPITAL_ADMIN') ? 'Hospital administrator' : 'Hospital staff' }}</small></span>
                 </div>
             </div>
         </aside>
@@ -38,6 +41,16 @@
                 <div>
                     <span class="admin-topbar-label">KIDNEY ACCESS &amp; TREATMENT OPERATIONS</span>
                     <strong>{% block section_label %}Hospital portal{% endblock %}</strong>
+                    <div class="admin-hospital-context">
+                        <span class="admin-hospital-context-label">YOUR HOSPITAL</span>
+                        <strong>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                All hospitals
+                            {% else %}
+                                {% for center in app.user.assignedCenters %}{{ center.name }}{% if not loop.last %} · {% endif %}{% else %}No hospital assigned{% endfor %}
+                            {% endif %}
+                        </strong>
+                    </div>
                 </div>
                 <span class="admin-topbar-profile">{{ app.user.name }}</span>
             </header>

@@ -337,9 +337,14 @@ document.addEventListener("DOMContentLoaded", () => {
         setActiveSidebarLink(initialSection);
     }
 
-    window.addEventListener("scroll", () => {
-        navbar?.classList.toggle("is-sticky", window.scrollY > 80);
-    }, { passive: true });
+    const updateStickyNavbar = () => {
+        const isSticky = window.scrollY > 80;
+        navbar?.classList.toggle("is-sticky", isSticky);
+        navbar?.closest(".hero")?.classList.toggle("has-sticky-navbar", isSticky);
+    };
+
+    window.addEventListener("scroll", updateStickyNavbar, { passive: true });
+    updateStickyNavbar();
 
     serviceButton?.addEventListener("click", (event) => {
         event.preventDefault();

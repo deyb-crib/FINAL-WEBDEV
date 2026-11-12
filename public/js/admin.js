@@ -32,7 +32,7 @@
     }
 
     const updateRoleGuide = () => {
-        centerAssignment.hidden = roleSelect.value !== "hospital_admin";
+        centerAssignment.hidden = !["hospital_admin", "hospital_staff"].includes(roleSelect.value);
         form.querySelectorAll("[data-role-card]").forEach((card) => {
             card.classList.toggle("is-selected", card.dataset.roleCard === roleSelect.value);
         });

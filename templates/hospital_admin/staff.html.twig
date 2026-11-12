@@ -1,0 +1,73 @@
+{% extends 'hospital_admin/layout.html.twig' %}
+
+{% set active_nav = 'staff' %}
+{% block title %}Hospital staff{% endblock %}
+{% block section_label %}Staff management{% endblock %}
+
+{% block body %}
+    <div class="admin-page-heading">
+        <div><span class="admin-eyebrow">HOSPITAL WORKSPACE</span><h1>Staff</h1><p>Create and manage staff access for your assigned dialysis centers.</p></div>
+    </div>
+
+    {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+
+    <section class="admin-panel">
+        <div class="admin-panel-heading">
+            <div><h2>Add hospital staff</h2><p>Staff can view and update bookings, but cannot manage staff accounts.</p></div>
+        </div>
+        {% if centers %}
+            <form class="admin-edit-form" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('hospital-staff-form') }}">
+                <label for="staff-name">Full name</label>
+                <input id="staff-name" name="name" value="{{ name }}" maxlength="100" autocomplete="name" required>
+                <label for="staff-email">Email address</label>
+                <input type="email" id="staff-email" name="email" value="{{ email }}" maxlength="180" autocomplete="email" required>
+                <label for="staff-password">Temporary password</label>
+                <input type="password" id="staff-password" name="password" minlength="8" autocomplete="new-password" required>
+                <fieldset class="admin-center-assignment">
+                    <legend>Assigned dialysis centers</legend>
+                    <p class="admin-form-note">Staff can only view bookings for the centers selected here.</p>
+                    <div class="admin-center-options">
+                        {% for center in centers %}
+                            <label class="admin-center-option">
+                                <input type="checkbox" name="assigned_centers[]" value="{{ center.id }}"{{ center.id in selected_center_ids ? ' checked' : '' }}>
+                                <span><strong>{{ center.name }}</strong><small>{{ center.address }}</small></span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+                <button class="admin-button admin-button-primary" type="submit">Create staff account</button>
+            </form>
+        {% else %}
+            <div class="admin-empty-state"><strong>No centers assigned</strong><p>Ask a system administrator to assign a center before creating staff.</p></div>
+        {% endif %}
+    </section>
+
+    <section class="admin-panel">
+        <div class="admin-panel-heading"><div><h2>Staff accounts</h2><p>Only accounts assigned to your centers are listed here.</p></div></div>
+        {% if staff_users %}
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead><tr><th>Staff member</th><th>Assigned centers</th><th>Account</th><th>Actions</th></tr></thead>
+                    <tbody>
+                    {% for staff in staff_users %}
+                        <tr>
+                            <td><strong>{{ staff.name }}</strong><small>{{ staff.email }}</small></td>
+                            <td>{% for center in staff.assignedCenters %}{{ center.name }}{% if not loop.last %}, {% endif %}{% else %}None{% endfor %}</td>
+                            <td><span class="admin-status {{ staff.active ? 'status-active' : 'status-inactive' }}">{{ staff.active ? 'Active' : 'Inactive' }}</span></td>
+                            <td>
+                                <form method="post" action="{{ path('app_hospital_admin_staff_status', {id: staff.id}) }}" onsubmit="return confirm('{{ staff.active ? 'Deactivate' : 'Activate' }} this staff account?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('hospital-staff-status-' ~ staff.id) }}">
+                                    <button class="admin-link-button" type="submit">{{ staff.active ? 'Deactivate' : 'Activate' }}</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="admin-empty-state"><strong>No staff accounts yet</strong><p>Create a staff account to give your team limited appointment access.</p></div>
+        {% endif %}
+    </section>
+{% endblock %}

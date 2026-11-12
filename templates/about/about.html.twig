@@ -3,17 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | KATOC</title>
+    <title>About KATOC</title>
     <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-header-logout-20261112">
+    <link rel="stylesheet" href="/css/patient-chrome.css?v=patient-about-layout-20261113">
 </head>
 <body class="site-patient-page {{ app.user ? 'has-patient-sidebar' : '' }}">
     {% include 'shared/_patient_navigation.html.twig' with {active_page: 'about'} %}
     <main class="app-main about site-patient-main">
-        <h1>About KATOC</h1>
-        <p class="muted">Kidney Access and Treatment Operation Center</p>
-        <p>KATOC is a digital platform that helps patients and their families locate dialysis centers, read essential information about nearby facilities, and request appointments in one place.</p>
-        <p>Edit this page in <code>templates/about/about.html.twig</code> to add your own team and project details.</p>
+        <section class="about-hero" aria-labelledby="about-title">
+            <div class="about-hero-content">
+                <p class="about-eyebrow">ABOUT KATOC</p>
+                <h1 id="about-title">Care information, easier to reach.</h1>
+                <p class="about-lead">KATOC helps patients and families find dialysis centers, review important center information, and request appointments in one place.</p>
+                <div class="about-actions">
+                    <a class="about-primary-action" href="{{ path('app_hospitals') }}">Find a dialysis center <span aria-hidden="true">&rarr;</span></a>
+                    <a class="about-secondary-action" href="{{ path('app_home') }}#kidney-care">Explore kidney care information</a>
+                </div>
+            </div>
+            <aside class="about-purpose-card">
+                <span>OUR PURPOSE</span>
+                <h2>Make the next step easier.</h2>
+                <p>Compare center locations, operating hours, and services before deciding where to request care.</p>
+            </aside>
+        </section>
+
+        <section class="about-steps" aria-labelledby="about-steps-title">
+            <div class="about-section-heading">
+                <p class="about-eyebrow">HOW KATOC HELPS</p>
+                <h2 id="about-steps-title">From search to appointment request</h2>
+            </div>
+            <div class="about-steps-grid">
+                <article class="about-step-card">
+                    <span>01</span>
+                    <h3>Find a center</h3>
+                    <p>Browse dialysis centers and search by city or location.</p>
+                </article>
+                <article class="about-step-card">
+                    <span>02</span>
+                    <h3>Review the details</h3>
+                    <p>Check each center’s location, operating hours, and listed services.</p>
+                </article>
+                <article class="about-step-card">
+                    <span>03</span>
+                    <h3>Request an appointment</h3>
+                    <p>Choose a center and send an appointment request through your patient account.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="about-appointment-note" aria-labelledby="about-appointment-title">
+            <div>
+                <p class="about-eyebrow">WHAT HAPPENS NEXT</p>
+                <h2 id="about-appointment-title">The center confirms your request.</h2>
+                <p>An appointment request is not a confirmed booking. The dialysis center will follow up about availability and treatment details.</p>
+            </div>
+            <a class="about-primary-action" href="{{ path('app_hospitals') }}">Browse centers <span aria-hidden="true">&rarr;</span></a>
+        </section>
     </main>
 </body>
 </html>

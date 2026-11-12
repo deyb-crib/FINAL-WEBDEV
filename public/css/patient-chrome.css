@@ -26,6 +26,7 @@
 .site-patient-top-links a, .site-patient-dashboard-link { color:#fff; font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap; }
 .site-patient-top-links a:hover, .site-patient-top-links a.is-active, .site-patient-dashboard-link:hover { color:#ffe4e5; }
 .site-patient-account { display:flex; align-items:center; gap:18px; margin-left:auto; }
+.site-patient-user-name { max-width:180px; min-width:0; overflow:hidden; color:#fff; font-size:13px; font-weight:700; text-overflow:ellipsis; white-space:nowrap; }
 .site-patient-logout-link { display:inline-flex; min-height:34px; align-items:center; justify-content:center; padding:7px 12px; border:1px solid rgba(255,255,255,.55); border-radius:7px; color:#fff; font-size:12px; font-weight:700; text-decoration:none; white-space:nowrap; }
 .site-patient-logout-link:hover { background:rgba(255,255,255,.12); color:#fff; }
 .site-patient-logout-link:focus-visible { outline:2px solid #fff; outline-offset:2px; }
@@ -55,8 +56,35 @@
 .site-patient-page .site-patient-main.dashboard-main { max-width:1440px; margin-top:0; padding:84px clamp(22px,3vw,42px) 48px; }
 .site-patient-page.has-patient-sidebar .site-patient-main.dashboard-main { margin-left:220px; }
 .site-patient-page .site-patient-main.hospitals-main { max-width:none; margin-top:0; padding:84px clamp(20px,3vw,40px) 48px; }
-.site-patient-page .site-patient-main.about { max-width:1100px; margin-top:0; padding-top:100px; }
+.site-patient-page .site-patient-main.about { display:grid; max-width:1100px; gap:24px; margin-top:0; padding-top:100px; }
 .site-patient-page.has-patient-sidebar .site-patient-main.about { margin-left:220px; }
+.about-hero { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(240px,.7fr); gap:28px; align-items:stretch; padding:clamp(26px,4vw,48px); border:1px solid #f0d8d9; border-radius:20px; background:linear-gradient(120deg,#fff 0%,#fff8f8 64%,#fdecee 100%); box-shadow:0 8px 26px rgba(85,20,24,.06); }
+.about-hero-content { align-self:center; min-width:0; }
+.about-eyebrow { margin:0 0 10px; color:#a71920; font-size:.72rem; font-weight:700; letter-spacing:.12em; }
+.about-hero h1 { max-width:700px; margin:0; color:#321a1b; font-size:clamp(2rem,4vw,3.25rem); line-height:1.08; letter-spacing:-.04em; }
+.about-lead { max-width:660px; margin:16px 0 0; color:#5f5354; font-size:1rem; line-height:1.7; }
+.about-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:24px; }
+.about-primary-action { display:inline-flex; min-height:44px; align-items:center; justify-content:center; gap:12px; padding:11px 16px; border:1px solid #a71920; border-radius:8px; background:#a71920; color:#fff; font-size:.85rem; font-weight:700; text-decoration:none; }
+.about-primary-action:hover { border-color:#7d1117; background:#7d1117; }
+.about-secondary-action { display:inline-flex; min-height:44px; align-items:center; padding:10px 4px; color:#8d151a; font-size:.84rem; font-weight:700; text-decoration:none; }
+.about-secondary-action:hover { text-decoration:underline; }
+.about-purpose-card { align-self:stretch; padding:24px; border:1px solid #edd5d6; border-radius:14px; background:rgba(255,255,255,.82); }
+.about-purpose-card > span { color:#a71920; font-size:.68rem; font-weight:700; letter-spacing:.12em; }
+.about-purpose-card h2 { margin:14px 0 8px; color:#451c20; font-size:1.35rem; line-height:1.25; }
+.about-purpose-card p { margin:0; color:#65595a; font-size:.88rem; line-height:1.65; }
+.about-steps { padding:clamp(22px,3vw,34px); border:1px solid #ece8e8; border-radius:18px; background:#fff; }
+.about-section-heading { max-width:620px; margin-bottom:22px; }
+.about-section-heading .about-eyebrow { margin-bottom:7px; }
+.about-section-heading h2, .about-appointment-note h2 { margin:0; color:#321a1b; font-size:clamp(1.4rem,2.4vw,2rem); line-height:1.2; }
+.about-steps-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.about-step-card { min-width:0; padding:20px; border:1px solid #f0e2e3; border-radius:12px; background:#fffafa; }
+.about-step-card > span { display:grid; width:34px; height:34px; place-items:center; border-radius:9px; background:#fdecee; color:#a71920; font-size:.75rem; font-weight:700; }
+.about-step-card h3 { margin:16px 0 7px; color:#432729; font-size:1rem; }
+.about-step-card p { margin:0; color:#6b6061; font-size:.84rem; line-height:1.6; }
+.about-appointment-note { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:24px clamp(22px,3vw,34px); border-radius:16px; background:#f8eeee; }
+.about-appointment-note > div { max-width:680px; }
+.about-appointment-note .about-eyebrow { margin-bottom:7px; }
+.about-appointment-note p:last-child { margin:9px 0 0; color:#65595a; font-size:.86rem; line-height:1.6; }
 .site-patient-page .patient-topbar, .site-patient-page .patient-sidebar { display:none; }
 .site-patient-page #appointment { scroll-margin-top:76px; }
 .site-patient-page.patient-portal .dashboard-main, .site-patient-page.patient-portal .dashboard-main * { font-family:Arial, Helvetica, sans-serif; }
@@ -65,19 +93,33 @@
 .site-patient-page.is-patient-home > .features-container { width:96%; }
 
 @media (max-width:680px) {
-    .site-patient-header { height:54px; gap:14px; padding:6px 12px; }
+    .site-patient-header { height:54px; gap:8px; padding:6px 10px; }
     .site-patient-logo { flex-basis:26px; }
     .site-patient-logo img { width:26px; height:30px; }
-    .site-patient-top-links { min-width:0; gap:14px; overflow-x:auto; scrollbar-width:none; }
+    .site-patient-top-links { min-width:0; flex:1 1 auto; gap:8px; overflow:visible; }
     .site-patient-top-links::-webkit-scrollbar { display:none; }
-    .site-patient-top-links a, .site-patient-dashboard-link { font-size:11px; }
-    .site-patient-account { gap:8px; }
+    .site-patient-top-links a, .site-patient-dashboard-link { font-size:10px; }
+    .site-patient-account { flex:0 0 auto; gap:7px; }
+    .site-patient-user-name { max-width:90px; font-size:11px; }
     .site-patient-logout-link { min-height:30px; padding:5px 8px; font-size:10px; }
     .site-patient-sidebar { top:54px; right:0; bottom:auto; width:100%; height:43px; flex-direction:row; gap:3px; overflow-x:auto; overflow-y:hidden; padding:4px 8px; border-right:0; border-bottom:1px solid #edcaca; box-shadow:0 4px 12px rgba(55,0,0,.08); scrollbar-width:thin; }
     .site-patient-sidebar-heading { display:none; }
     .site-patient-sidebar > a { flex:0 0 auto; padding:9px 10px; font-size:11px; white-space:nowrap; }
-    .site-patient-main, .site-patient-page .site-patient-main.dashboard-main, .site-patient-page .site-patient-main.hospitals-main, .site-patient-page .site-patient-main.about, .site-patient-page.has-patient-sidebar .site-patient-main.dashboard-main, .site-patient-page.has-patient-sidebar .site-patient-main.appointments-main { width:100%; margin:0; padding:117px 15px 34px; }
+    .site-patient-main, .site-patient-page .site-patient-main.dashboard-main, .site-patient-page .site-patient-main.hospitals-main, .site-patient-page .site-patient-main.about, .site-patient-page.has-patient-sidebar .site-patient-main.dashboard-main, .site-patient-page.has-patient-sidebar .site-patient-main.appointments-main, .site-patient-page.has-patient-sidebar .site-patient-main.about { width:100%; margin:0; padding:117px 15px 34px; }
     .site-patient-page .site-patient-main.dashboard-main { padding-top:117px; }
+    .site-patient-page .site-patient-main.about { gap:16px; }
+    .about-hero { grid-template-columns:1fr; gap:18px; padding:24px 20px; }
+    .about-hero h1 { font-size:clamp(2rem,9vw,2.8rem); }
+    .about-lead { margin-top:12px; font-size:.92rem; }
+    .about-actions { align-items:stretch; flex-direction:column; gap:7px; margin-top:18px; }
+    .about-primary-action, .about-secondary-action { width:100%; }
+    .about-secondary-action { justify-content:center; }
+    .about-purpose-card { padding:20px; }
+    .about-steps { padding:22px 18px; }
+    .about-steps-grid { grid-template-columns:1fr; gap:10px; }
+    .about-step-card { padding:16px; }
+    .about-step-card h3 { margin-top:12px; }
+    .about-appointment-note { align-items:stretch; flex-direction:column; gap:16px; padding:22px 18px; }
     .site-patient-page #appointment { scroll-margin-top:110px; }
     .site-patient-page.is-patient-home { padding:108px 10px 24px; }
     .site-patient-page.is-patient-home > .hero { width:100%; }

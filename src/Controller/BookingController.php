@@ -54,7 +54,7 @@ class BookingController extends AbstractController
     #[Route('/booking/create', name: 'app_booking_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, AdminActivityLogger $activityLogger): Response
     {
-        if ($this->isGranted('ROLE_HOSPITAL_ADMIN') && !$this->isGranted('ROLE_ADMIN')) {
+        if ($this->isGranted('ROLE_HOSPITAL_STAFF') && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
 

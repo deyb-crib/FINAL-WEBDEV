@@ -36,6 +36,9 @@
 .admin-topbar > div { display:grid; gap:3px; }
 .admin-topbar-label { color:#999ba3; font-size:.59rem; letter-spacing:.1em; }
 .admin-topbar > div > strong { font-size:.91rem; }
+.admin-hospital-context { display:grid; gap:2px; margin-top:3px; }
+.admin-hospital-context-label { color:var(--admin-red); font-size:.55rem; font-weight:700; letter-spacing:.1em; }
+.admin-hospital-context > strong { color:#565862; font-size:.72rem; line-height:1.35; overflow-wrap:anywhere; }
 .admin-topbar-profile { display:flex; align-items:center; gap:9px; color:var(--admin-ink); font-size:.8rem; text-decoration:none; }
 .admin-topbar-profile .admin-avatar { width:30px; height:30px; flex-basis:30px; }
 .admin-main { width:100%; max-width:1540px; margin:0 auto; padding:32px 34px 52px; }

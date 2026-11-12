@@ -81,6 +81,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
         return \in_array('ROLE_HOSPITAL_ADMIN', $this->getRoles(), true);
     }
 
+    public function isHospitalStaff(): bool
+    {
+        return \in_array('ROLE_HOSPITAL_STAFF', $this->getRoles(), true);
+    }
+
     public function getAssignedCenters(): Collection
     {
         return $this->assignedCenters;
@@ -118,6 +123,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
         $roles = array_values(array_filter($this->roles, static fn (string $role): bool => $role !== 'ROLE_HOSPITAL_ADMIN'));
         if ($hospitalAdmin) {
             $roles[] = 'ROLE_HOSPITAL_ADMIN';
+        }
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function setHospitalStaff(bool $hospitalStaff): static
+    {
+        $roles = array_values(array_filter($this->roles, static fn (string $role): bool => $role !== 'ROLE_HOSPITAL_STAFF'));
+        if ($hospitalStaff) {
+            $roles[] = 'ROLE_HOSPITAL_STAFF';
         }
         $this->roles = $roles;
 

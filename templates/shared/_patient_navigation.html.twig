@@ -9,7 +9,7 @@
     </nav>
     <div class="site-patient-account">
         {% if app.user %}
-            <a class="site-patient-dashboard-link" href="{{ path(is_granted('ROLE_ADMIN') ? 'app_admin_dashboard' : (is_granted('ROLE_HOSPITAL_ADMIN') ? 'app_hospital_admin_dashboard' : 'app_dashboard')) }}">Dashboard</a>
+            <span class="site-patient-user-name">{{ app.user.name }}</span>
             <a class="site-patient-logout-link" href="{{ path('app_logout') }}">Log out</a>
         {% else %}
             <a class="site-patient-dashboard-link" href="{{ path('app_login') }}">Log in</a>
@@ -20,15 +20,16 @@
 {% if app.user %}
     <aside class="site-patient-sidebar" aria-label="Patient navigation">
         <div class="site-patient-sidebar-heading">
-            <span>{{ is_granted('ROLE_ADMIN') ? 'ADMIN MENU' : (is_granted('ROLE_HOSPITAL_ADMIN') ? 'HOSPITAL MENU' : 'PATIENT MENU') }}</span>
+            <span>{{ is_granted('ROLE_ADMIN') ? 'ADMIN MENU' : (is_granted('ROLE_HOSPITAL_STAFF') ? 'HOSPITAL MENU' : 'PATIENT MENU') }}</span>
             <strong>{{ app.user.name }}</strong>
         </div>
         {% if is_granted('ROLE_ADMIN') %}
             <a class="{{ active_page == 'admin' ? 'is-active' : '' }}" href="{{ path('app_admin_dashboard') }}">Admin panel</a>
             <a href="{{ path('app_admin_centers') }}">Manage centers</a>
-        {% elseif is_granted('ROLE_HOSPITAL_ADMIN') %}
+        {% elseif is_granted('ROLE_HOSPITAL_STAFF') %}
             <a class="{{ active_page == 'hospital' ? 'is-active' : '' }}" href="{{ path('app_hospital_admin_dashboard') }}">Hospital dashboard</a>
             <a href="{{ path('app_hospital_admin_records') }}">Manage appointments</a>
+            {% if is_granted('ROLE_HOSPITAL_ADMIN') %}<a href="{{ path('app_hospital_admin_staff') }}">Manage staff</a>{% endif %}
         {% else %}
             <a class="{{ active_page == 'dashboard' ? 'is-active' : '' }}" href="{{ path('app_dashboard') }}" {% if active_page == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
             <a class="{{ active_page == 'centers' ? 'is-active' : '' }}" href="{{ path('app_hospitals') }}" {% if active_page == 'centers' %}aria-current="page"{% endif %}>Find a center</a>

@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('app_admin_dashboard');
         }
-        if ($this->isGranted('ROLE_HOSPITAL_ADMIN')) {
+        if ($this->isGranted('ROLE_HOSPITAL_STAFF')) {
             return $this->redirectToRoute('app_hospital_admin_dashboard');
         }
 
@@ -61,7 +61,7 @@ class SecurityController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             return 'app_admin_dashboard';
         }
-        if ($this->isGranted('ROLE_HOSPITAL_ADMIN')) {
+        if ($this->isGranted('ROLE_HOSPITAL_STAFF')) {
             return 'app_hospital_admin_dashboard';
         }
 

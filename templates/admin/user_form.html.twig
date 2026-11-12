@@ -6,7 +6,7 @@
 
 {% block body %}
     <a class="admin-back-link" href="{{ is_new ? path('app_admin_users') : path('app_admin_user_show', {id: managed_user.id}) }}">← Back to user management</a>
-    <div class="admin-page-heading"><div><span class="admin-eyebrow">ACCOUNT</span><h1>{{ is_new ? 'Add a user' : 'Edit account' }}</h1><p>{{ is_new ? 'Create a patient, hospital administrator, or system administrator account.' : 'Update account details and access.' }}</p></div></div>
+    <div class="admin-page-heading"><div><span class="admin-eyebrow">ACCOUNT</span><h1>{{ is_new ? 'Add a user' : 'Edit account' }}</h1><p>{{ is_new ? 'Create a patient, hospital staff, hospital administrator, or system administrator account.' : 'Update account details and access.' }}</p></div></div>
     {% if errors %}<div class="flash flash-error" role="alert">{% for error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
     <div class="admin-user-form-layout" data-user-form>
         <form class="admin-panel admin-edit-form admin-user-form" method="post">
@@ -19,14 +19,15 @@
             <label for="password">{{ is_new ? 'Temporary password' : 'New password (leave blank to keep current password)' }}</label><input type="password" id="password" name="password" autocomplete="new-password" minlength="8" {{ is_new ? 'required' : '' }}>
             <label for="role">Account role</label>
             <select id="role" name="role" data-role-select>
-                <option value="patient"{{ not is_admin and not is_hospital_admin ? ' selected' : '' }}>Patient</option>
+                <option value="patient"{{ not is_admin and not is_hospital_admin and not is_hospital_staff ? ' selected' : '' }}>Patient</option>
+                <option value="hospital_staff"{{ is_hospital_staff ? ' selected' : '' }}>Hospital staff</option>
                 <option value="hospital_admin"{{ is_hospital_admin ? ' selected' : '' }}>Hospital administrator</option>
                 <option value="admin"{{ is_admin ? ' selected' : '' }}>System administrator</option>
             </select>
 
-            <fieldset class="admin-center-assignment" data-center-assignment {% if not is_hospital_admin %}hidden{% endif %}>
+            <fieldset class="admin-center-assignment" data-center-assignment {% if not is_hospital_admin and not is_hospital_staff %}hidden{% endif %}>
                 <legend>Assigned dialysis centers</legend>
-                <p class="admin-form-note" id="assigned-centers-help">Choose the centers this administrator represents. They will only see bookings for the centers selected here.</p>
+                <p class="admin-form-note" id="assigned-centers-help">Choose the centers this account can access. It will only see bookings for the selected centers.</p>
                 <div class="admin-center-options">
                     {% for center in centers %}
                         <label class="admin-center-option">
@@ -34,7 +35,7 @@
                             <span><strong>{{ center.name }}</strong><small>{{ center.address }}</small></span>
                         </label>
                     {% else %}
-                        <p class="admin-form-note">No centers are available yet. Add a dialysis center before creating a hospital administrator.</p>
+                        <p class="admin-form-note">No centers are available yet. Add a dialysis center before creating a hospital account.</p>
                     {% endfor %}
                 </div>
             </fieldset>
@@ -51,18 +52,23 @@
                 <h2>Choose the right role</h2>
                 <p class="admin-guide-intro">Each account type has a different level of access in KATOC.</p>
                 <div class="admin-role-options">
-                    <article class="admin-role-option{{ not is_admin and not is_hospital_admin ? ' is-selected' : '' }}" data-role-card="patient">
+                    <article class="admin-role-option{{ not is_admin and not is_hospital_admin and not is_hospital_staff ? ' is-selected' : '' }}" data-role-card="patient">
                         <span class="admin-role-number">01</span>
                         <div><h3>Patient</h3><p>Books appointments and manages their own requests.</p></div>
                         <span class="admin-role-badge">Personal</span>
                     </article>
-                    <article class="admin-role-option{{ is_hospital_admin ? ' is-selected' : '' }}" data-role-card="hospital_admin">
+                    <article class="admin-role-option{{ is_hospital_staff ? ' is-selected' : '' }}" data-role-card="hospital_staff">
                         <span class="admin-role-number">02</span>
-                        <div><h3>Hospital administrator</h3><p>Reviews and updates appointments for assigned centers only.</p></div>
+                        <div><h3>Hospital staff</h3><p>Views and updates bookings for assigned centers. Cannot manage staff accounts.</p></div>
+                        <span class="admin-role-badge">Limited access</span>
+                    </article>
+                    <article class="admin-role-option{{ is_hospital_admin ? ' is-selected' : '' }}" data-role-card="hospital_admin">
+                        <span class="admin-role-number">03</span>
+                        <div><h3>Hospital administrator</h3><p>Reviews bookings and manages staff for assigned centers.</p></div>
                         <span class="admin-role-badge">Center access</span>
                     </article>
                     <article class="admin-role-option{{ is_admin ? ' is-selected' : '' }}" data-role-card="admin">
-                        <span class="admin-role-number">03</span>
+                        <span class="admin-role-number">04</span>
                         <div><h3>System administrator</h3><p>Manages all users, centers, bookings, and system settings.</p></div>
                         <span class="admin-role-badge">Global access</span>
                     </article>
@@ -70,7 +76,7 @@
             </section>
             <section class="admin-panel admin-account-tip">
                 <span class="admin-tip-mark" aria-hidden="true">i</span>
-                <div><h3>Keep access secure</h3><p>Use a unique email address, assign only the centers the administrator needs, and share the temporary password privately.</p></div>
+                <div><h3>Keep access secure</h3><p>Use a unique email address, assign only the centers this account needs, and share the temporary password privately.</p></div>
             </section>
         </aside>
     </div>
